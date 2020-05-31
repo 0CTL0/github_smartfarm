@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.WorkTypeDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.WorkType" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+  </resultMap>
+
+  <select id="queryWorkTypeList" resultMap="BaseResultMap">
+  	SELECT id,`name`,sort
+	FROM core_work_type
+	ORDER BY sort
+  </select>
+
+  <select id="queryWorkTypeById" resultMap="BaseResultMap">
+  	SELECT id,`name`,sort
+	FROM core_work_type
+	WHERE id = #{id}
+  </select>
+
+
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.WorkType" >
+    insert into core_work_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.WorkType" >
+    update core_work_type
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+
+</mapper>

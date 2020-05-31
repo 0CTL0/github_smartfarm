@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.OrderDetailDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.OrderDetail" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="receive_name" property="receiveName" jdbcType="VARCHAR" />
+    <result column="receive_mobile" property="receiveMobile" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+    <result column="freight_price" property="freightPrice" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="ship_no" property="shipNo" jdbcType="VARCHAR" />
+    <result column="ship_name" property="shipName" jdbcType="VARCHAR" />
+    <result column="ship_code" property="shipCode" jdbcType="VARCHAR" />
+    <result column="ship_time" property="shipTime" jdbcType="VARCHAR" />
+    <result column="confirm_time" property="confirmTime" jdbcType="VARCHAR" />
+    <result column="shipping_status" property="shippingStatus" jdbcType="SMALLINT" />
+    <result column="pay_status" property="payStatus" jdbcType="SMALLINT" />
+    <result column="business_id" property="businessId" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.shop.core.entity.vo.OrderDetailVo" id="BaseVoResultMap" extends="BaseResultMap">
+  	<collection property="productList" ofType="com.smartfarm.base.shop.core.entity.OrderProduct" column="order_detail_id">
+		<id column="productId" property="id" jdbcType="BIGINT" />
+	    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+	    <result column="product_id" property="productId" jdbcType="BIGINT" />
+	    <result column="product_sku_id" property="productSkuId" jdbcType="BIGINT" />
+	    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+	    <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+	    <result column="product_norm" property="productNorm" jdbcType="VARCHAR" />
+	    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+	    <result column="price" property="price" jdbcType="DECIMAL" />
+	    <result column="status" property="status" jdbcType="SMALLINT" />
+	    <result column="order_detail_id" property="orderDetailId" jdbcType="BIGINT" />
+	</collection>
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.OrderDetail" keyProperty="id" useGeneratedKeys="true">
+    insert into order_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="receiveName != null" >
+        receive_name,
+      </if>
+      <if test="receiveMobile != null" >
+        receive_mobile,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      <if test="totalPrice != null" >
+        total_price,
+      </if>
+      <if test="freightPrice != null" >
+        freight_price,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="shipNo != null" >
+        ship_no,
+      </if>
+      <if test="shipName != null" >
+        ship_name,
+      </if>
+      <if test="shipCode != null" >
+        ship_code,
+      </if>
+      <if test="shipTime != null" >
+        ship_time,
+      </if>
+      <if test="confirmTime != null" >
+        confirm_time,
+      </if>
+      <if test="shippingStatus != null" >
+        shipping_status,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="businessId != null" >
+        business_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="receiveName != null" >
+        #{receiveName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveMobile != null" >
+        #{receiveMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPrice != null" >
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="freightPrice != null" >
+        #{freightPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shipNo != null" >
+        #{shipNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shipName != null" >
+        #{shipName,jdbcType=VARCHAR},
+      </if>
+      <if test="shipCode != null" >
+        #{shipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shipTime != null" >
+        #{shipTime,jdbcType=VARCHAR},
+      </if>
+      <if test="confirmTime != null" >
+        #{confirmTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingStatus != null" >
+        #{shippingStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="businessId != null" >
+        #{businessId,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.OrderDetail" >
+    update order_detail
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="receiveName != null" >
+        receive_name = #{receiveName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveMobile != null" >
+        receive_mobile = #{receiveMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPrice != null" >
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="freightPrice != null" >
+        freight_price = #{freightPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shipNo != null" >
+        ship_no = #{shipNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shipName != null" >
+        ship_name = #{shipName,jdbcType=VARCHAR},
+      </if>
+      <if test="shipCode != null" >
+        ship_code = #{shipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shipTime != null" >
+        ship_time = #{shipTime,jdbcType=VARCHAR},
+      </if>
+      <if test="confirmTime != null" >
+        confirm_time = #{confirmTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingStatus != null" >
+        shipping_status = #{shippingStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="businessId != null" >
+        business_id = #{businessId,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryByOrderId" resultMap="BaseVoResultMap">
+  	select *
+  	from order_detail
+  	where order_id = #{orderId}
+  </select>
+  
+  <select id="queryAllOrderDetail" resultMap="BaseResultMap">
+  	SELECT id,ship_no,ship_code,ship_name,receive_mobile,receive_name,address,`status`,pay_status,order_no
+	FROM order_detail
+	where status > 0
+	<if test="status != null">
+		and `status` = #{status}
+	</if>
+	<if test="ship_no != null and ship_no != ''">
+		and ship_no like CONCAT('%',#{ship_no},'%')
+	</if>
+	limit #{start}, #{limit}
+  </select>
+  
+  <select id="queryCountAllOrderDetail" resultType="Integer">
+  	SELECT count(*)
+	FROM order_detail
+	where status > 0
+	<if test="status != null">
+		and `status` = #{status}
+	</if>
+	<if test="ship_no != null and ship_no != ''">
+		and ship_no like CONCAT('%',#{ship_no},'%')
+	</if>
+  </select>
+  
+  <select id="queryOrderDetailById" resultMap="BaseVoResultMap">
+  	SELECT od.id,od.ship_code,od.ship_name,od.ship_no,od.address,od.receive_mobile,od.`status`,od.order_no,od.receive_name,od.message,
+	op.product_name,op.quantity,op.order_detail_id,op.id productId
+	from order_detail od,order_product op
+	WHERE od.id = op.order_detail_id
+	and od.id = #{id}
+  </select>
+  
+  <select id="queryAllBusinessOrderDetail" resultMap="BaseResultMap">
+  	SELECT id,ship_no,ship_code,ship_name,receive_mobile,receive_name,address,`status`,pay_status,order_no,business_id
+	FROM order_detail
+	where status <![CDATA[ >  ]]> 0
+	and business_id = #{businessId}
+	<if test="status != null">
+		and `status` = #{status}
+	</if>
+	<if test="ship_no != null and ship_no != ''">
+		and ship_no like CONCAT('%',#{ship_no},'%')
+	</if>
+	order by id desc
+	limit #{start}, #{limit}
+  </select>
+  
+  <select id="queryCountBusinessOrderDetail" resultType="Integer">
+  	SELECT count(*)
+	FROM order_detail
+	where status > 0
+	and business_id = #{businessId}
+	<if test="status != null">
+		and `status` = #{status}
+	</if>
+	<if test="ship_no != null and ship_no != ''">
+		and ship_no like CONCAT('%',#{ship_no},'%')
+	</if>
+  </select>
+</mapper>

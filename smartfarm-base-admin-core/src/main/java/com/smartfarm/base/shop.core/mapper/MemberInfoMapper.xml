@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.MemberInfoDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.MemberInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <result column="experience" property="experience" jdbcType="BIGINT" />
+    <result column="cash" property="cash" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="point" property="point" jdbcType="BIGINT" />
+    <result column="business_id" property="businessId" jdbcType="BIGINT" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="session_key" property="sessionKey" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseVoResultMap" type="com.smartfarm.base.shop.core.entity.vo.MemberInfoVo" extends="BaseResultMap">
+  	<result column="fansNum" property="fansNum" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.MemberInfo"  useGeneratedKeys="true" keyProperty="id">
+    insert into member_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="nickName != null" >
+        nick_name,
+      </if>
+      <if test="picUrl != null" >
+        pic_url,
+      </if>
+      <if test="openid != null" >
+        openid,
+      </if>
+      <if test="experience != null" >
+        experience,
+      </if>
+      <if test="cash != null" >
+        cash,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="point != null" >
+        point,
+      </if>
+      <if test="businessId != null" >
+        business_id,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sessionKey != null" >
+        session_key,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="nickName != null" >
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null" >
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="experience != null" >
+        #{experience,jdbcType=BIGINT},
+      </if>
+      <if test="cash != null" >
+        #{cash,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="point != null" >
+        #{point,jdbcType=BIGINT},
+      </if>
+      <if test="businessId != null" >
+        #{businessId,jdbcType=BIGINT},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sessionKey != null" >
+        #{sessionKey,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.MemberInfo" >
+    update member_info
+    <set >
+      <if test="nickName != null" >
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null" >
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null" >
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="experience != null" >
+        experience = #{experience,jdbcType=BIGINT},
+      </if>
+      <if test="cash != null" >
+        cash = #{cash,jdbcType=DECIMAL},
+      </if>
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="point != null" >
+        point = #{point,jdbcType=BIGINT},
+      </if>
+      <if test="businessId != null" >
+        business_id = #{businessId,jdbcType=BIGINT},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sessionKey != null" >
+        session_key = #{sessionKey,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryByOpenId" resultMap="BaseResultMap">
+  	select * from member_info
+  	where openid = #{openid,jdbcType=VARCHAR}
+  	and business_id = #{businessId}
+  	limit 1
+  </select>
+  
+  <select id="queryById" resultMap="BaseResultMap">
+  	select * from member_info
+  	where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="queryByNickName" resultMap="BaseResultMap">
+  	SELECT mi.id,mi.nick_name
+	FROM member_info mi
+	WHERE mi.nick_name = #{nickName,jdbcType=VARCHAR}
+	and mi.business_id = #{businessId}
+  </select>
+  
+  <select id="queryMemberVoById" resultMap="BaseVoResultMap">
+  	select m.*,count(distinct m2.id) as fansNum
+  	from member_info m
+  	left join member_info m2 on m2.member_id=m.id
+  	where m.id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <update id="updateIntegralById" parameterType="com.smartfarm.base.shop.core.entity.MemberInfo" >
+    update member_info set point=#{point,jdbcType=BIGINT} where id=#{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryByFarmId" resultMap="BaseResultMap">
+  	select *
+  	from member_info
+  	where business_id = #{farmId}
+  </select>
+
+  <select id="selectPageList" resultMap="BaseResultMap">
+    select * from member_info mi
+    where mi.business_id=#{farmId}
+    <if test="nickName!=null and nickName!=''">
+      and mi.nick_name LIKE CONCAT('%',#{nickName},'%')
+    </if>
+    order by mi.id desc
+    limit #{start}, #{limit}
+  </select>
+
+  <select id="selectPageTotal" resultType="Integer">
+    select count(*) from member_info mi
+    where mi.business_id=#{farmId}
+    <if test="nickName!=null and nickName!=''">
+      and mi.nick_name=#{nickName}
+    </if>
+  </select>
+
+  <select id="selectMemberFans" resultMap="BaseResultMap">
+    select * from member_info mi
+    where mi.member_id=#{memberId}
+  </select>
+  <select id="selectMemberFansTotal" resultType="Integer">
+    select count(*) from member_info mi
+    where mi.member_id=#{memberId}
+  </select>
+
+</mapper>

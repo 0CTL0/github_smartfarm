@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.SeedDetailDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.SeedDetail" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="area" property="area" jdbcType="INTEGER" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="seed_id" property="seedId" jdbcType="BIGINT" />
+    <result column="plant_status" property="plantStatus" jdbcType="SMALLINT" />
+    <result column="plant_time" property="plantTime" jdbcType="VARCHAR" />
+    <result column="mature_time" property="matureTime" jdbcType="VARCHAR" />
+  </resultMap>
+  
+   <resultMap type="com.smartfarm.base.farm.core.entity.vo.SeedDetailInfoVo" id="BaseVoResultMap" extends="BaseResultMap">
+ 	 <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+ 	 <result column="growth" property="growth" jdbcType="INTEGER" />
+  </resultMap>
+  
+  
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.SeedDetail" >
+    insert into farm_seed_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="totalAmount != null" >
+        total_amount,
+      </if>
+      <if test="seedId != null" >
+        seed_id,
+      </if>
+      <if test="plantStatus != null" >
+        plant_status,
+      </if>
+      <if test="plantTime != null" >
+        plant_time,
+      </if>
+      <if test="matureTime != null" >
+        mature_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="seedId != null" >
+        #{seedId,jdbcType=BIGINT},
+      </if>
+      <if test="plantStatus != null" >
+        #{plantStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="plantTime != null" >
+        #{plantTime,jdbcType=VARCHAR},
+      </if>
+      <if test="matureTime != null" >
+        #{matureTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.SeedDetail" >
+    update farm_seed_detail
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null" >
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="seedId != null" >
+        seed_id = #{seedId,jdbcType=BIGINT},
+      </if>
+      <if test="plantStatus != null" >
+        plant_status = #{plantStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="plantTime != null" >
+        plant_time = #{plantTime,jdbcType=VARCHAR},
+      </if>
+      <if test="matureTime != null" >
+        mature_time = #{matureTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectByRentOrderId" resultMap="BaseResultMap">
+  	select  fsd.* from farm_seed_detail fsd
+	WHERE fsd.order_id=#{orderId,jdbcType=BIGINT} 
+  </select>
+  
+  
+  <select id="querySeedDetailById" resultMap="BaseVoResultMap">
+  	SELECT ro.order_no,
+  	sd.id,
+  	sd.plant_time,
+  	sd.mature_time,
+  	si.growth,
+  	sd.plant_status
+	FROM farm_seed_detail sd 
+	INNER JOIN farm_seed_info si ON si.id = sd.seed_id
+	INNER JOIN farm_rent_order ro ON ro.id = sd.order_id
+	WHERE sd.id = #{detailId}
+  </select>
+  
+</mapper>

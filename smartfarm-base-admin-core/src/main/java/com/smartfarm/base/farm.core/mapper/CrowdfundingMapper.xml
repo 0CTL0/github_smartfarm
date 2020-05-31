@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.CrowdfundingDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.Crowdfunding" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="brief" property="brief" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="cover" property="cover" jdbcType="VARCHAR" />
+    <result column="targer_amount" property="targerAmount" jdbcType="DECIMAL" />
+    <result column="sponsor" property="sponsor" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+    <result column="profit_type" property="profitType" jdbcType="SMALLINT" />
+    <result column="provide_time" property="provideTime" jdbcType="VARCHAR" />
+    <result column="is_hot" property="isHot" jdbcType="BIT" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="period" property="period" jdbcType="INTEGER" />
+    <result column="mini_quantity" property="miniQuantity" jdbcType="DECIMAL" />
+    <result column="bonus_rate" property="bonusRate" jdbcType="DECIMAL" />
+    <result column="profit_info" property="profitInfo" jdbcType="VARCHAR" />
+    <result column="is_show" property="isShow" jdbcType="BIT" />
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.farm.core.entity.vo.CrowdFundingVo" id="BaseVoResultMap" extends="BaseResultMap">
+  	<result column="minGradePrice" property="minGradePrice" jdbcType="DECIMAL" />
+  	<result column="completionRate" property="completionRate" jdbcType="DECIMAL" />
+  	<result column="totalAmount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="orderQuantities" property="orderQuantities" jdbcType="INTEGER" />
+  	<collection property="gradeList" ofType="com.smartfarm.base.farm.core.entity.Grade" column="crowfunding_id">
+  		<id column="gid" property="id" jdbcType="BIGINT" />
+	    <result column="price" property="price" jdbcType="DECIMAL" />
+	    <result column="des" property="description" jdbcType="VARCHAR" />
+	    <result column="crowfunding_id" property="crowfundingId" jdbcType="BIGINT" />
+  	</collection>
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.farm.core.entity.vo.CrowfundingGradeVo" id="BaseGradeResultMap" extends="BaseResultMap">
+  	<result column="price" property="price" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.Crowdfunding" useGeneratedKeys="true" keyProperty="id">
+    insert into crfd_crowdfunding
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="brief != null" >
+        brief,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="cover != null" >
+        cover,
+      </if>
+      <if test="targerAmount != null" >
+        targer_amount,
+      </if>
+      <if test="sponsor != null" >
+        sponsor,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="profitType != null" >
+        profit_type,
+      </if>
+      <if test="provideTime != null" >
+        provide_time,
+      </if>
+      <if test="isHot != null" >
+        is_hot,
+      </if>
+      <if test="orderNum != null" >
+        order_num,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="period != null" >
+        period,
+      </if>
+      <if test="miniQuantity != null" >
+        mini_quantity,
+      </if>
+      <if test="bonusRate != null" >
+        bonus_rate,
+      </if>
+      <if test="profitInfo != null" >
+        profit_info,
+      </if>
+      <if test="isShow != null" >
+        is_show,
+      </if>
+      <if test="farmId != null" >
+        farm_id
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="cover != null" >
+        #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="targerAmount != null" >
+        #{targerAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sponsor != null" >
+        #{sponsor,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="profitType != null" >
+        #{profitType,jdbcType=SMALLINT},
+      </if>
+      <if test="provideTime != null" >
+        #{provideTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isHot != null" >
+        #{isHot,jdbcType=BIT},
+      </if>
+      <if test="orderNum != null" >
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="period != null" >
+        #{period,jdbcType=INTEGER},
+      </if>
+      <if test="miniQuantity != null" >
+        #{miniQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="bonusRate != null" >
+        #{bonusRate,jdbcType=DECIMAL},
+      </if>
+      <if test="profitInfo != null" >
+        #{profitInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        #{isShow,jdbcType=BIT},
+      </if>
+      <if test="farmId != null" >
+        #{farmId,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.Crowdfunding" >
+    update crfd_crowdfunding
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        brief = #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="cover != null" >
+        cover = #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="targerAmount != null" >
+        targer_amount = #{targerAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="sponsor != null" >
+        sponsor = #{sponsor,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="profitType != null" >
+        profit_type = #{profitType,jdbcType=SMALLINT},
+      </if>
+      <if test="provideTime != null" >
+        provide_time = #{provideTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isHot != null" >
+        is_hot = #{isHot,jdbcType=BIT},
+      </if>
+      <if test="orderNum != null" >
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="period != null" >
+        period = #{period,jdbcType=INTEGER},
+      </if>
+      <if test="miniQuantity != null" >
+        mini_quantity = #{miniQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="bonusRate != null" >
+        bonus_rate = #{bonusRate,jdbcType=DECIMAL},
+      </if>
+      <if test="profitInfo != null" >
+        profit_info = #{profitInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        is_show = #{isShow,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="quryCrowdFundingList" resultMap="BaseResultMap">
+  	SELECT cf.brief,cf.cover,cf.end_time,cf.start_time,cf.sponsor,cf.`status`,cf.is_hot,cf.`name`,cf.order_num,cf.profit_type,cf.provide_time,cf.id,cf.targer_amount
+	from crfd_crowdfunding cf
+	limit #{start}, #{limit}
+  </select>
+  
+  <select id="queryCountCrowdFunding" resultType="Integer">
+  	SELECT COUNT(*)
+	from crfd_crowdfunding cf
+  </select>
+  
+  <select id="queryCrowdFundingById" resultMap="BaseVoResultMap">
+  	SELECT 
+	cf.brief,cf.cover,cf.end_time,cf.start_time,cf.sponsor,cf.`status`,cf.is_hot,cf.`name`,cf.order_num,cf.profit_type,cf.provide_time,cf.id,cf.description,cf.targer_amount,
+	cf.bonus_rate,cf.is_show,cf.mini_quantity,cf.profit_info,cf.period,
+	cg.price,cg.description des,cg.id gid
+	from crfd_crowdfunding cf,crfd_grade cg
+	WHERE cg.crowfunding_id = cf.id
+	and cf.id = #{id}
+  </select>
+  
+  <select id="getAllCrowdfundingListWithStatus" resultMap="BaseVoResultMap">
+  	SELECT cf.id,cf.`status`,cf.`name`,cf.period,cf.targer_amount,cf.brief,cf.description,cf.cover,cf.mini_quantity,cf.sponsor,cf.start_time,cf.end_time,cf.provide_time,cf.profit_info,cf.profit_type,cf.bonus_rate,
+	c.orderQuantities,g.minGradePrice,c.totalAmount,c.totalAmount/cf.targer_amount as completionRate,cg.id gid,cg.price,cg.description des,cg.crowfunding_id,cf.farm_id
+	FROM crfd_crowdfunding cf
+	LEFT OUTER JOIN crfd_grade cg on cf.id = cg.crowfunding_id
+	LEFT JOIN (SELECT COUNT(*) orderQuantities,co.crowdfunding_id,SUM(co.total_amount) totalAmount FROM 
+	crfd_crowdfunding cf,crfd_crowdfunding_order co WHERE cf.id = co.crowdfunding_id GROUP BY co.crowdfunding_id) c on c.crowdfunding_id = cf.id
+	LEFT JOIN (SELECT MIN(cg.price) minGradePrice,cg.crowfunding_id FROM crfd_crowdfunding cf,crfd_grade cg GROUP BY cg.crowfunding_id) g on g.crowfunding_id = cf.id
+	WHERE cf.status = #{status} and cf.farm_id = #{farmId}
+  </select>
+  
+  <select id="getAllCrowdfundingList" resultMap="BaseVoResultMap">
+  	SELECT cf.id,cf.`status`,cf.`name`,cf.period,cf.targer_amount,cf.brief,cf.description,cf.cover,cf.mini_quantity,cf.sponsor,cf.start_time,cf.end_time,cf.provide_time,cf.profit_info,cf.profit_type,cf.bonus_rate,
+	c.orderQuantities,g.minGradePrice,c.totalAmount,c.totalAmount/cf.targer_amount as completionRate,cg.id gid,cg.price,cg.description des,cg.crowfunding_id,cf.farm_id
+	FROM crfd_crowdfunding cf
+	LEFT OUTER JOIN crfd_grade cg on cf.id = cg.crowfunding_id
+	LEFT JOIN (SELECT COUNT(*) orderQuantities,co.crowdfunding_id,SUM(co.total_amount) totalAmount FROM 
+	crfd_crowdfunding cf,crfd_crowdfunding_order co WHERE cf.id = co.crowdfunding_id GROUP BY co.crowdfunding_id) c on c.crowdfunding_id = cf.id
+	LEFT JOIN (SELECT MIN(cg.price) minGradePrice,cg.crowfunding_id FROM crfd_crowdfunding cf,crfd_grade cg GROUP BY cg.crowfunding_id) g on g.crowfunding_id = cf.id
+	WHERE cf.farm_id = #{farmId}
+  </select>
+  
+  <select id="getCrowdfundingDetail" resultMap="BaseVoResultMap">
+  	SELECT cf.id,cf.`name`,cf.period,cf.targer_amount,cf.brief,cf.description,cf.cover,cf.mini_quantity,cf.sponsor,cf.start_time,cf.end_time,cf.provide_time,cf.profit_info,cf.profit_type,cf.bonus_rate,
+	c.orderQuantities,g.minGradePrice,c.totalAmount,c.totalAmount/cf.targer_amount as completionRate,cg.id gid,cg.price,cg.description des,cg.crowfunding_id
+	FROM crfd_crowdfunding cf
+	LEFT OUTER JOIN crfd_grade cg on cf.id = cg.crowfunding_id
+	LEFT JOIN (SELECT COUNT(*) orderQuantities,co.crowdfunding_id,SUM(co.total_amount) totalAmount FROM 
+	crfd_crowdfunding cf,crfd_crowdfunding_order co WHERE cf.id = co.crowdfunding_id AND co.`status` &lt; 7 GROUP BY co.crowdfunding_id) c on c.crowdfunding_id = cf.id
+	LEFT JOIN (SELECT MIN(cg.price) minGradePrice,cg.crowfunding_id FROM crfd_crowdfunding cf,crfd_grade cg GROUP BY cg.crowfunding_id) g on g.crowfunding_id = cf.id
+	WHERE cf.id = #{id}
+  </select>
+  
+  <select id="getCrowdFundingDetailByGradeId" resultMap="BaseGradeResultMap">
+  	SELECT cf.id,cf.`name`,cf.cover,cf.brief,cf.bonus_rate,cf.profit_type,cg.price
+	FROM crfd_crowdfunding cf
+	INNER JOIN crfd_grade cg ON cg.crowfunding_id = cf.id
+	WHERE cg.id = #{gradeId}
+  </select>
+  
+</mapper>

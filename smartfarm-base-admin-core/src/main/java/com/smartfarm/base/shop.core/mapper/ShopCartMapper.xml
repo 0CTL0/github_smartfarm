@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.ShopCartDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.ShopCart" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="norm" property="norm" jdbcType="VARCHAR" />
+    <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="product_sku_id" property="productSkuId" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.shop.core.entity.vo.ShopCartVo" id="BaseResultVoMap" extends="BaseResultMap">
+  	<result column="productStatus" property="productStatus" jdbcType="SMALLINT" />
+  	<result column="productPrice" property="productPrice" jdbcType="DECIMAL" />
+  	<result column="productName" property="productName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.ShopCart" >
+    insert into shop_cart
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="norm != null" >
+        norm,
+      </if>
+      <if test="picUrl != null" >
+        pic_url,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="productSkuId != null" >
+        product_sku_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="norm != null" >
+        #{norm,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null" >
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="productSkuId != null" >
+        #{productSkuId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.ShopCart" >
+    update shop_cart
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="quantity != null" >
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="norm != null" >
+        norm = #{norm,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null" >
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="productSkuId != null" >
+        product_sku_id = #{productSkuId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryByMemberIdAndSkuId" resultMap="BaseResultMap">
+  	select *
+  	from shop_cart
+  	where status = 1
+  	and member_id = #{memberId}
+  	and product_sku_id = #{productSkuId}
+  	limit 1
+  </select>
+  
+  <select id="queryByMemberId" resultMap="BaseResultVoMap">
+  	select c.*,p.status as productStatus,p.price as productPrice,pp.name as productName
+  	from shop_cart c
+  	left join product_sku p on p.id=c.product_sku_id
+  	left join product_info pp on pp.id = c.product_id
+  	where c.member_id = #{memberId}
+  	and c.status = 1
+  </select>
+  
+</mapper>

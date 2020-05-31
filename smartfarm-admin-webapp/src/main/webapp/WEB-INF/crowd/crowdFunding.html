@@ -1,0 +1,705 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type"  content="multipart/form-data; charset=utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="/r/css/fileinput.min.css" rel="stylesheet" />
+    <link href="/r/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="/r/css/showProgress.css" rel="stylesheet" />
+
+    <script src="/r/js/skins.min.js"></script>
+    <script src="/r/js/jquery-2.1.1.js"></script>
+    <script src="/r/js/bootstrap.min.js"></script>
+    <script src="/r/js/angular.min.js"></script>
+    <script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>
+	<script src="/r/js/fileinput.min.js"></script>
+	<script src="/r/js/distpicker.data.js"></script>
+	<script src="/r/js/distpicker.js"></script>	
+	<script src="/r/js/bootstrap-datetimepicker.js"></script>
+	<script src="/r/js/core.js"></script>
+	<script src="/r/js/beyond.min.js"></script>
+
+	<script src="/r/core/controller/crowd/crowd.js"></script>
+
+	<style>
+		[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+			display: none !important;
+		}
+	</style>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+	<!-- 头部 -->
+	   
+    <div class="main-container container-fluid">
+        <div class="page-container">
+        
+        	<!-- 菜单 -->
+        	<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+        	<!-- 菜单 -->
+            
+            <!-- 右半页 -->
+            <div class="page-content">
+            	<div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="fa fa-comments"></i>
+                            <a href="/admin/main.htm">首页</a>
+                        </li>
+                        <li class="active">众筹管理</li>
+                    </ul>
+                </div>
+                
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                        
+                            <div class="widget">
+                                <div class="widget-header ">
+                                    <span class="widget-caption">众筹列表</span>
+                                </div>
+                                <div class="widget-body">
+
+                                	<div class="table table-striped table-bordered table-hover" style="height:55px;margin-bottom:20px;padding:10px;">
+                                		<div class="DTTT btn-group" style="left:35px;top:60px;">
+                                			<a class="btn btn-primary DTTT_button_copy" ng-click="showAddMsg()"><span><i class="glyphicon glyphicon-plus"></i>添加项目</span></a>
+                                		</div>
+                                	</div>
+                                
+                                    <table class="table table-striped table-bordered table-hover" id="simpledatatable">
+                                        <thead>
+                                            <tr>
+                                            	<th>
+                                                   	 ID
+                                                </th>
+                                                <th>
+                                                   	项目名称
+                                                </th>
+                                                <th>
+                                                                                                                                                            封面
+                                                </th>
+                                                 <th>
+                                                   	 责任人
+                                                </th>
+                                                <th>
+                                                                                                                                                             目标金额(元)
+                                                </th>
+                                                <th>
+                                                   	已筹金额(元)
+                                                </th>
+                                                <th>
+                                                   	发起时间
+                                                </th>
+                                                <th>
+                                                   	结束时间
+                                                </th>
+                                                <th>
+                                                   	收益发放时间
+                                                </th>
+                                                <th>
+                                                   	项目状态
+                                                </th>
+                                                <th>
+                                                   	分红状态
+                                                </th>
+                                                <th>
+                                                   	操作
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        
+                                        <tbody>
+                                            <tr ng-repeat="crowd in list">
+                                            	<td>
+                                                    {{crowd.id}}
+                                                </td>
+                                            	<td>
+                                                    {{crowd.name}}
+                                                </td>
+                                            	<td>
+                                                   <img ng-src="{{picUrl + crowd.cover}}" style="width:100px;height:100px;">
+                                                </td>
+                                            	<td>
+                                                    {{crowd.sponsor}}
+                                                </td>
+                                            	<td>
+                                                    {{crowd.targerAmount}}
+                                                </td>
+                                            	<td>
+                                                   
+                                                </td>
+                                            	<td>
+                                                    {{formatDate(crowd.startTime)}}
+                                                </td>
+                                            	<td>
+                                                    {{formatDate(crowd.endTime)}}
+                                                </td>
+                                            	<td>
+                                                    {{formatDate(crowd.provideTime)}}
+                                                </td>
+                                            	<td>
+                                                     {{{'-1':'初稿','1':'上架','2':'众筹中','3':'失败','4':'成功','5':'项目进展中','6':'分红中','7':'完成'}[crowd.status]}}
+                                                </td>
+                                            	<td>
+                                                    {{{1:'分红',2:'实物',3:'分红+实物'}[crowd.profitType]}}
+                                                </td>
+                                            	<td>
+                                                    <button class="btn btn-default" ng-click="showOrderList(crowd.id)">众筹列表</button>
+                                                    <button class="btn btn-default" ng-click="showEdit(crowd)">编辑</button>
+                                                    <button class="btn btn-default" ng-click="showOrderProgress(crowd.id)">进展</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        
+                                    </table>
+                                    <div class="row DTTTFooter">
+                                    	<pagination style="float:right" ng-change="pageChanged()" total-items="formData.total" items-per-page="formData.pageSize" ng-model="formData.pageNumber" max-size="5" class="pagination m-t m-b" boundary-links="true"></pagination>
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--查询订单列表  -->
+    <div class="modal-backdrop fade in" ng-cloak  ng-if="common.showOrderList"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block;" ng-show="common.showOrderList">
+    	<div class="modal-dialog modal-lg">
+	    	<div class="modal-content">
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeOrderList()">×</button>
+	    			<h4 class="modal-title">
+<!--						<button class="btn btn-primary" style="border-radius:5px;" ng-click='updateAllBonus()'>点击一键全部分红</button>-->
+						<button class="btn btn-primary" style="border-radius:5px;" ng-click='closeOrderList()'>点击关闭</button>
+					</h4>
+	    		</div>
+	    		<div class="modal-body" style="height:500px;overflow-y:scroll;overflow-x:hidden;">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+			    			 <table class="table table-striped table-bordered table-hover" id="simpledatatable">
+                                        <thead>
+                                            <tr>
+                                            	<th>
+                                                   	 订单编号
+                                                </th>
+                                                <th>
+                                                   	头像
+                                                </th>
+                                                <th>
+                                                                                                                                                            姓名
+                                                </th>
+                                                 <th>
+                                                   	 联系电话
+                                                </th>
+                                                <th>
+                                                                                                                                                             众筹类型
+                                                </th>
+                                                <th>
+                                                   	众筹档位
+                                                </th>
+                                               <!-- <th>
+                                                   	收益发放时间
+                                                </th>
+                                                <th>
+                                                   	分红状态
+                                                </th>
+                                                <th>
+                                                   	操作
+                                                </th>-->
+                                            </tr>
+                                        </thead>
+                                        
+                                        <tbody>
+                                            <tr ng-repeat="order in crowdOrderList">
+                                            	<td>
+                                                   {{order.orderNo}}
+                                                </td>
+                                            	<td>
+                                                   <img ng-src="{{order.picUrl}}" style="width:100px;height:100px;">
+                                                </td>
+                                            	<td>
+                                                   {{order.receiveName}}
+                                                </td>
+                                            	<td>
+                                                    {{order.receiveMobile}}
+                                                </td>
+                                            	<td>
+                                                    {{{1:'分红',2:'实物',3:'分红+实物'}[order.profitType]}}
+                                                </td>
+                                            	<td>
+                                                   {{order.price }}
+                                                </td>
+                                            	<!--<td>
+                                                    <span ng-show="!(order.grantTime) || (order.grantTime === null)">暂未发放</span>
+                                                    <span ng-if="!(order.grantTime) || (order.grantTime === null)">{{order.grantTime}}</span>
+                                                    <span ng-if="(order.grantTime)">{{formatDate(order.grantTime)}}</span>
+                                                </td>
+                                            	<td>
+                                                    <span ng-show="!(order.grantTime) || (order.grantTime === null)">暂未分红</span>
+                                                    <span ng-if="(order.grantTime)">已分红</span>
+                                                </td>-->
+                                            	<!--<td>
+                                                    <button class="btn btn-primary" style="border-radius:5px;" ng-show="!(order.grantTime)" ng-click="updateBonusById(order.id)">立即分红</button>
+                                                </td>-->
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="row DTTTFooter">
+                                    	<pagination style="float:right" ng-change="queryCrowOrderList()" total-items="crowdOrderData.total" items-per-page="crowdOrderData.pageSize" ng-model="crowdOrderData.pageNumber" max-size="5" class="pagination m-t m-b" boundary-links="true"></pagination>
+                                    </div>
+                                    <div style="clear: both"></div>
+		    			</div>
+		    		</div>
+		    	</div>
+	    	</div>
+	    </div>
+	</div>
+
+	<!--添加项目  -->
+	<div class="modal-backdrop fade in" ng-if="common.showAdd"></div>
+	<div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showAdd">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<button type="button" class="bootbox-close-button close"  ng-click="closeAddMsg()">×</button>
+					<h4 class="modal-title">添加项目</h4>
+				</div>
+
+				<div class="modal-body" style="height:500px;overflow-y:scroll;overflow-x:hidden">
+					<div class="bootbox-body">
+						<div class="form-horizontal">
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">项目名称</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" ng-model='crowdFundingAdd.name'>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">负责人</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" ng-model='crowdFundingAdd.sponsor'>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">封面图片</label>
+								<div class="col-sm-10">
+									<input id="addImg" type="file" class="file" name="addCover"
+										   data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">开始时间</label>
+								<div class="col-sm-4">
+									<input id="joinDate" name="myDates" ng-model="crowdFundingAdd.startTime" class="form-control date-picker" placeholder="请选择报名起始时间"  data-date-format="yyyy-mm-dd"/>
+								</div>
+								<label  class="col-sm-2 control-label no-padding-right">截止时间</label>
+								<div class="col-sm-4">
+									<input id="joinDeadlineDate" name="myDates" ng-model="crowdFundingAdd.endTime" class="form-control date-picker" placeholder="请选择活动截止时间"  data-date-format="yyyy-mm-dd"/>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">收益发放时间</label>
+								<div class="col-sm-4">
+									<input id="profitDate" name="myDates" ng-model="crowdFundingAdd.provideTime" class="form-control date-picker" placeholder="请选择活动截止时间"  data-date-format="yyyy-mm-dd"/>
+								</div>
+								<label  class="col-sm-2 control-label no-padding-right">目标金额</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" ng-model='crowdFundingAdd.targerAmount'>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">收益类型</label>
+								<div class="col-sm-10">
+									<select id="member_option" ng-model="crowdFundingAdd.profitType">
+										<option value="">---请选择---</option>
+<!--										<option value="1">投资分红</option>-->
+										<option value="2">实物</option>
+<!--										<option value="3">投资分红+实物</option>-->
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">项目简介</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" ng-model='crowdFundingAdd.brief'>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">收益方式说明</label>
+								<div class="col-sm-10">
+									<textarea class="form-control" ng-model='crowdFundingAdd.profitInfo' cols="30" rows="5" style="resize:none;"></textarea>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">项目周期</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" ng-model='crowdFundingAdd.period'>
+								</div>
+								<label  class="col-sm-2 control-label no-padding-right">众筹最少量</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" ng-model='crowdFundingAdd.miniQuantity'>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">预计分红率</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" ng-model='crowdFundingAdd.bonusRate'>
+								</div>
+								<label  class="col-sm-2 control-label no-padding-right">是否显示</label>
+								<div class="col-sm-4">
+									<div class="checkbox">
+										<label>
+											<!-- ng-model绑定了hasIdCard，当选中，hasIdCard为true，否则为发false -->
+											<input type="checkbox" ng-model="crowdFundingAdd.isShow">
+											<span class="text">是否显示</span>
+										</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">描述图片</label>
+								<div class="col-sm-10">
+									<input id="addImg" type="file" class="file" name="addDesc" multiple
+										   data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">排序</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" ng-model='crowdFundingAdd.orderNum'>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">档位设置</label>
+								<div class="col-sm-7"></div>
+								<div class="col-sm-3">
+									<button class="btn" ng-click="addGear()">添加档位</button>
+								</div>
+							</div>
+
+							<!-- 活动档次DIV -->
+							<div class="form-group" ng-repeat="grea in gearList">
+								<div ng-if="$index>0">
+									<div class="col-sm-8"></div>
+									<div class="col-sm-3">
+										<!-- 方法是可以传值的，ng-repeat中提供$index作为数据的下标值，可以利用这个值来做删除 -->
+										<button type="button" class="bootbox-close-button close"  ng-click="removeGear($index)">×</button>
+									</div>
+								</div>
+								<div class="form-group">
+									<label  class="col-sm-2 control-label no-padding-right">档位金额</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" ng-model='grea.price' placeholder="元" id="moneySet">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right">简单描述</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" ng-model='grea.description' placeholder="档位简单描述" id="easyDesc">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" ng-click="submitAdd()">保存</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!--编辑项目  -->
+	<div class="modal-backdrop fade in" ng-if="common.showEdit"></div>
+	<div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showEdit">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<button type="button" class="bootbox-close-button close"  ng-click="closeEdit()">×</button>
+					<h4 class="modal-title">编辑项目</h4>
+				</div>
+
+				<div class="modal-body" style="height:500px;overflow-y:scroll;overflow-x:hidden">
+					<div class="bootbox-body">
+						<div class="form-horizontal">
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">项目名称</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" ng-model='crowdFundingInfo.name'>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">负责人</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" ng-model='crowdFundingInfo.sponsor'>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">封面原图片</label>
+								<div class="col-sm-10">
+									<img alt="" ng-src="{{picUrl + crowdFundingInfo.cover}}" style="height:100px;width:300px;">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">上传新封面图</label>
+								<div class="col-sm-10">
+									<input id="addImg" type="file" class="file" name="editCover"
+										   data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">开始时间</label>
+								<div class="col-sm-4">
+									<input id="editJoinDate" name="myDates" ng-model="crowdFundingInfo.startTime" class="form-control date-picker" placeholder="请选择报名起始时间"  data-date-format="yyyy-mm-dd"/>
+								</div>
+								<label  class="col-sm-2 control-label no-padding-right">截止时间</label>
+								<div class="col-sm-4">
+									<input id="editJoinDeadlineDate" name="myDates" ng-model="crowdFundingInfo.endTime" class="form-control date-picker" placeholder="请选择活动截止时间"  data-date-format="yyyy-mm-dd"/>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">收益发放时间</label>
+								<div class="col-sm-4">
+									<input id="editProfitDate" name="myDates" ng-model="crowdFundingInfo.provideTime" class="form-control date-picker" placeholder="请选择活动截止时间"  data-date-format="yyyy-mm-dd"/>
+								</div>
+								<label  class="col-sm-2 control-label no-padding-right">目标金额</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" ng-model='crowdFundingInfo.targerAmount'>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">收益类型</label>
+								<div class="col-sm-10">
+									<select id="member_option" ng-model="crowdFundingInfo.profitType">
+<!--										<option value="1" ng-selected="1 === crowdFundingInfo.profitType">投资分红</option>-->
+										<option value="2" ng-selected="2 === crowdFundingInfo.profitType">实物</option>
+<!--										<option value="3" ng-selected="3 === crowdFundingInfo.profitType">投资分红+实物</option>-->
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">项目简介</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" ng-model='crowdFundingInfo.brief'>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">收益方式说明</label>
+								<div class="col-sm-10">
+									<textarea class="form-control" ng-model='crowdFundingInfo.profitInfo' cols="30" rows="5" style="resize:none;"></textarea>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">项目周期</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" ng-model='crowdFundingInfo.period'>
+								</div>
+								<label  class="col-sm-2 control-label no-padding-right">众筹最少量</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" ng-model='crowdFundingInfo.miniQuantity'>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">预计分红率</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" ng-model='crowdFundingInfo.bonusRate'>
+								</div>
+								<label  class="col-sm-2 control-label no-padding-right">是否显示</label>
+								<div class="col-sm-4">
+									<div class="checkbox">
+										<label>
+											<!-- ng-model绑定了hasIdCard，当选中，hasIdCard为true，否则为发false -->
+											<input type="checkbox" ng-model="crowdFundingInfo.isShow">
+											<span class="text">是否显示</span>
+										</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">原描述图</label>
+								<div class="col-sm-2" ng-repeat="desc in crowdFundingInfo.description.split(';')">
+									<img alt="" ng-src="{{picUrl + desc}}" style="height:50px;width:50px;">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">上传新描述图</label>
+								<div class="col-sm-10">
+									<input id="addImg" type="file" class="file" name="editDesc" multiple
+										   data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">排序</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" ng-model='crowdFundingInfo.orderNum'>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">档位设置</label>
+								<div class="col-sm-7"></div>
+								<div class="col-sm-3">
+									<button class="btn" ng-click="addEditGear()">添加档位</button>
+								</div>
+							</div>
+
+
+							<!-- 活动档次DIV -->
+							<div class="form-group" ng-repeat="greaEdit in crowdFundingInfo.gradeList">
+								<div ng-if="$index>0">
+									<div class="col-sm-8"></div>
+									<div class="col-sm-3">
+										<!-- 方法是可以传值的，ng-repeat中提供$index作为数据的下标值，可以利用这个值来做删除 -->
+										<button type="button" class="bootbox-close-button close"  ng-click="deleteGear($index)">×</button>
+									</div>
+								</div>
+								<div class="form-group">
+									<label  class="col-sm-2 control-label no-padding-right">档位金额</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" ng-model='greaEdit.price' placeholder="元" id="moneyEditSet">
+									</div>
+								</div>
+								<div class="form-group">
+									<label  class="col-sm-2 control-label no-padding-right">简单描述</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" ng-model='greaEdit.description' placeholder="档位简单描述" id="easyEditDesc">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" ng-click="submitEdit(crowdFundingInfo)">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--查看订单进展  -->
+    <div class="modal-backdrop fade in" ng-cloak  ng-show="common.showOrderProgress"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block;" ng-show="common.showOrderProgress">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    	
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeOrderProgress()">×</button>
+	    			<h4 class="modal-title"><button class="btn btn-primary" ng-click="showAddProgress()" data-toggle="modal" data-target="#myAddModel"><i class="glyphicon glyphicon-plus"></i>新增进展</button></h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:500px;overflow-y:scroll;overflow-x:hidden;">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+							 <div class="package-status">
+						        <div class="status-box">
+						            <ul class="status-list">
+						                <li ng-repeat="progress in progressInfoList">
+						                    <div class="status-content-before">{{formatDate(progress.reportTime)}}&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-trash"
+						                     ng-click="deleteProgressInfoById(progress.id,progress.projectId)" style="cursor:pointer;"></i></div>
+						                    <div class="status-time-before" style="display: table-cell;">
+						                    	<p style="margin-left:20px;display:block">{{progress.content}}</p>
+						                    	<div class="col-sm-2" ng-repeat="pic in progress.pics.split(';')">
+				                        			<img alt="" ng-src="{{picUrl +pic}}" style="height:100%;width:100%;">
+				                          		</div>
+											</div>
+						                    <div class="status-line"></div>
+						                </li>
+						            </ul>
+						        </div>
+						    </div>
+		    			</div>
+		    		</div>
+		    	</div>
+	    	</div>
+	    </div>
+	</div>
+
+	<!-- 模态框（Modal） -->
+	<div class="modal fade in" id="myAddModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<div class="modal-header"> 
+		    			<h4 class="modal-title">添加项目进度</h4>
+		    		</div>
+				</div>
+				<div class="modal-body" style="height:500px;overflow-y:scroll;overflow-x:hidden">
+					<div class="form-group">
+	    				<label class="col-sm-2 control-label no-padding-right">内容</label>
+	    				<div class="col-sm-10">      
+	                       	<textarea class="form-control" ng-model='orderProInfo.content' cols="30" rows="5" style="resize:none;"></textarea>
+	                  	</div>
+				    </div>
+				    			
+	    			<div class="form-group">
+	          			<label class="col-sm-2 control-label no-padding-right">图片说明</label>
+	               		<div class="col-sm-10">
+	               			<input id="addImg" type="file" class="file" name="addPro" multiple 
+	                 			data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+	                		</div>
+	         		</div>
+		    		<button type="button" class="btn btn-primary" ng-click="addProgress(orderProInfo.id)" style="text-align:center;">保存</button>
+			    </div>
+			</div>
+	   	</div>
+	</div>
+			
+</body>
+
+<script src="/r/core/controller/base/menu.js"></script>
+</html>

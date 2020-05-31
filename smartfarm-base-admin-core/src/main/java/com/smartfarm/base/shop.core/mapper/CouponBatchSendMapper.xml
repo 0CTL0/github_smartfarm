@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartfarm.base.shop.core.dao.CouponBatchSendDao">
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.CouponBatchSend">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="coupon_batch_id" jdbcType="BIGINT" property="couponBatchId" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="time_for_user" jdbcType="INTEGER" property="timeForUser" />
+    <result column="total_num" jdbcType="INTEGER" property="totalNum" />
+    <result column="remain_num" jdbcType="INTEGER" property="remainNum" />
+  </resultMap>
+  
+  <resultMap extends="BaseResultMap" id="BaseVoResultMap" type="com.smartfarm.base.shop.core.entity.vo.CouponBatchSendVo">
+  </resultMap>
+  <insert id="insert" keyProperty="id" parameterType="com.smartfarm.base.shop.core.entity.CouponBatchSend" useGeneratedKeys="true">
+    insert into coupon_batch_send
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="couponBatchId != null">
+        coupon_batch_id,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="timeForUser != null">
+        time_for_user,
+      </if>
+      <if test="totalNum != null">
+        total_num,
+      </if>
+      <if test="remainNum != null">
+        remain_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="couponBatchId != null">
+        #{couponBatchId,jdbcType=BIGINT},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="timeForUser != null">
+        #{timeForUser,jdbcType=INTEGER},
+      </if>
+      <if test="totalNum != null">
+        #{totalNum,jdbcType=INTEGER},
+      </if>
+      <if test="remainNum != null">
+        #{remainNum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.CouponBatchSend">
+    update coupon_batch_send
+    <set>
+      <if test="couponBatchId != null">
+        coupon_batch_id = #{couponBatchId,jdbcType=BIGINT},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="timeForUser != null">
+        time_for_user = #{timeForUser,jdbcType=INTEGER},
+      </if>
+      <if test="totalNum != null">
+        total_num = #{totalNum,jdbcType=INTEGER},
+      </if>
+      <if test="remainNum != null">
+        remain_num = #{remainNum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="queryUseableSend" resultMap="BaseVoResultMap">
+    select s.*,b.strategy_type as strategyType,b.deadline,b.day_count as dayCount,b.display_name as displayName,
+           b.reduct_price as reductPrice,b.amount,b.type,b.discount
+    from coupon_batch_send s
+    left join coupon_batch b  on b.id = s.coupon_batch_id
+    where s.status = 2
+    and s.start_time <![CDATA[ < ]]> #{nowTime}
+    and s.end_time <![CDATA[ > ]]> #{nowTime}
+    and b.business_id = #{businessId}
+    and s.remain_num <![CDATA[ > ]]> 0
+  </select>
+
+  <update id="updateRemainNumSend">
+    update coupon_batch_send
+    set remain_num = remain_num - 1
+    where id = #{id}
+    and remain_num <![CDATA[ > ]]> 0
+  </update>
+
+  <select id="querySendById" resultMap="BaseResultMap">
+    select * from coupon_batch_send where id = #{id}
+  </select>
+
+  <select id="queryCouponSendPage" resultMap="BaseVoResultMap">
+    select s.*,b.strategy_type as strategyType,b.deadline,b.day_count as dayCount,b.display_name as displayName,
+           b.reduct_price as reductPrice,b.amount,b.type,b.discount
+    from  coupon_batch_send s
+    left join coupon_batch b  on b.id = s.coupon_batch_id
+    where b.business_id = #{businessId}
+    order by s.id desc
+    limit #{start}, #{limit}
+  </select>
+
+  <select id="countCouponSendPage" resultType="Integer">
+    select count(s.id)
+    from  coupon_batch_send s
+            left join coupon_batch b  on b.id = s.coupon_batch_id
+    where b.business_id = #{businessId}
+  </select>
+
+  <select id="querySendByBatchId" resultMap="BaseResultMap">
+    select * from coupon_batch_send where coupon_batch_id = #{id}
+  </select>
+</mapper>

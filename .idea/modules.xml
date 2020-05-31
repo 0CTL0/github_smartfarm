@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/smartfarm.iml" filepath="$PROJECT_DIR$/smartfarm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smartfarm-admin-core/smartfarm-admin-core.iml" filepath="$PROJECT_DIR$/smartfarm-admin-core/smartfarm-admin-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smartfarm-admin-webapp/smartfarm-admin-webapp.iml" filepath="$PROJECT_DIR$/smartfarm-admin-webapp/smartfarm-admin-webapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smartfarm-base-admin-core/smartfarm-base-admin-core.iml" filepath="$PROJECT_DIR$/smartfarm-base-admin-core/smartfarm-base-admin-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smartfarm-service-core/smartfarm-service-core.iml" filepath="$PROJECT_DIR$/smartfarm-service-core/smartfarm-service-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smartfarm-service-webapp/smartfarm-service-webapp.iml" filepath="$PROJECT_DIR$/smartfarm-service-webapp/smartfarm-service-webapp.iml" />
+    </modules>
+  </component>
+</project>

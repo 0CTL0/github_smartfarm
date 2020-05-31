@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.ProducePlanDetailDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.ProducePlanDetail" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="brief" property="brief" jdbcType="VARCHAR" />
+    <result column="stage" property="stage" jdbcType="VARCHAR" />
+    <result column="task_date" property="taskDate" jdbcType="VARCHAR" />
+    <result column="plant_id" property="plantId" jdbcType="BIGINT" />
+    <result column="log_status" property="logStatus" jdbcType="SMALLINT" />
+  </resultMap>
+  
+  <resultMap id="BaseVoResultMap" type="com.smartfarm.base.farm.core.entity.vo.ProducePlanDetailVo" extends="BaseResultMap">
+  	<result column="master_name" property="masterName" jdbcType="VARCHAR" />
+    <result column="batch_code" property="batchCode" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getAllPageListByMasterId" resultMap="BaseResultMap">
+    select * from produce_plan_detail where plant_id = #{masterId,jdbcType=BIGINT} order by task_date asc limit #{start}, #{limit}
+  </select>
+  
+  <select id="getPageTotalByMasterId" resultType="Integer" parameterType="java.lang.Long" >
+    select count(*) from produce_plan_detail where plant_id = #{masterId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getDetailById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select * from produce_plan_detail where id=#{id,jdbcType=BIGINT}
+  </select>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.ProducePlanDetail" >
+    update produce_plan_detail
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        brief = #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="stage != null" >
+        stage = #{stage,jdbcType=VARCHAR},
+      </if>
+      <if test="taskDate != null" >
+        task_date = #{taskDate,jdbcType=VARCHAR},
+      </if>
+      <if test="plantId != null" >
+        plant_id = #{plantId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.ProducePlanDetail" >
+    insert into produce_plan_detail (id, name, brief,stage, task_date, plant_id)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{brief,jdbcType=VARCHAR}, 
+      #{stage,jdbcType=VARCHAR}, #{taskDate,jdbcType=VARCHAR}, #{plantId,jdbcType=BIGINT}
+      )
+  </insert>
+  
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    delete from produce_plan_detail where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <select id="getAllDetailsPageList" resultMap="BaseVoResultMap">
+    select ppd.*,pif.name master_name,pb.batch_code batch_code  from produce_plan_detail ppd,produce_plan_master ppm,product_batch pb,product_info pif
+    <where>
+    	ppd.plant_id=ppm.id and ppm.batch_id=pb.id and pb.product_info_id=pif.id
+    	and pb.farm_id=#{farmId,jdbcType=BIGINT}
+      <if test="batchCode != null">
+        and pb.batch_code LIKE CONCAT('%',#{batchCode},'%')
+      </if>
+		<if test="name != null">
+			and ppd.name LIKE CONCAT('%',#{name},'%')
+		</if>
+		<if test="startDate != null and startDate != '' ">
+			and ppd.task_date&gt;=#{startDate}
+		</if>
+		<if test="endDate != null and endDate != '' ">
+			and ppd.task_date&lt;=#{endDate}
+		</if>
+	</where>
+    order by ppd.task_date asc
+    limit #{start}, #{limit}
+  </select>
+  
+  <select id="getAllDetailsTotal" resultType="Integer" >
+    select count(*) from produce_plan_detail ppd,produce_plan_master ppm,product_batch pb
+    <where>
+      ppd.plant_id=ppm.id and ppm.batch_id=pb.id
+      and pb.farm_id=#{farmId,jdbcType=BIGINT}
+		<if test="name != null">
+			and ppd.name LIKE CONCAT('%',#{name},'%')
+		</if>
+		<if test="startDate != null and startDate != '' ">
+			and ppd.task_date&gt;=#{startDate}
+		</if>
+		<if test="endDate != null and endDate != '' ">
+			and ppd.task_date&lt;=#{endDate}
+		</if>
+	</where>
+  </select>
+  
+  <update id="updateLogStatusById">
+    update produce_plan_detail set log_status=#{logStatus,jdbcType=SMALLINT} where id=#{id,jdbcType=BIGINT}
+  </update>
+    
+  <insert id="insertDetailList" parameterType="java.util.List">
+  	insert into produce_plan_detail(`name`,brief,stage,task_date,plant_id,log_status) values
+    <foreach collection="detailList" item="detail" index="index" separator=",">
+        (#{detail.name,jdbcType=VARCHAR}, #{detail.brief,jdbcType=VARCHAR},#{detail.stage,jdbcType=VARCHAR},#{detail.taskDate,jdbcType=VARCHAR},#{detail.plantId,jdbcType=BIGINT},#{detail.logStatus,jdbcType=SMALLINT})
+    </foreach>
+  </insert>
+  
+  
+  
+  
+  
+  <sql id="Base_Column_List" >
+    id, name, brief, stage, task_date, plant_id
+  </sql>
+  
+  
+  
+  <insert id="insert2" parameterType="com.smartfarm.base.farm.core.entity.ProducePlanDetail" >
+    insert into produce_plan_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="brief != null" >
+        brief,
+      </if>
+      <if test="stage != null" >
+        stage,
+      </if>
+      <if test="taskDate != null" >
+        task_date,
+      </if>
+      <if test="plantId != null" >
+        plant_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="stage != null" >
+        #{stage,jdbcType=VARCHAR},
+      </if>
+      <if test="taskDate != null" >
+        #{taskDate,jdbcType=VARCHAR},
+      </if>
+      <if test="plantId != null" >
+        #{plantId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="com.smartfarm.base.farm.core.entity.ProducePlanDetail" >
+    update produce_plan_detail
+    set name = #{name,jdbcType=VARCHAR},
+      brief = #{brief,jdbcType=VARCHAR},
+      stage = #{stage,jdbcType=VARCHAR},
+      task_date = #{taskDate,jdbcType=VARCHAR},
+      plant_id = #{plantId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

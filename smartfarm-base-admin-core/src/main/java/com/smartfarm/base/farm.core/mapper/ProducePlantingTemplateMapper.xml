@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.ProducePlantingTemplateDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.ProducePlantingTemplate" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="brief" property="brief" jdbcType="VARCHAR" />
+    <result column="stage" property="stage" jdbcType="VARCHAR" />
+    <result column="days" property="days" jdbcType="INTEGER" />
+    <result column="crops_id" property="cropsId" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <!-- 根据种子id查询其对应的所有种植计划模板 -->
+  <select id="getTemplatesBySeedId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select * from produce_planting_template where crops_id=#{seedId,jdbcType=BIGINT}
+  </select>
+  
+  
+  
+  
+  
+  <sql id="Base_Column_List" >
+    id, name, brief, stage, days, crops_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from produce_planting_template
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from produce_planting_template
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert2" parameterType="com.smartfarm.base.farm.core.entity.ProducePlantingTemplate" >
+    insert into produce_planting_template (id, name, brief, 
+      stage, days, crops_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{brief,jdbcType=VARCHAR}, 
+      #{stage,jdbcType=VARCHAR}, #{days,jdbcType=INTEGER}, #{cropsId,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.ProducePlantingTemplate" >
+    insert into produce_planting_template
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="brief != null" >
+        brief,
+      </if>
+      <if test="stage != null" >
+        stage,
+      </if>
+      <if test="days != null" >
+        days,
+      </if>
+      <if test="cropsId != null" >
+        crops_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="stage != null" >
+        #{stage,jdbcType=VARCHAR},
+      </if>
+      <if test="days != null" >
+        #{days,jdbcType=INTEGER},
+      </if>
+      <if test="cropsId != null" >
+        #{cropsId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.ProducePlantingTemplate" >
+    update produce_planting_template
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        brief = #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="stage != null" >
+        stage = #{stage,jdbcType=VARCHAR},
+      </if>
+      <if test="days != null" >
+        days = #{days,jdbcType=INTEGER},
+      </if>
+      <if test="cropsId != null" >
+        crops_id = #{cropsId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartfarm.base.farm.core.entity.ProducePlantingTemplate" >
+    update produce_planting_template
+    set name = #{name,jdbcType=VARCHAR},
+      brief = #{brief,jdbcType=VARCHAR},
+      stage = #{stage,jdbcType=VARCHAR},
+      days = #{days,jdbcType=INTEGER},
+      crops_id = #{cropsId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

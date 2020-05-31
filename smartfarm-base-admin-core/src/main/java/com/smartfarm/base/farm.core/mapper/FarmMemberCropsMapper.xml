@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.FarmMemberCropsDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.FarmMemberCrops" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="member_land_id" property="memberLandId" jdbcType="BIGINT" />
+    <result column="crops_id" property="cropsId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="area" property="area" jdbcType="INTEGER" />
+    <result column="weight" property="weight" jdbcType="SMALLINT" />
+    <result column="inventory" property="inventory" jdbcType="SMALLINT" />
+    <result column="pick_time" jdbcType="VARCHAR" property="pickTime" />
+    <result column="fresh_time" jdbcType="VARCHAR" property="freshTime" />
+  </resultMap>
+  
+  <resultMap id="BaseVoResultMap" type="com.smartfarm.base.farm.core.entity.vo.FarmMemberCropsVo" extends="BaseResultMap" >
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="cover" property="cover" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.FarmMemberCrops" >
+    insert into farm_member_crops
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberLandId != null" >
+        member_land_id,
+      </if>
+      <if test="cropsId != null" >
+        crops_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="pickTime != null">
+        pick_time,
+      </if>
+      <if test="freshTime != null">
+        fresh_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberLandId != null" >
+        #{memberLandId,jdbcType=BIGINT},
+      </if>
+      <if test="cropsId != null" >
+        #{cropsId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=INTEGER},
+      </if>
+      <if test="pickTime != null">
+        #{pickTime,jdbcType=VARCHAR},
+      </if>
+      <if test="freshTime != null">
+        #{freshTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="getCropsByLandId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select * from farm_member_crops where member_land_id=#{landId,jdbcType=BIGINT} order by id desc limit 1
+  </select>
+  
+  <select id="getCropsByLandIdAndStatus" resultMap="BaseVoResultMap" parameterType="java.lang.Long" >
+    select fmc.*,fci.name from farm_member_crops fmc,farm_crops_info fci where fmc.crops_id=fci.id 
+    and fmc.member_land_id=#{landId,jdbcType=BIGINT} and fmc.status=1
+  </select>
+  
+  <select id="getMatureCropsByLandId" resultMap="BaseVoResultMap" parameterType="java.lang.Long" >
+    select fmc.*,fci.name from farm_member_crops fmc,farm_crops_info fci where fmc.crops_id=fci.id 
+    and fmc.member_land_id=#{landId,jdbcType=BIGINT} and fmc.inventory>0
+  </select>
+  
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select * from farm_member_crops where id=#{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="getCropById" resultMap="BaseVoResultMap" parameterType="java.lang.Long" >
+    select fmc.*,fci.name from farm_member_crops fmc,farm_crops_info fci where fmc.crops_id=fci.id
+    and fmc.id=#{id,jdbcType=BIGINT}
+  </select>
+  
+  <update id="updateInventory" parameterType="com.smartfarm.base.farm.core.entity.FarmMemberCrops" >
+    update farm_member_crops set inventory=#{inventory,jdbcType=SMALLINT} where id=#{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getMyCropsInfoByLandId" resultMap="BaseVoResultMap" parameterType="java.lang.Long" >
+    select fmc.*,fci.name,fci.cover from farm_member_crops fmc,farm_crops_info fci where fmc.crops_id=fci.id 
+     and fmc.member_land_id=#{landId,jdbcType=BIGINT} and fmc.status!=4
+  </select>
+  
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    delete from farm_member_crops where id=#{id,jdbcType=BIGINT}
+  </delete>
+  
+  <update id="updateStatusById" parameterType="com.smartfarm.base.farm.core.entity.FarmMemberCrops" >
+    update farm_member_crops set  status=#{status,jdbcType=SMALLINT} where id=#{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="getAllMemberCrops" resultMap="BaseVoResultMap">
+    SELECT fmc.*,fci.cover,fci.name FROM farm_member_crops fmc
+    LEFT JOIN farm_crops_info fci ON fmc.crops_id=fci.id
+    WHERE fmc.member_land_id=#{memberLandId}  AND fmc.inventory>0
+  </select>
+
+
+  <select id="getByDelegateOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select fmc.* from farm_member_crops fmc where fmc.id=(select fdo.member_crops_id from farm_delegate_order fdo
+    where fdo.id=#{orderId,jdbcType=BIGINT})
+  </select>
+
+  <update id="updateAfterPick" parameterType="com.smartfarm.base.farm.core.entity.FarmMemberCrops" >
+    update farm_member_crops
+    <set >
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=SMALLINT},
+      </if>
+      <if test="inventory != null" >
+        inventory = #{inventory,jdbcType=SMALLINT},
+      </if>
+      <if test="pickTime != null">
+        pick_time = #{pickTime,jdbcType=VARCHAR},
+      </if>
+      <if test="freshTime != null">
+        fresh_time = #{freshTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="getPickDelegateInfo" parameterType="java.lang.Long" resultMap="BaseVoResultMap">
+    select fmc.id, fmc.area, fci.name name from farm_member_crops fmc, farm_crops_info fci where fmc.crops_id=fci.id and fmc.id=(select fdo.member_crops_id from farm_delegate_order fdo
+    where fdo.id=#{orderId,jdbcType=BIGINT})
+  </select>
+
+
+
+  
+  
+  
+  <sql id="Base_Column_List" >
+    id, member_land_id, crops_id, status, area, weight,inventory,pick_time,fresh_time
+  </sql>
+  
+  
+  <insert id="insert2" parameterType="com.smartfarm.base.farm.core.entity.FarmMemberCrops" >
+    insert into farm_member_crops (id, member_land_id, crops_id, 
+      status, area)
+    values (#{id,jdbcType=BIGINT}, #{memberLandId,jdbcType=BIGINT}, #{cropsId,jdbcType=BIGINT}, 
+      #{status,jdbcType=SMALLINT}, #{area,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.FarmMemberCrops" >
+    update farm_member_crops
+    <set >
+      <if test="memberLandId != null" >
+        member_land_id = #{memberLandId,jdbcType=BIGINT},
+      </if>
+      <if test="cropsId != null" >
+        crops_id = #{cropsId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=SMALLINT},
+      </if>
+      <if test="inventory != null" >
+        inventory = #{inventory,jdbcType=SMALLINT},
+      </if>
+      <if test="pickTime != null">
+        pick_time = #{pickTime,jdbcType=VARCHAR},
+      </if>
+      <if test="freshTime != null">
+        fresh_time = #{freshTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+</mapper>

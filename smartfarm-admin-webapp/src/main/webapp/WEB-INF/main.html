@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+
+    <script src="/r/js/skins.min.js"></script>
+    <script src="/r/js/jquery-2.1.1.js"></script>
+    <script src="/r/js/bootstrap.min.js"></script>
+    <script src="/r/js/angular.min.js"></script>
+    <script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>
+	<script src="/r/js/core.js"></script>
+	<script src="/r/js/beyond.min.js"></script>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+
+    
+    <div class="main-container container-fluid">
+        <div class="page-container">
+        
+            
+        	<!-- 菜单 -->
+        	<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+        	<!-- 菜单 -->
+            
+            
+            <!-- 右半页 -->
+            <div class="page-content">
+            	<div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="fa fa-comments"></i>
+                            <a href="#">首页</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="page-body"></div>
+            </div>
+            
+            
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+var app = angular.module("myApp", ["ui.bootstrap"]);
+
+app.controller("myCtrl", function($scope,$http) {
+	
+});
+</script>
+<script src="/r/core/controller/base/menu.js"></script>
+</html>

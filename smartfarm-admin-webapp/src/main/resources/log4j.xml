@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss}][%l] %-5p %x %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="file" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="./log/mt-terminal-admin-webapp.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value=".yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss}] %-5p %x %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="timing-file" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="./log/timing_record.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value=".yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+	</appender>
+
+	<logger name="TimingRecord">
+		<level value="info" />
+		<appender-ref ref="timing-file" />
+	</logger>
+
+	<logger name="org.springframework">
+		<level value="warn" />
+		<appender-ref ref="file" />
+	</logger>
+
+	<logger name="com.smartfarm">
+		<level value="info" />
+		<appender-ref ref="file" />
+	</logger>
+	<root>
+		<level value="error" />
+		<appender-ref ref="console" />
+	</root>
+</log4j:configuration>

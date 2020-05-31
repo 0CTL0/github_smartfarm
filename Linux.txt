@@ -1,0 +1,44 @@
+
+netstat - atulnp		//查看所有端口和进程
+lsof -i:22			//查某个端口的占用情况
+java -jar ***.jar     		//执行可运行jar包
+
+
+
+java -jar XXX.jar				//在当前ssh窗口，可按CTRL + C打断程序运行，或者直接关闭窗口，则程序直接退出
+nohup java -jar xxx.jar &			//在当窗口关闭时，程序才会中止运行。&代表让该命令在后台执行。
+nohup java -jar  smartfarm-admin-webapp-0.0.1-SNAPSHOT.jar > ./log/console_output &	
+					//不挂断运行命令,当账户退出或终端关闭时,程序仍然运行，并且该作业的所有输出被重定向到Log.log的文件中。
+nohup java -jar XXX.jar > Log.log 2>&1 &	
+					标准输入文件(stdin)：stdin的文件描述符为0，Unix程序默认从stdin读取数据。
+					标准输出文件(stdout)：stdout 的文件描述符为1，Unix程序默认向stdout输出数据。
+					标准错误文件(stderr)：stderr的文件描述符为2，Unix程序会向stderr流中写入错误信息。
+nohup java -jar XXX.jar > /dev/null 2>&1 &	/dev/null 是一个特殊的文件，写入到它的内容都会被丢弃；屏蔽输出，起到禁止输出作用	
+
+项目启动后，在jar包所在目录生成log目录，进入并打开日志文件
+tail -f catalina.out				//不断的刷新日志信息（实时）
+tailf -n 500 console_output			//打印最后500行
+
+ctrl+c 			//中断退出进程  
+ctrl+z			//中断挂起进程
+ps aux|grep smartfarm-admin-webapp-0.0.1-SNAPSHOT.jar		//查看jar程序的PID
+kill -9 PID			//杀死进程
+
+
+
+解决更新项目带来的频繁重启操作，创建2个脚本
+
+	start.sh
+	#! /bin/bash
+	#注意：必须有&让其后台执行，否则没有pid生成   jar包路径为绝对路径
+	java -jar /web/share-book.jar > /web/log.txt &
+	# 将jar包启动对应的pid写入文件中，为停止时提供pid
+	echo $! > /web/pid.txt
+
+	stop.sh
+	#! /bin/bash
+	PID=$(cat /web/pid.txt)
+	kill -9 $PID
+
+	启动项目：./start.sh
+	停止项目：./stop.sh

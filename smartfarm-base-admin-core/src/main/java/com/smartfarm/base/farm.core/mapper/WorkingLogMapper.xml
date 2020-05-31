@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.WorkingLogDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.WorkingLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="plan_time" property="planTime" jdbcType="VARCHAR" />
+    <result column="execute_time" property="executeTime" jdbcType="VARCHAR" />
+    <result column="actual_execute_time" property="actualExecuteTime" jdbcType="VARCHAR" />
+    <result column="operator" property="operator" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="task_type" property="taskType" jdbcType="VARCHAR" />
+    <result column="is_show" property="isShow" jdbcType="SMALLINT" />
+    <result column="plan_detail_id" property="planDetailId" jdbcType="BIGINT" />
+    <result column="member_land_id" property="memberLandId" jdbcType="BIGINT" />
+  </resultMap>
+
+  <resultMap id="BaseVoResultMap" type="com.smartfarm.base.farm.core.entity.vo.WorkingLogVo" extends="BaseResultMap">
+  	<result column="name" property="operatorName" jdbcType="VARCHAR" />
+  	<result column="work_name" property="workName" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.WorkingLog" >
+    insert into working_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="planTime != null" >
+        plan_time,
+      </if>
+      <if test="executeTime != null" >
+        execute_time,
+      </if>
+      <if test="actualExecuteTime != null" >
+        actual_execute_time,
+      </if>
+      <if test="operator != null" >
+        operator,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="pic != null" >
+        pic,
+      </if>
+      <if test="taskType != null" >
+        task_type,
+      </if>
+      <if test="isShow != null" >
+        is_show,
+      </if>
+      <if test="planDetailId != null" >
+        plan_detail_id,
+      </if>
+      <if test="memberLandId != null" >
+        member_land_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="planTime != null" >
+        #{planTime,jdbcType=VARCHAR},
+      </if>
+      <if test="executeTime != null" >
+        #{executeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="actualExecuteTime != null" >
+        #{actualExecuteTime,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="pic != null" >
+        #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="taskType != null" >
+        #{taskType,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        #{isShow,jdbcType=SMALLINT},
+      </if>
+      <if test="planDetailId != null" >
+        #{planDetailId,jdbcType=BIGINT},
+      </if>
+      <if test="memberLandId != null" >
+        #{memberLandId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="selectByMemberLandId" resultMap="BaseVoResultMap">
+    select wl.* FROM working_log wl
+    WHERE wl.is_show=1 AND wl.`status`=2 AND wl.member_land_id=#{memberLandId} ORDER by wl.id DESC
+  </select>
+
+  <select id="selectEmployeeTaskList" resultMap="BaseVoResultMap">
+    SELECT * FROM working_log wl
+    WHERE wl.operator=#{employId}
+    ORDER BY wl.id DESC
+  </select>
+
+  <select id="getWorkingLogsPageList" resultMap="BaseVoResultMap">
+  	select wl.*,ei.name,fdt.work_name from working_log wl,employee_info ei,farm_delegate_type fdt,farm_delegate_order fdo,farm_member_land fml,farm_rentland_info fri,farm_tunnel_info fti,farm_base_info fbi,farm_info fi
+    <where>
+    	wl.operator=ei.id and wl.task_type=fdt.work_type and wl.plan_detail_id=fdo.id and fdo.member_land_id=fml.id and fml.rent_land_id=fri.id and fri.tunnel_id=fti.id and fti.base_id=fbi.id and fbi.farm_id=fi.id
+      <if test="farmId != null">
+        and fi.id=#{farmId}
+      </if>
+		<if test="content != null">
+			and wl.content LIKE CONCAT('%',#{content},'%')
+		</if>
+		<if test="planTime != null and planTime != '' ">
+			and wl.plan_time=#{planTime}
+		</if>
+		<if test="executeTime != null and executeTime != '' ">
+			and wl.execute_time=#{executeTime}
+		</if>
+		<if test="status != null">
+			and wl.status=#{status}
+		</if>
+	</where>
+    order by wl.execute_time asc
+    limit #{start}, #{limit}
+  </select>
+  
+  <select id="getWorkingLogTotal" resultType="Integer" >
+    select count(*) from working_log wl,employee_info ei,farm_delegate_type fdt,farm_delegate_order fdo,farm_member_land fml,farm_rentland_info fri,farm_tunnel_info fti,farm_base_info fbi,farm_info fi
+    <where>
+      wl.operator=ei.id and wl.task_type=fdt.work_type and wl.plan_detail_id=fdo.id and fdo.member_land_id=fml.id and fml.rent_land_id=fri.id and fri.tunnel_id=fti.id and fti.base_id=fbi.id and fbi.farm_id=fi.id
+      <if test="farmId != null">
+        and fi.id=#{farmId}
+      </if>
+		<if test="content != null">
+			and content LIKE CONCAT('%',#{content},'%')
+		</if>
+		<if test="planTime != null and planTime != '' ">
+			and plan_time=#{planTime}
+		</if>
+		<if test="executeTime != null and executeTime != '' ">
+			and execute_time=#{executeTime}
+		</if>
+		<if test="status != null">
+			and status=#{status}
+		</if>
+	</where>
+  </select>
+  
+  <update id="updateShowStatusById">
+    update working_log set is_show=#{isShow,jdbcType=SMALLINT} where id=#{id,jdbcType=BIGINT}
+  </update>
+  
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    delete from working_log where id=#{id,jdbcType=BIGINT}
+  </delete>
+
+  <select id="getDelegateLogs" resultMap="BaseResultMap">
+    select * from working_log where operator=#{operator,jdbcType=BIGINT} and member_land_id=#{landId,jdbcType=BIGINT} order by id desc
+  </select>
+
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.WorkingLog" >
+    update working_log
+    <set >
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="actualExecuteTime != null" >
+        actual_execute_time = #{actualExecuteTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="pic != null" >
+        pic = #{pic,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+
+
+  <sql id="Base_Column_List" >
+    id, plan_time, execute_time, operator, content, status, pic, task_type, is_show,
+    plan_detail_id,member_land_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from working_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from working_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert2" parameterType="com.smartfarm.base.farm.core.entity.WorkingLog" >
+    insert into working_log (id, plan_time, execute_time,
+      operator, content, status,
+      pic, task_type, is_show,
+      plan_detail_id)
+    values (#{id,jdbcType=BIGINT}, #{planTime,jdbcType=VARCHAR}, #{executeTime,jdbcType=VARCHAR},
+      #{operator,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT},
+      #{pic,jdbcType=VARCHAR}, #{taskType,jdbcType=VARCHAR}, #{isShow,jdbcType=SMALLINT},
+      #{planDetailId,jdbcType=BIGINT})
+  </insert>
+
+
+  <update id="updateByPrimaryKey" parameterType="com.smartfarm.base.farm.core.entity.WorkingLog" >
+    update working_log
+    set plan_time = #{planTime,jdbcType=VARCHAR},
+      execute_time = #{executeTime,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=BIGINT},
+      content = #{content,jdbcType=VARCHAR},
+      status = #{status,jdbcType=SMALLINT},
+      pic = #{pic,jdbcType=VARCHAR},
+      task_type = #{taskType,jdbcType=VARCHAR},
+      is_show = #{isShow,jdbcType=SMALLINT},
+      plan_detail_id = #{planDetailId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  
+
+
+</mapper>

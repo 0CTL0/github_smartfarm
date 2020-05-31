@@ -1,0 +1,319 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="/r/css/fileinput.min.css" rel="stylesheet" />
+	
+	<script src="/r/js/skins.min.js"></script>
+	<script src="/r/js/jquery-2.1.1.js"></script>
+	<script src="/r/js/bootstrap.min.js"></script>
+	<script src="/r/js/angular.min.js"></script>
+	<script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>	    	
+	<script src="/r/js/fileinput.min.js"></script>
+	<script src="/r/js/distpicker.data.js"></script>
+	<script src="/r/js/distpicker.js"></script>
+	<script src="/r/js/core.js"></script>
+	<script src="/r/js/beyond.min.js"></script>
+	<script src="/r/core/controller/base/farmInfo.js"></script>
+	<script src="/r/core/controller/base/menu.js"></script>
+		
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+	<!-- 头部 -->
+	   
+    <div class="main-container container-fluid">
+        <div class="page-container">
+        
+        	<!-- 菜单 -->
+        	<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+        	<!-- 菜单 -->
+            
+            <!-- 右半页 -->
+            <div class="page-content">
+            	<div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="fa fa-comments"></i>
+                            <a href="/admin/main.htm">首页</a>
+                        </li>
+                        <li>
+                         <a href="/admin/farmInfo.htm">农场列表</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="widget">
+                                <div class="widget-header ">
+                                    <span class="widget-caption">农场列表</span>
+                                </div>
+                                
+                                <div class="widget-body">                                                   	
+                                
+		                               <!-- 搜索框 -->
+			                          <div class="table table-striped table-bordered table-hover" style="margin-bottom:20px;padding:10px;overflow:hidden; position:relative;">
+			                            <div class="row">	                            
+			                            	<div class="col-sm-1 control-label no-padding-right" for="inputEmail3" style="padding-top:7px;"><label>农场名称</label></div>
+					    					<div class="col-sm-2">
+			                            		<input type="text" class="form-control" ng-model='formData.name'>
+			                        		</div>	 
+			                        		<div class="col-sm-1" style="padding-top:7px;"><label>选择状态</label></div>
+			                        		<div class="col-sm-2">			                        		
+                                    			<select class="form-control" ng-model='formData.status' ng-options="status.id as status.name for status in statusList">
+													<option value="" disabled>--请选择--</option>
+												</select>       
+			                        		</div>		      			                     		                   	
+		                                	<div class="col-sm-1">
+		                                		<button class="btn btn-default"  ng-click="pageChanged()">查询</button> 
+		                                	</div>		                                	
+		                                	
+		                                	<div class="col-sm-1" style="position:absolute;right:30px;top:10px;">
+		                                		<button class="btn btn-default"  ng-click="showAddMsg()">新增农场</button>
+                        	                </div>	                                  		
+	                                		     					   		
+						    			</div>							    										    		
+						    		 </div>  
+		                             <!-- 搜索框 -->    
+                                     
+                                     <!-- 主列表 -->                           
+                                    <table class="table table-striped table-bordered table-hover" id="simpledatatable">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                   	 农场名称
+                                                </th>
+                                                <th>
+                                                     	农场地址
+                                                </th>
+                                                 <th>
+                                                    	 农场经度
+                                                </th>
+                                                <th>
+													 农场纬度
+                                                </th>
+                                                <th>
+                                                   	农场简介
+                                                </th>
+												<th>
+													状态
+												</th>
+                                                <th>
+                                                   	操作
+                                                </th>                                             
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="farm in list">
+                                                <td>
+                                                    {{farm.name}}
+                                                </td>
+                                                <td>
+                                                	{{farm.address}}
+                                                </td>
+                                                <td>
+                                                	{{farm.longitude}}
+                                                </td>
+                                                <td>
+                                                	{{farm.latitude}}
+                                                </td>                                                
+                                                <td>
+                                                	{{farm.brief}}
+                                                </td>
+												<td>
+													{{{1:'启用',2:'禁用'}[farm.status]}}
+												</td>
+                                                <td>                                                   
+                                                    <button class="btn btn-default" ng-click="changeStatus(farm.id)">{{{1:'禁用',2:'启用'}[farm.status]}}</button>
+                                                    <button class="btn btn-default" ng-click="showEditMsg(farm.id)">编辑</button>
+<!--                                                    <button class="btn btn-default" ng-click="toFarmBase(farm.id)">基地管理</button>-->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        
+                                    </table>
+                                    <div class="row DTTTFooter">
+                                    	<pagination style="float:right" ng-change="pageChanged()" total-items="formData.total" items-per-page="formData.pageSize" ng-model="formData.pageNumber" max-size="5" class="pagination m-t m-b" boundary-links="true"></pagination>
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    
+    
+        <!-- 新增弹窗-->
+    <div class="modal-backdrop fade in" ng-if="common.showAdd"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showAdd" >
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    		
+	    		<div class="modal-header">	    		
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeAddMsg()">×</button>
+	    			<h4 class="modal-title">添加农场</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:350px;overflow-y:scroll;overflow-x:hidden">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">农场名称</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="farmInfoAdd.name"></input>
+	                        	</div>
+			    		</div>
+			    		
+			    		<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">地址</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="farmInfoAdd.address"></input>
+	                        	</div>
+			    		</div>
+			    		
+			    		<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">经度</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="farmInfoAdd.longitude"></input>
+	                        	</div>
+			    		</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">纬度</label>
+								<div class="col-sm-10">
+									<input class="form-control" rows="3" ng-model="farmInfoAdd.latitude"></input>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label
+									   class="col-sm-2 control-label no-padding-right">简介</label>
+								<div class="col-sm-10">
+									<textarea class="form-control" rows="5"
+											  ng-model="farmInfoAdd.brief"></textarea>
+								</div>
+							</div>
+			    					    		
+			    		<div class="form-group">
+			                    <label class="col-sm-2 control-label no-padding-right">农场封面</label>
+			                    <div class="col-sm-10">
+			                         <input id="addCoverImg" type="file" class="file" name="addCoverImg"  
+			                          	data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+			                     </div>
+		                </div>	
+
+			    		
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeAddMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitAdd()">确定</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+    <!-- 新增弹窗 -->
+    
+     <!-- 编辑弹窗 -->
+    <div class="modal-backdrop fade in" ng-if="common.showEdit"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showEdit" >
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+
+	    		<div class="modal-header">	    		
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeEditMsg()">×</button>
+	    			<h4 class="modal-title">编辑土地</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:350px;overflow-y:scroll;overflow-x:hidden">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+
+							<input ng-model="farmInfoEdit.id" type="hidden">
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">农场名称</label>
+								<div class="col-sm-10">
+									<input class="form-control" rows="3" ng-model="farmInfoEdit.name"></input>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">地址</label>
+								<div class="col-sm-10">
+									<input class="form-control" rows="3" ng-model="farmInfoEdit.address"></input>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">经度</label>
+								<div class="col-sm-10">
+									<input class="form-control" rows="3" ng-model="farmInfoEdit.longitude"></input>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">纬度</label>
+								<div class="col-sm-10">
+									<input class="form-control" rows="3" ng-model="farmInfoEdit.latitude"></input>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label
+									   class="col-sm-2 control-label no-padding-right">简介</label>
+								<div class="col-sm-10">
+									<textarea class="form-control" rows="5"
+											  ng-model="farmInfoEdit.brief"></textarea>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">农场封面</label>
+								<div class="col-sm-10">
+									<input id="editCoverImg" type="file" class="file" name="editCoverImg"
+										   data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+								</div>
+							</div>
+
+						</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeEditMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitEdit()">确定</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+    <!-- 编辑弹窗 -->
+    
+
+</body>
+</html>

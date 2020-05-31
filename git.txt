@@ -1,0 +1,147 @@
+------------------------------------------------------------------------------------------------------------------------
+常用命令：
+git clone 远程库地址
+
+git config --global user.name "0CTL0"
+git config --global user.email "643788809@qq.com"
+
+git status  查看本地变化
+git log	查看日志
+git add .  提交改变的文件到暂存区
+git commit -m "注释"    提交到本地
+git commit -a -m "注释"  自动把所有跟踪的文件暂存起来并一起提交
+或者
+git commit -a
+	弹出注释文件，a和ESC切换状态，：qa!保存退出；
+git push -u origin master 推送到远程库
+git fetch	将数据拉取到本地仓库 - 它并不会自动合并或修改当前的工作回，本地的库中master的commitID不变。
+git pull	从唯一远程获取最新版本并merge到本地，会自动合并或修改当前的工作,commitID发生改变。
+	完整格式	$ git pull <远程主机名> <远程分支名>:<本地分支名>	拉取某远程库的某分支与本地某分支合并
+	
+（注意：配置信息存在于本地，跟换电脑操作需要再配置一次）
+git remote 查看当前配置的所有远程仓库
+$ git remote add 库名(常用origin)  git://github.com/paulboone/ticgit.git  添加远程仓库
+
+git branch 	看看分支 		git branch -a 	查看所有本地分支和远程分支
+git branch -d <branchName>		创建本地分支
+git branch -d <branchName>		删除本地分支
+git branch origin --delete <branchName>	删除远程分支
+git pull  <branchName>		将远程分支拉取到本地分支
+git chechout aaa 	切换分支aaa （应该是切换本地分支，为什么也可以切换远程分支？？？）
+git merge <branchName>		将分支合并到当前分支
+
+
+git rm --cached  <filename>		删除文件跟踪并保留在本地
+git rm --f <filename>		删除文件跟踪和本地文件
+（github限制超过100M文件上传，使用git fls问题多：
+使用FLS提交大文件到github，又遇到其他问题——决定放弃跟踪大文件——但本地的第一个提交记录已经存在，在push时总
+是自动调起FLS上传文件——改用传到gitee，还是主动调起FLS，报错：FLS属于企业功能——所以，超过100M的文件在gitee
+和github中版本管理行不通，只能干掉大文件）
+-----------------------------------------------------------------------------------------------------------------------
+
+有了一定的积累，马上明白了这两种方法的区别：（以后导入项目，要导入在工作区的项目）
+	第一种是建立本地仓库并初始化，需要配置SSH信息，连接远程库，提交，推送
+	第二种是克隆远程仓库为本地仓库，不需要配置SSH信息，把项目拷进本都仓库工作区，提交，推送
+
+需要先告诉git我是谁——》每个提交版本上记录是谁的提交
+	$ git config --global user.name "0CTL0"
+	$ git config --global user.email "643788809@qq.com"
+推送和拉取需要SSH验证：
+	github：643788809@qq.com 643788809TIANqq
+	gitee:13570416750		13570416750
+
+【第二种】（简单，推荐）
+https://blog.csdn.net/Lucky_LXG/article/details/77849212
+1、github上创建仓库，点击Clone，复制地址备用。若是创建时勾选README，就自动为项
+目在github创建一个用作介绍的文件。
+2、右键项目（实际上在不必右键，再任意目录都可以），Git Bash Here，弹出git窗口
+	git clone 复制的地址
+3、项目下出现一个以github仓库命名的文件夹，把项目的其他文件全部复制到该文件夹下。
+4、cd 文件夹名，进入该文件夹，完成以下操作：
+	git add . //添加所有文件到本地
+	git commit -m "注释" 
+	git push -u origin master //同步本地仓库和远程仓库，需要账号和密码
+新理解：想要项目的每个文件有不同的注释，暂时的办法是add一次commit一次，所以项目最好
+由几个文件夹组成，像KJ的一样，方便注释。
+
+
+【第一种】（比较麻烦）
+这篇博客讲得很清楚：https://www.cnblogs.com/my-freedom/p/5701427.html
+Git 的工作就是创建和保存你的项目的快照及与之后的快照进行对比。
+Git使用步骤：
+1、安装好Git后首先要配置该信息。
+Git是分布式版本控制系统，所以需要填写用户名和邮箱作为一个标识，分别输入这两个命令，用户名和邮箱需要换成自己的。
+	$ git config --global user.name "0CTL0""
+	$ git config --global user.email "643788809@qq.com"
+2、用 git init 在目录中创建新的 Git 仓库。 你可以在任何时候、任何目录中这么做，完全是本地化的。如：
+	$ cd "C:\Users\Administrator\Desktop\控制台音乐播放器"
+	$ git init
+   然后就在该目录生成生成隐藏属性的.git文件，这就是我的Git仓库了。
+//以下需要加入"工作区（我电脑的工作目录）"——"暂存区（目录下生成的.git文件）"——"本地仓库"的概念！
+3、将文件添加到缓冲
+	$ git add .  //操作当前目录的全部文件
+	$ git add  index.html  //或者指定文件
+3-1、查看当前工作区的文件变化情况
+	git status
+4、将缓存区的文件添加到本地仓库
+	$ git commit -m "注释内容，随意填"  
+		不想写注释，就写个空字符或#字符吧。
+4-1,、版本回退，查看最近的提交历史
+	$ git log
+5、连接远程仓库	
+	（1）$ ssh-keygen -t rsa -C "youremail@example.com"  
+	（2）输入key值：-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABFwAAAAdzc2gtcn
+NhAAAAAwEAAQAAAQEAk/asLUqBvDAJTQkpb06iv7Yw+6OwzM0W2wwsYi6PwEhPhoGlKd1u
+6jjaiblCvNt63QXyVfiCj6hp3cMUARSq3TRjTVYOlfZljsaKGJqw/O9WS8dS5/tX28CFGy
+d156a3sOUomWS5tAZtYoDexjZtciYoLmJA+k0y8s6zZhz7qszW58MqyhH9JiQyiFXf7ITK
+HzWC3gLkqHKNVPuTntb+WnTeh41Y8cIWuR6qIJXVXRn08WdNdDWHn4tL5zlJPiyLcj28ao
+devDac3JLRd8DuODVOXB7H/n8Vvjg31p7cK5KMPOptm58uDhYqtvc4G8Wy3FnWjOHQ/KsZ
+PeQdD7+2ZQAAA8gFrokeBa6JHgAAAAdzc2gtcnNhAAABAQCT9qwtSoG8MAlNCSlvTqK/tj
+D7o7DMzRbbDCxiLo/ASE+GgaUp3W7qONqJuUK823rdBfJV+IKPqGndwxQBFKrdNGNNVg6V
+9mWOxooYmrD871ZLx1Ln+1fbwIUbJ3Xnprew5SiZZLm0Bm1igN7GNm1yJiguYkD6TTLyzr
+NmHPuqzNbnwyrKEf0mJDKIVd/shMofNYLeAuSoco1U+5Oe1v5adN6HjVjxwha5HqogldVd
+GfTxZ010NYefi0vnOUk+LItyPbxqh168NpzcktF3wO44NU5cHsf+fxW+ODfWntwrkow86m
+2bny4OFiq29zgbxbLcWdaM4dD8qxk95B0Pv7ZlAAAAAwEAAQAAAQAIKfQWC6Zc28mnlnnS
+ymPwb/0D5WQ76JT6QRGx2R/VXCgHI+AZDz6vbbOhJbeo8/MzfsCAPdX2VzSAJ+NSq/FBg0
+J3YegsHgw8dHfqI57gVdRNGhJY+mU+msC9XtACmBBKklpLHGOiqzgd1z5zcU1YnwJYjNNI
+/DlzbDQ5zh+UrOM0GXhUfUlmTJXdPxIBOkk+VZZSvvyKJ9YzrYbBJFpGVY5uMBSK5fSrdL
+h0k3mSxcg5jihd/WbdkjaHtNl1oCgjvX6pdEntqTj262tojZmEoL3iST+4/Tg5/8O060Ot
+EbcVgo2aVFDD1ZywgRQdSyot+5QXB6goPuCNqZ7ZKeGBAAAAgFOG1ayjNysmLEpXjboP1I
+4nK5o8goMV0DGulm3wDzun5kLvAkxqca/W/Gcu3Wk5mATAI3CVU5X5ANlBHkbPPkGRS7sb
+LftGBPS9x0ed9ViPt16LPxzq0zjzHpWQaAEx75t6zSP/JKdWP8fwtbQYrLtOYdpZnXxXIp
+IcmvgRk7UzAAAAgQDFBDq1fi1mGvTKcgVAK08LS36wdxy81v8HAjRj3Tx1+zQWrY7dubmn
+hcNfjJOI9DxHRoA5T/ynBjiYsJL4RBBzQ/q9FlP5/giWTgSlYHw+MaBRXPMrv71egSj4qK
+2saIxL7HTrHx0H6UXhAi8duTNFULHw9gd/nlNGKxOYfbJ6WwAAAIEAwELrQnesGjAkWcxW
+VzzxChxK4aue1+D/9aZWTm9CgNGsDdEJnY6CzR5Na+b8xAnC2MI9B/Q9EIewbWnzQqR5Iz
+t0qwORK/e6BEgD0A6zjMDCHsPDQXecP8oWNKc38N72GUoc73NPhdmZ4Q+PI4/uyKZvHOi2
+IKrfIXpOf9ep7j8AAAAQNjQzNzg4ODA5QHFxLmNvbQECAw==
+-----END OPENSSH PRIVATE KEY-----
+
+	//本地 Git 仓库和 GitHub 仓库之间的传输是通过SSH加密的，所以我们需要配置验证信息。你去你的C盘
+下去找你的user文件夹，有的叫用户，你在里面搜索一下有没有一个.ssh的文件夹，把它打开之后，里面有这几个
+文件，打开 id_rsa.pub，复制里面的 key。之后一路回车。
+
+	（第一次上传）回到 github 上，进入 Account => Settings（账户配置）=》SSH and GPG keys。随便写入
+一个title，然后打开你刚才找到的再C盘里的那个id_rsa.pub.把里面的内容复制到那个key里面去。
+	（3）创建远程库：点击个人信息旁边的+号进行创建
+	（4）$ git remote add origin git@github.com:GitHub账户名/远程库名.git  //连接本地仓库和远程仓库
+		遇到的问题+2：fatal: remote origin already exists.
+		解决：$ git remote rm origin 
+	（5）$ git push -u origin master  //同步本地仓库和远程仓库
+
+6、分支管理
+    不懂： 分支在实际中有什么用呢？假设你准备开发一个新功能，但是需要两周才能完成，第一周你写了50%的代码，
+如果立刻提交，由于代码还没写完，不完整的代码库会导致别人不能干活了。如果等代码全部写完再一次提交，又存在
+丢失每天进度的巨大风险。
+     现在有了分支，就不用怕了。你创建了一个属于你自己的分支，别人看不到，还继续在原来的分支上正常工作，而你
+在自己的分支上干活，想提交就提交，直到开发完毕后，再一次性合并到原来的分支上，这样，既安全，又不影响别人工作
+--------------------------------------------------------------------------------------------------------------------------------
+
+康健的：
+$ git clone https://github.com/521xueweihan/git-tips.git  //克隆下来，只有fork才可以提交
+$ git add .  //添加到本地仓库
+$ git log  //显示提交记录
+$ git commit -m "测试git"  //版本注释
+$ git push  //提交到github
+//看到感兴趣的直接搞，不要先全部学完再搞

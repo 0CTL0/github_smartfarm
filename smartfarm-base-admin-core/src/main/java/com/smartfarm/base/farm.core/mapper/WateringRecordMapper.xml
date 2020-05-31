@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.WateringRecordDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.WateringRecord" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="member_land_id" property="memberLandId" jdbcType="BIGINT" />
+    <result column="watering_date" property="wateringDate" jdbcType="VARCHAR" />
+    <result column="watering_time" property="wateringTime" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <select id="getTotalByLandIdAndDate" resultType="int" >
+    select count(*) from watering_record 
+    where member_land_id=#{memberLandId,jdbcType=BIGINT} 
+    and watering_date=#{wateringDate,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.WateringRecord" >
+    insert into watering_record (member_land_id, watering_date, watering_time)
+    values (#{memberLandId,jdbcType=BIGINT}, #{wateringDate,jdbcType=VARCHAR}, #{wateringTime,jdbcType=VARCHAR})
+  </insert>
+  
+  
+  
+  <sql id="Base_Column_List" >
+    id, member_land_id, watering_date, watering_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from watering_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from watering_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert2" parameterType="com.smartfarm.base.farm.core.entity.WateringRecord" >
+    insert into watering_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="memberLandId != null" >
+        member_land_id,
+      </if>
+      <if test="wateringDate != null" >
+        watering_date,
+      </if>
+      <if test="wateringTime != null" >
+        watering_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="memberLandId != null" >
+        #{memberLandId,jdbcType=BIGINT},
+      </if>
+      <if test="wateringDate != null" >
+        #{wateringDate,jdbcType=VARCHAR},
+      </if>
+      <if test="wateringTime != null" >
+        #{wateringTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.WateringRecord" >
+    update watering_record
+    <set >
+      <if test="memberLandId != null" >
+        member_land_id = #{memberLandId,jdbcType=BIGINT},
+      </if>
+      <if test="wateringDate != null" >
+        watering_date = #{wateringDate,jdbcType=VARCHAR},
+      </if>
+      <if test="wateringTime != null" >
+        watering_time = #{wateringTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartfarm.base.farm.core.entity.WateringRecord" >
+    update watering_record
+    set member_land_id = #{memberLandId,jdbcType=BIGINT},
+      watering_date = #{wateringDate,jdbcType=VARCHAR},
+      watering_time = #{wateringTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

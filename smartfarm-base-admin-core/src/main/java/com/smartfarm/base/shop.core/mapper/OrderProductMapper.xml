@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.OrderProductDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.OrderProduct" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="product_sku_id" property="productSkuId" jdbcType="BIGINT" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+    <result column="product_norm" property="productNorm" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="order_detail_id" property="orderDetailId" jdbcType="BIGINT" />
+  </resultMap>
+
+  <resultMap id="BaseVoResultMap" type="com.smartfarm.base.shop.core.entity.vo.OrderProductVo" extends="BaseResultMap">
+
+  </resultMap>
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.OrderProduct" >
+    insert into order_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="productSkuId != null" >
+        product_sku_id,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="picUrl != null" >
+        pic_url,
+      </if>
+      <if test="productNorm != null" >
+        product_norm,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="orderDetailId != null" >
+        order_detail_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="productSkuId != null" >
+        #{productSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null" >
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="productNorm != null" >
+        #{productNorm,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="orderDetailId != null" >
+        #{orderDetailId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.OrderProduct" >
+    update order_product
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="productSkuId != null" >
+        product_sku_id = #{productSkuId,jdbcType=BIGINT},
+      </if>
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null" >
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="productNorm != null" >
+        product_norm = #{productNorm,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null" >
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="orderDetailId != null" >
+        order_detail_id = #{orderDetailId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="queryByOrderId" resultMap="BaseResultMap">
+  	select *
+  	from order_product
+  	where status = 1 and order_id = #{orderId}
+  </select>
+  
+  <select id="queryByOrderDetailId" resultMap="BaseResultMap">
+  	select *
+  	from order_product
+  	where status = 1 and order_detail_id = #{orderDetailId}
+  </select>
+
+  <select id="queryOrderProductByDateAndFarmId" resultMap="BaseVoResultMap">
+    select o.create_time as createTime,o.id as orderId,o.order_no as orderNo,o.total_price as totalPrice,
+    o.real_price as realPrice,m.nick_name as nickName,od.shipping_status as shippingStatus,od.ship_time as shipTime,
+    od.message as message,od.address as address,od.receive_name as receiveName,od.receive_mobile as receiveMobile,
+    od.ship_no as shipNo,od.ship_name as shipName,op.*
+    from order_info o
+    left join member_info m on m.id = o.member_id
+    left join order_detail od on o.id = od.order_id
+    left join order_product op on op.order_id = o.id
+    where o.create_time >= #{startDate}  and o.create_time &lt;= #{endDate}
+          and o.status = 1 and o.business_id = #{farmId}
+  </select>
+</mapper>

@@ -1,0 +1,510 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="/r/css/fileinput.min.css" rel="stylesheet" />
+    <link href="/r/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />    		  			    			
+	
+	<script src="/r/js/skins.min.js"></script>
+	<script src="/r/js/jquery-2.1.1.js"></script>
+	<script src="/r/js/bootstrap.min.js"></script>
+	<script src="/r/js/angular.min.js"></script>
+	<script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>	    	
+	<script src="/r/js/fileinput.min.js"></script>
+	<script src="/r/js/distpicker.data.js"></script>
+	<script src="/r/js/distpicker.js"></script>	
+	<script src="/r/js/bootstrap-datetimepicker.js"></script>		
+	<script src="/r/js/core.js"></script>
+	<script src="/r/js/beyond.min.js"></script>
+	<script src="/r/core/controller/rent/landInfo.js"></script>
+	<script src="/r/core/controller/base/menu.js"></script>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+	<!-- 头部 -->
+	   
+    <div class="main-container container-fluid">
+        <div class="page-container">
+        
+        	<!-- 菜单 -->
+        	<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+        	<!-- 菜单 -->
+            
+            <!-- 右半页 -->
+            <div class="page-content">
+            	<div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="fa fa-comments"></i>
+                            <a href="/admin/main.htm">首页</a>
+                        </li>
+						<li class="active">土地列表</li>
+                    </ul>
+                </div>
+                
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="widget">
+                                <div class="widget-header ">
+                                    <span class="widget-caption">土地列表</span>
+                                </div>
+                                
+                                <div class="widget-body">                                                   	
+                                
+		                               <!-- 搜索框 -->
+			                          <div class="table table-striped table-bordered table-hover" style="margin-bottom:20px;padding:10px;overflow:hidden;"> 	
+			                            <div class="row">	                            
+			                            	<label  class="col-sm-1 control-label no-padding-right">土地名称</label>
+					    					<div class="col-sm-2">
+			                            		<input type="text" class="form-control" ng-model='formData.name'>
+			                        		</div>	 
+			                        		<label class="col-sm-1">选择状态</label>
+			                        		<div class="col-sm-2">			                        		
+                                    			<select class="form-control" ng-model='formData.searchStatus' ng-options="searchStatus.id as searchStatus.name for searchStatus in statusList">
+													<option value="" disabled>--请选择--</option>
+												</select>       
+			                        		</div>		      			                     		                   	
+		                                	<div class="col-sm-1">
+		                                		<button class="btn btn-default"  ng-click="pageChanged()">查询</button> 
+		                                	</div>		                                	
+		                                	
+		                                	<div class="col-sm-1" style="float:right;">
+		                                		<button class="btn btn-default"  ng-click="showAddMsg()">新增土地</button>
+                        	                </div>	                                  		
+	                                		     					   		
+						    			</div>							    										    		
+						    		 </div>  
+		                             <!-- 搜索框 -->    
+                                     
+                                     <!-- 主列表 -->                           
+                                    <table class="table table-striped table-bordered table-hover" id="simpledatatable">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                   	 土地名称
+                                                </th>
+                                                <th>
+                                                                                             土地分类
+                                                </th>
+                                                 <th>
+                                                                                             状态
+                                                </th>
+                                                <th>
+                                                   	租地周期
+                                                </th>
+                                                <th>
+                                                   	至少配送次数
+                                                </th>                                                                                         
+                                                <th>
+                                                   	操作
+                                                </th>                                             
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="landInfo in list">
+                                                <td>
+                                                    {{landInfo.name}}
+                                                </td>
+                                                <td>
+                                                	{{landInfo.landTypeName}}
+                                                </td>
+                                                <td>
+                                                	{{{1:'上架',2:'下架'}[landInfo.status]}}   
+                                                </td>
+                                                <td>
+                                                	{{landInfo.period}}
+                                                </td>                                                
+                                                <td>
+                                                	{{landInfo.shipTimes}}
+                                                </td>                                                                      
+                                                <td>                                                   
+                                                    <button class="btn btn-default" ng-click="changeStatus(landInfo.id)">{{{1:'下架',2:'上架'}[landInfo.status]}}</button>                                                                                                      
+                                                    <button class="btn btn-default" ng-click="showEditMsg(landInfo.id)">编辑</button>  
+                                                    <button class="btn btn-default" ng-click="showAcreageMsg(landInfo.id,landInfo.status)">土块管理</button>
+                                                    <button class="btn btn-default" ng-click="showShipMsg(landInfo.id,landInfo.status)">配送周期</button>                                                                                                    
+                                                </td>
+                                                
+                                            </tr>
+                                        </tbody>
+                                        
+                                    </table>
+                                    <div class="row DTTTFooter">
+                                    	<pagination style="float:right" ng-change="pageChanged()" total-items="formData.total" items-per-page="formData.pageSize" ng-model="formData.pageNumber" max-size="5" class="pagination m-t m-b" boundary-links="true"></pagination>
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    
+    
+        <!-- 新增弹窗-->
+    <div class="modal-backdrop fade in" ng-if="common.showAdd"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showAdd" >
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    		
+	    		<div class="modal-header">	    		
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeAddMsg()">×</button>
+	    			<h4 class="modal-title">添加土地</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:350px;overflow-y:scroll;overflow-x:hidden">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">土地名称</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="landInfoAdd.name"></input>
+	                        	</div>
+			    		</div>
+			    		
+			    		<div class="form-group">
+			    				<label class="col-sm-2 control-label no-padding-right">租地周期</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="landInfoAdd.period"></input>
+	                        	</div>
+			    		</div>
+			    		
+			    		<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">至少配送次数</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="landInfoAdd.shipTimes"></input>
+	                        	</div>
+			    		</div>
+			    		
+			    		<div class="form-group">
+			    				<label class="col-sm-2 control-label no-padding-right">简介</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="landInfoAdd.brief"></input>
+	                        	</div>
+			    		</div>	
+			    					    		
+
+						<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">土地分类</label>
+			    				<div class="col-sm-10">                            	
+									<select class="form-control" ng-model='landInfoAdd.typeId' ng-options="item.id as item.name for item in landTypes">
+										<option value="" disabled>--请选择--</option>
+									</select>									
+	                        	</div>
+			    		</div>	
+			    		
+			    		<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">可种植种子</label>
+			    				<div class="col-sm-10">
+			    				<div class="col-sm-3"  ng-repeat="seedInfo in seedInfos">
+			    					<div class="checkbox">
+                                        <label>
+                                        	<input type="checkbox" ng-model="seedInfo.flag">
+                                            <span class="text">{{seedInfo.name}}</span>
+                                        </label>
+                                    </div>
+			    				</div>	
+			    				</div>	    				
+			    		</div>				    					    					    				    					    					    			  
+			    					    		 		 			    		
+			    		<div class="form-group">
+			                    <label class="col-sm-2 control-label no-padding-right">土地封面</label>
+			                    <div class="col-sm-10">
+			                         <input id="addCoverImg" type="file" class="file" name="addCoverImg"  
+			                          	data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+			                     </div>
+		                </div>	
+		                
+		                <div class="form-group" >
+			    				<label  class="col-sm-2 control-label no-padding-right">详细信息</label>
+			    				<div class="col-sm-10">
+									     <input id="addDescImg" type="file" class="file" multiple="multiple" name="addDescImg" 
+                          					data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+	                        	</div>
+			    		</div>
+		                
+		                
+		                <div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">排序</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="landInfoAdd.sort"></input>
+	                        	</div>
+			    		</div>		    							    						    		
+			    		
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeAddMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitAdd()">确定</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+    <!-- 新增弹窗 -->
+    
+     <!-- 编辑弹窗 -->
+    <div class="modal-backdrop fade in" ng-if="common.showEdit"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showEdit" >
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    		
+	    		<div class="modal-header">	    		
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeEditMsg()">×</button>
+	    			<h4 class="modal-title">编辑土地</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:350px;overflow-y:scroll;overflow-x:hidden">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    					<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">土地名称</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="landInfoEdit.name"></input>
+	                        	</div>
+			    		</div>
+			    		
+			    		<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">租地周期</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="landInfoEdit.period"></input>
+	                        	</div>
+			    		</div>
+			    		
+			    		<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">至少配送次数</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="landInfoEdit.shipTimes"></input>
+	                        	</div>
+			    		</div>
+			    		
+			    		<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">简介</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="landInfoEdit.brief"></input>
+	                        	</div>
+			    		</div>				    					    	
+
+						<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">土地分类</label>
+			    				<div class="col-sm-10">                            	
+									<select class="form-control" ng-model='landInfoEdit.typeId' ng-options="item.id as item.name for item in landTypes">
+										<option value="" disabled>--请选择--</option>
+									</select>									
+	                        	</div>
+			    		</div>		
+			    		
+			    		<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">可种植种子</label>
+			    				<div class="col-sm-10">
+			    				<div class="col-sm-3"  ng-repeat="seedInfo in seedInfos">
+			    					<div class="checkbox">
+                                        <label>
+                                        	<input type="checkbox" ng-model="seedInfo.flag">
+                                            <span class="text">{{seedInfo.name}}</span>
+                                        </label>
+                                    </div>
+			    				</div>	
+			    				</div>	    				
+			    		</div>					    					    		
+			    					    					    					    					    					    	  
+			    					    		 		 			    		
+			    		<div class="form-group">
+			                    <label class="col-sm-2 control-label no-padding-right">土地封面</label>
+			                    <div class="col-sm-10">
+			                         <input id="editCoverImg" type="file" class="file" name="editCoverImg"  
+			                          	data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+			                     </div>
+		                </div>		
+		                
+		                <div class="form-group" >
+			    				<label  class="col-sm-2 control-label no-padding-right">详细信息</label>
+			    				<div class="col-sm-10">
+									     <input id="editDescImg" type="file" class="file" multiple="multiple" name="editDescImg" 
+                          					data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+	                        	</div>
+			    		</div>
+		                
+		                <div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">排序</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="landInfoEdit.sort"></input>
+	                        	</div>
+			    		</div>					    		
+			    		
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeEditMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitEdit()">确定</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+    <!-- 编辑弹窗 -->
+    
+    
+    <!-- 土地管理弹窗 -->
+    <div class="modal-backdrop fade in" ng-if="common.showAcreage"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showAcreage" >
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    		
+	    		<div class="modal-header">	    		
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeAcreageMsg()">×</button>
+	    			<h4 class="modal-title">土块管理</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:350px;overflow-y:scroll;overflow-x:hidden">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">		    			
+		    			
+		    			<div class="form-group">
+		                     <div class="col-sm-9"></div>		            				    		
+                            <div class="col-sm-3" ng-if="formData.status==2">
+			    					<button class="btn" ng-click="addAcreageInfo()">添加地块</button>
+			    			</div>
+				    	</div>		    			
+		    			
+		    			<div class="form-group" ng-repeat="acreageInfo in acreageInfoList" style="border-bottom:solid 1px grey">			    			
+			    			  			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">地块编号</label>
+			    				<div class="col-sm-4">
+	                            	<input type="text" class="form-control" ng-model='acreageInfo.code'>
+	                        	</div>
+	                        	<label  class="col-sm-2 control-label no-padding-right">地块名称</label>
+			    				<div class="col-sm-3">
+	                            	<input type="text" class="form-control" ng-model='acreageInfo.name'>
+	                        	</div>
+			    			</div> 	
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">地块面积</label>
+			    				<div class="col-sm-4">
+	                            	<input type="text" class="form-control" ng-model='acreageInfo.area'>
+	                        	</div>
+	                        	<label  class="col-sm-2 control-label no-padding-right">地块价格</label>
+			    				<div class="col-sm-3">
+	                            	<input type="text" class="form-control" ng-model='acreageInfo.cost'>
+	                        	</div>
+			    			</div>	
+			    			
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">地块状态</label>
+			    				<div class="col-sm-4">	                            	
+	                            	<lable class="form-control" >{{{1:'未租用',2:'已租用'}[acreageInfo.status]}} </lable>  
+	                        	</div>	                        	
+	                        	<div class="col-sm-3"></div>
+			    				<div class="col-sm-1" ng-if="acreageInfo.status==1&&formData.status==2">	                            	
+	                            	<button class="btn" ng-click="deleteAcreageInfo($index)">删除</button>
+	                        	</div>	                        	                       	
+			    		</div>	
+			    			    						    					    		    							    						    			    			
+			    			</div>
+    					</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeAcreageMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitAcreage()">保存</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+    <!-- 地块管理弹窗 -->
+    
+    <!-- 配送管理弹窗 -->
+    <div class="modal-backdrop fade in" ng-if="common.showShip"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showShip" >
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    		
+	    		<div class="modal-header">	    		
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeShipMsg()">×</button>
+	    			<h4 class="modal-title">土块管理</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:350px;overflow-y:scroll;overflow-x:hidden">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">		    			
+		    			
+		    			<div class="form-group" ng-if="formData.status==2">
+		                     <div class="col-sm-9"></div>		            				    		
+                            <div class="col-sm-3">
+			    					<button class="btn" ng-click="addShip()">添加配送</button>
+			    			</div>
+				    	</div>		    			
+		    			
+		    			<div class="form-group" ng-repeat="ship in shipList" style="border-bottom:solid 1px grey">			    			
+			    			  			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">配送名称</label>
+			    				<div class="col-sm-9">
+	                            	<input type="text" class="form-control" ng-model='ship.name'>
+	                        	</div>
+			    			</div> 	
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">时间设置</label>
+			    				<div class="col-sm-4">
+	                            	<input type="text" class="form-control" ng-model='ship.frequency'>
+	                        	</div>	   
+	                        	 <div class="col-sm-2">天/次</div>                    	
+			    			</div>	
+			    			
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">排序</label>
+			    				<div class="col-sm-4">
+	                            	<input type="text" class="form-control" ng-model='ship.sort'>
+	                        	</div>                        	
+	                        	<div class="col-sm-3"></div>
+			    				<div class="col-sm-1" ng-if="formData.status==2">	                            	
+	                            	<button class="btn" ng-click="deleteShip($index)">删除</button>
+	                        	</div>	                        	                       	
+			    		</div>	
+			    			    						    					    		    							    						    			    			
+			    			</div>
+    					</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeShipMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitShip()">保存</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+    <!-- 配送管理弹窗 -->
+       
+    
+</body>
+</html>

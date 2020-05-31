@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.monitor.core.dao.MonitorWarningInfoDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.monitor.core.entity.MonitorWarningInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sersor_node_id" property="sersorNodeId" jdbcType="BIGINT" />
+    <result column="max_threshold" property="maxThreshold" jdbcType="DOUBLE" />
+    <result column="min_threshold" property="minThreshold" jdbcType="DOUBLE" />
+    <result column="real_value" property="realValue" jdbcType="DOUBLE" />
+    <result column="warning_time" property="warningTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="handle_action" property="handleAction" jdbcType="VARCHAR" />
+    <result column="warning_status" property="warningStatus" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.monitor.core.entity.vo.MonitorWarningInfoVo" id="BaseVoResultMap" extends="BaseResultMap">
+  	<result column="node_name" property="nodeName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="queryPageWarningList" resultMap="BaseVoResultMap">
+  	select sn.*,msn.node_name,gn.node_name as gatewayName
+  	from monitor_warning_info sn
+  	left join monitor_sersor_node msn on msn.id=sn.sersor_node_id
+  	left join monitor_gateway_node gn on gn.id=msn.gateway_id
+  	where gn.business_id = #{businessId}
+  	order by sn.id desc
+  	limit #{start},#{limit}
+  </select>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select * from monitor_warning_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    delete from monitor_warning_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.monitor.core.entity.MonitorWarningInfo" >
+    insert into monitor_warning_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sersorNodeId != null" >
+        sersor_node_id,
+      </if>
+      <if test="maxThreshold != null" >
+        max_threshold,
+      </if>
+      <if test="minThreshold != null" >
+        min_threshold,
+      </if>
+      <if test="realValue != null" >
+        real_value,
+      </if>
+      <if test="warningTime != null" >
+        warning_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="handleAction != null" >
+        handle_action,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="sersorNodeId != null" >
+        #{sersorNodeId,jdbcType=BIGINT},
+      </if>
+      <if test="maxThreshold != null" >
+        #{maxThreshold,jdbcType=INTEGER},
+      </if>
+      <if test="minThreshold != null" >
+        #{minThreshold,jdbcType=INTEGER},
+      </if>
+      <if test="realValue != null" >
+        #{realValue,jdbcType=DOUBLE},
+      </if>
+      <if test="warningTime != null" >
+        #{warningTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="handleAction != null" >
+        #{handleAction,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.monitor.core.entity.MonitorWarningInfo" >
+    update monitor_warning_info
+    <set >
+      <if test="sersorNodeId != null" >
+        sersor_node_id = #{sersorNodeId,jdbcType=BIGINT},
+      </if>
+      <if test="maxThreshold != null" >
+        max_threshold = #{maxThreshold,jdbcType=INTEGER},
+      </if>
+      <if test="minThreshold != null" >
+        min_threshold = #{minThreshold,jdbcType=INTEGER},
+      </if>
+      <if test="realValue != null" >
+        real_value = #{realValue,jdbcType=DOUBLE},
+      </if>
+      <if test="warningTime != null" >
+        warning_time = #{warningTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="handleAction != null" >
+        handle_action = #{handleAction,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="querySoilWarningList" resultMap="BaseVoResultMap">
+	SELECT sn.node_name,wi.sersor_node_id
+	FROM monitor_sersor_node sn 
+	RIGHT JOIN monitor_warning_info wi ON wi.sersor_node_id = sn.id
+	WHERE sn.gateway_id IN 
+	<foreach collection="ids" item="item" index="index" 
+	open="(" separator="," close=")">#{item}
+	</foreach>
+	GROUP BY sn.node_name
+	ORDER BY wi.warning_time
+	LIMIT 5
+  </select>
+  
+
+  
+  <select id="countPageWarningList" resultType="Integer">
+  	select count(sn.id)
+  	from monitor_warning_info sn
+  	left join monitor_sersor_node msn on msn.id=sn.sersor_node_id
+  	left join monitor_gateway_node gn on gn.id=msn.gateway_id
+  	where gn.business_id = #{businessId}
+  </select>
+</mapper>

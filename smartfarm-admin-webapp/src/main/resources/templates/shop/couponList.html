@@ -1,0 +1,552 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="/r/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+    <script src="/r/js/skins.min.js"></script>
+    <script src="/r/js/jquery-2.1.1.js"></script>
+    <script src="/r/js/bootstrap.min.js"></script>
+    <script src="/r/js/angular.min.js"></script>
+    <script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>
+	<script src="/r/js/bootstrap-datetimepicker.js"></script>
+	<script src="/r/js/core.js"></script>
+	<script src="/r/js/beyond.min.js"></script>
+	<script src="/r/core/controller/shop/couponList.js"></script>
+	<script src="/r/core/controller/base/menu.js"></script>
+	<script src="/r/js/checkUtil.js"></script>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+
+    <div class="main-container container-fluid">
+        <div class="page-container">
+        
+			<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+            
+            <!-- 右半页 -->
+            <div class="page-content">
+                 <div class="page-breadcrumbs">
+							<ul class="breadcrumb">
+								<li><i class="fa fa-comments"></i> <a href="/admin/main.html">首页</a>
+								</li>
+								<li class="active">优惠券管理</li>
+							</ul>
+						</div>
+                <!-- Page Header -->
+                <!-- 列表 -->
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="widget">
+                                <div class="widget-header ">
+                                    <span class="widget-caption">优惠券列表</span>
+                                </div>
+                                <div class="widget-body">
+                                
+                                <div class="table table-striped table-bordered table-hover" style="height:55px;margin-bottom:20px;padding:10px;">
+										<div class="DTTT btn-group" style="left:35px;top:60px">
+											<button class="btn btn-sky" ng-click="showAddMsg()"><span style="color:white;">新增批次</span></button>
+										</div>
+										
+									</div>
+									<div style="right:120px;top:60px;position:absolute;">
+										<label> 类型： </label>
+											<select ng-model="formData.type">
+												<option value="">---选择---</option>
+												<option value="1">满减优惠券</option>
+												<option value="2">折扣优惠券</option>
+											</select>
+											<div class="DTTT btn-group" style="right:-70px;">
+												<a class="btn btn-primary DTTT_button_copy"
+													ng-click="pageChanged()"><span>查询</span></a>
+											</div>
+										</div>
+									
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                   	 序号
+                                                </th>
+                                                <th>
+                                                   	 优惠券名称
+                                                </th>
+                                                <th>
+                                                   	 优惠描述
+                                                </th>
+                                                <th>
+                                                   	 优惠券显示名称
+                                                </th>
+                                                <th>
+                                                   	  优惠类型
+                                                </th>
+												<th>
+													可用次数
+												</th>
+                                                <th>
+                                                   	  过期时间
+                                                </th>
+                                                <th>
+                                                   	  有效天数
+                                                </th>
+                                                <th>
+                                                   	  起用价格
+                                                </th>
+                                                <th>
+                                                   	  抵用金额
+                                                </th>
+                                                <th>
+                                                   	  折扣
+                                                </th>
+                                                <th>
+                                                   	  已生成
+                                                </th>
+                                                <th>
+                                                   	  已使用
+                                                </th>
+                                                <th>
+                                                   	  操作
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="cou in couponBatchList">
+                                                <td>
+                                                    {{$index+1}}
+                                                </td>
+                                                <td>
+                                                    {{cou.displayName}}
+                                                </td>
+                                                <td>
+                                                    {{cou.discretion}}
+                                                </td>
+                                                <td>
+                                                    {{cou.displayName}}
+                                                </td>
+                                                <td>
+                                                    {{{'1':'满减优惠券','2':'折扣优惠券'}[cou.type]}}
+                                                </td>
+												<td>
+													{{cou.useTime}}
+												</td>
+                                                <td>
+                                                    <span ng-if="(cou.deadline)">{{formatDate(cou.deadline)}}</span>
+                                                </td>
+                                                <td>
+                                                    {{cou.dayCount}}
+                                                </td>
+                                                <td>
+                                                    {{cou.reductPrice}}
+                                                </td>
+                                                <td>
+                                                    {{cou.amount}}
+                                                </td>
+                                                <td>
+                                                    <span ng-if="(cou.discount)">{{cou.discount}}折</span>
+                                                </td>
+                                                 <td>
+                                                    {{cou.couponCount}}<span ng-if="!(cou.couponCount)">0</span>
+                                                </td>
+                                                 <td>
+                                                    {{cou.useCount}}<span ng-if="!(cou.useCount)">0</span>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sky" ng-click="showBatchNum(cou.id)">生成优惠券</button>
+                                                    <button class="btn btn-sky" ng-click="showAddBatchRule(cou.id)">新增适用范围</button>
+                                                    <button class="btn btn-sky" ng-click="showAllRule(cou.id)">查看适用范围</button>
+                                                    <button class="btn btn-sky" ng-if="cou.couponCount==null" ng-click="showEdit(cou.id)">编辑</button>
+<!--													ng-if="cou.couponCount==0"-->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        
+                                    </table>
+                                    <div class="row DTTTFooter">
+                                    	<pagination style="float:right" ng-change="pageChanged()" total-items="formData.total" items-per-page="formData.pageSize" ng-model="formData.pageNumber" max-size="5" class="pagination m-t m-b" boundary-links="true"></pagination>
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--添加批次  -->
+    <div class="modal-backdrop fade in" ng-if="common.showAdd"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showAdd">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    	
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeAddMsg()">×</button>
+	    			<h4 class="modal-title">新增批次</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">优惠券名称</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='batchAdd.displayName'>
+	                        	</div>
+			    			</div>
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">优惠券描述</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='batchAdd.discretion'>
+	                        	</div>
+			    			</div>
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">优惠券类型</label>
+			    				<div class="col-sm-5">
+	                            	<select class="form-control" ng-model="batchAdd.type">
+									  <option selected="selected" disabled="disabled"  style='display: none' value=''>----请指定优惠券类型----</option>
+									  <option value="1">满减优惠券</option>
+									  <option value="2">折扣优惠券</option>
+									</select>
+	                        	</div>
+			    			</div>
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">可用次数</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" ng-model='batchAdd.useTime'>
+								</div>
+							</div>
+			    			<div class="form-group" ng-if="batchAdd.type==1">
+			    				<label  class="col-sm-2 control-label no-padding-right">优惠金额</label>
+			    				<div class="col-sm-4">
+	                            	<input type="text" class="form-control" ng-model='batchAdd.amount'>
+	                        	</div>
+			    			</div>
+			    			<div class="form-group" ng-if="batchAdd.type==1">
+			    				<label  class="col-sm-2 control-label no-padding-right">门槛价</label>
+			    				<div class="col-sm-4">
+	                            	<input type="text" class="form-control" ng-model='batchAdd.reductPrice'>
+	                        	</div>
+			    			</div>
+			    			<div class="form-group" ng-if="batchAdd.type==2">
+			    				<label  class="col-sm-2 control-label no-padding-right">打折(整数)</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='batchAdd.discount'>
+	                        	</div>
+			    			</div>
+			    			
+			    			<div class="form-group">
+			    				<label class="col-sm-2 control-label no-padding-right">凭证策略</label>
+			    				<div class="col-sm-10">
+	                            	<select class="form-control" ng-model="batchAdd.strategyType">
+									  <option selected="selected" disabled="disabled"  style='display: none' value=''>----请指定优惠券凭证策略----</option>
+									  <option value="1">按指定有效天数来计算</option>
+									  <option value="2">按指定最后期限来计算</option>
+									</select>
+	                        	</div>
+			    			</div>
+			    			
+			    			<div class="form-group" ng-if="batchAdd.strategyType==1">
+			    				<label class="col-sm-2 control-label no-padding-right">有效天数</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='batchAdd.dayCount' placeholder="请输入优惠券有效天数">
+	                        	</div>
+			    			</div>
+			    			
+			    			<div class="form-group" ng-if="batchAdd.strategyType==2">
+			    				<label  class="col-sm-2 control-label no-padding-right">最后期限</label>
+			    				<div class="col-sm-10">
+			    					<input id="dateLine" name="myDates" ng-model="batchAdd.deadlineStr" class="form-control date-picker" placeholder="请输入优惠券最后期限"  data-date-format="yyyy-mm-dd"/>
+	                        	</div>
+			    			</div>
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeAddMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitAdd()">保存</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+	
+	
+	<!--修改批次  -->
+    <div class="modal-backdrop fade in" ng-if="common.showEdit"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showEdit">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    	
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeEditMsg()">×</button>
+	    			<h4 class="modal-title">修改批次</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">优惠券名称</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='batchInfo.displayName'>
+	                        	</div>
+			    			</div>
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">优惠券描述</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='batchInfo.discretion'>
+	                        	</div>
+			    			</div>
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">优惠券类型</label>
+			    				<div class="col-sm-5">
+	                            	<select class="form-control" ng-model="batchInfo.type">
+									  <option selected="selected" disabled="disabled"  style='display: none' value=''>----请指定优惠券类型----</option>
+									  <option value="1" ng-selected="1 === batchInfo.type">满减优惠券</option>
+									  <option value="2" ng-selected="2 === batchInfo.type">折扣优惠券</option>
+									</select>
+	                        	</div>
+			    			</div>
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">可用次数</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" ng-model='batchInfo.useTime'>
+								</div>
+							</div>
+			    			<div class="form-group" ng-if="batchInfo.type==1">
+			    				<label  class="col-sm-2 control-label no-padding-right">优惠金额</label>
+			    				<div class="col-sm-4">
+	                            	<input type="text" class="form-control" ng-model='batchInfo.amount'>
+	                        	</div>
+			    			</div>
+
+			    			<div class="form-group" ng-if="batchInfo.type==1">
+			    				<label  class="col-sm-2 control-label no-padding-right">门槛价</label>
+			    				<div class="col-sm-4">
+	                            	<input type="text" class="form-control" ng-model='batchInfo.reductPrice'>
+	                        	</div>
+			    			</div>
+			    			<div class="form-group" ng-if="batchInfo.type==2">
+			    				<label  class="col-sm-2 control-label no-padding-right">打折(整数)</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='batchInfo.discount'>
+	                        	</div>
+			    			</div>
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">凭证策略</label>
+			    				<div class="col-sm-10">
+	                            	<select class="form-control" ng-model="batchInfo.strategyType">
+									  <option selected="selected" disabled="disabled"  style='display: none' value=''>----请指定优惠券凭证策略----</option>
+									  <option value="1" ng-selected="1 === batchInfo.strategyType">按指定有效天数来计算</option>
+									  <option value="2" ng-selected="2 === batchInfo.strategyType">按指定最后期限来计算</option>
+									</select>
+	                        	</div>
+			    			</div>
+			    			
+			    			<div class="form-group" ng-if="batchInfo.strategyType==1">
+			    				<label  class="col-sm-2 control-label no-padding-right">有效天数</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='batchInfo.dayCount'>
+	                        	</div>
+			    			</div>
+			    			
+			    			<div class="form-group" ng-if="batchInfo.strategyType==2">
+			    				<label  class="col-sm-2 control-label no-padding-right">最后期限</label>
+			    				<div class="col-sm-10">
+			    					<input id="dateLine" name="myDates" ng-model="batchInfo.deadlineStr" class="form-control date-picker" placeholder="最后期限"  data-date-format="yyyy-mm-dd"/>
+	                        	</div>
+			    			</div>
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeEditMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitEdit()">保存</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+
+	<!--生成优惠券  -->
+    <div class="modal-backdrop fade in" ng-if="common.showBatchNum"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showBatchNum">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    	
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeBatchNum()">×</button>
+	    			<h4 class="modal-title">生成优惠券</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    				<div class="form-group">
+			    				<label  class="col-sm-3 control-label no-padding-right">生成优惠券数量</label>
+			    				<div class="col-sm-9">
+	                            	<input type="text" class="form-control" ng-model='batchNum.num' placeholder="请输入生成优惠券数量">
+	                        	</div>
+			    			</div>
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-primary" ng-click="submitAddBatch(batchNum.id)">保存</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>    
+   
+   
+   <!--新增优惠券规则  -->
+    <div class="modal-backdrop fade in" ng-if="common.showAddBatchRule"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showAddBatchRule">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    	
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeAddBatchRule()">×</button>
+	    			<h4 class="modal-title">新增优惠券适用范围</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="overflow:scroll;height:400px;">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    				<div class="form-group">
+			    				<label  class="col-sm-3 control-label no-padding-right">规则类型</label>
+			    				<div class="col-sm-9">
+	                            	<select class="form-control" ng-model="batchRuleAdd.type">
+									  <option selected="selected" disabled="disabled"  style='display: none' value=''>----请指定优惠券规则类型----</option>
+									  <option value="1">产品skuId</option>
+									  <option value="2">支付类型</option>
+									</select>
+	                        	</div>
+			    			</div>
+		    				
+		    				<div ng-show="batchRuleAdd.type === '1'">
+		    					<div class="form-group">
+			    					<label  class="col-sm-2 control-label no-padding-right">添加所有规则</label>
+				    				<div class="col-sm-10">
+	                                    <!-- checkBox样式，在分格内再加一个checkbox class的div，下方是label，再来是input和span，span生成显示的图标 -->
+				    					<div class="checkbox">
+	                                        <label>
+	                                            <input type="checkbox" name="checkAll">
+	                                            <span class="text">一键添加所有规则</span>
+	                                        </label>
+	                                    </div>
+				    				</div>
+				    			</div>	
+		    					<div class="form-group col-sm-12">
+				    				<label  class="col-sm-2 control-label no-padding-right">显示产品Sku分类</label>
+				    				<div class="col-sm-2" ng-repeat="category in productCategoryList">
+		                            	<button class="btn btn-sky" ng-click="showCategoryProSku(category.id)">{{category.name}}</button>
+		                        	</div>
+			    				</div>
+		    					<div class="form-group">
+			    					<label  class="col-sm-2 control-label no-padding-right"  style="margin-bottom:-25px;">产品Sku信息</label>
+				    				<div class="col-sm-10" ng-repeat="sku in productSkuList" style="margin-left:100px;">
+	                                    <!-- checkBox样式，在分格内再加一个checkbox class的div，下方是label，再来是input和span，span生成显示的图标 -->
+				    					<div class="checkbox">
+	                                        <label>
+	                                            <input type="checkbox" name="checkRule" 
+	                                            value="{{sku.id}}" ng-click="boxStatus($event,sku.id)" ng-checked="expression(sku.id)">
+	                                            <span class="text">{{sku.details}}</span>
+	                                        </label>
+	                                    </div>
+				    				</div>
+				    			</div>	
+		    				</div>
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-primary" ng-click="submitAddBatchRule()">保存</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>    
+    
+    <!--查看优惠券规则  -->
+    <div class="modal-backdrop fade in" ng-if="common.showAllRule"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showAllRule">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    	
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeAllRule()">×</button>
+	    			<h4 class="modal-title">优惠券规则</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="overflow:scroll;height:400px;">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    			<div class="form-group" ng-show="!(skusList.length === 0)">
+			    				<label  class="col-sm-2 control-label no-padding-right">规则类型：</label>
+			    				<div class="col-sm-9">
+	                            	<input type="text" class="form-control" ng-model="{1:'产品skuId',2:'支付类型'}[skusList[0].ruleType]" readonly>
+	                        	</div>
+			    			</div>
+			    			
+			    			<div class="form-group" ng-show="(skusList[0].paramValue === 'all')">
+			    				<span style="font-weight:bold;margin-left:150px;font-size:18px;">匹配所有规则</span>
+			    			</div>
+			    			
+		    				<div class="form-group" ng-show="!(skusList[0].paramValue === 'all')">
+			    				<table class="table table-bordered table-hover">
+			    					<tr ng-show="!(skusList.length === 0)">
+			    						<td>序号</td>
+			    						<td>产品Sku</td>
+			    					</tr>
+			    					<tr ng-repeat="sku in skusList">
+			    						<td>{{$index+1}}</td>
+			    						<td>{{sku.details}}</td>
+			    					</tr>
+			    				</table>
+			    			</div>
+			    			<div ng-show="(skusList.length === 0)">
+			    				<span style="font-weight:bold;margin-left:150px;font-size:20px;">当前优惠券还没有规则!</span>
+			    			</div>
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-primary" ng-click="closeAllRule()">关闭</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>    
+</body>
+</html>

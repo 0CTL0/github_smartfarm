@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/azure.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="/r/css/fileinput.min.css" rel="stylesheet" />
+
+    <script src="/r/js/skins.min.js"></script>
+    <script src="/r/js/jquery-2.1.1.js"></script>
+    <script src="/r/js/bootstrap.min.js"></script>
+    <script src="/r/js/angular.min.js"></script>
+    <script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>
+	<script src="/r/js/fileinput.min.js"></script>
+	<script src="/r/js/distpicker.data.js"></script>
+	<script src="/r/js/distpicker.js"></script>	
+	
+	<script src="/r/js/FileSaver.js"></script>
+    <script src="/r/core/controller/shop/memberCash.js"></script>
+    <script src="/r/js/core.js"></script>
+    <script src="/r/core/controller/base/menu.js"></script>
+    <script src="/r/js/checkUtil.js"></script>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+	<!-- 头部 -->
+	   
+    <div class="main-container container-fluid">
+        <div class="page-container">
+
+            <div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+            
+            <!-- 右半页 -->
+            <div class="page-content">
+                 <div class="page-breadcrumbs">
+							<ul class="breadcrumb">
+								<li><i class="fa fa-comments"></i> <a href="/admin/main.htm">首页</a>
+								</li>
+								<li class="active">财务管理</li>
+							</ul>
+                 </div>
+                <!-- Page Header -->
+
+<!--		        <div class="page-header position-relative" style="margin-top:-40px;z-index:100;width:42px;height:40px;float:right;">-->
+<!--		            &lt;!&ndash;Header Buttons&ndash;&gt;-->
+<!--		            <div class="header-buttons">-->
+<!--		                <a class="fullscreen" id="fullscreen-toggler" href="#">-->
+<!--		                    <i class="glyphicon glyphicon-fullscreen"></i>-->
+<!--		                </a>-->
+<!--		            </div>-->
+<!--		            &lt;!&ndash;Header Buttons End&ndash;&gt;-->
+<!--		        </div>-->
+                
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="widget">
+                                <div class="widget-header ">
+                                    <span class="widget-caption">用户提现列表</span>
+                                </div>
+                                
+                                <div class="widget-body">                                                   	
+                                
+		                               <!-- 搜索框 -->
+			                          <div class="table table-striped table-bordered table-hover" style="margin-bottom:20px;padding:10px;overflow:hidden;"> 	
+			                            <div class="row">	                            
+			                            	<label  class="col-sm-1 control-label no-padding-right" style="padding-top:7px;">用户名称</label>
+					    					<div class="col-sm-2">
+			                            		<input type="text" class="form-control" ng-model='formData.memberName'>
+			                        		</div>	 
+			                        		<label class="col-sm-1" style="padding-top:7px;">状态</label>
+			                        		<div class="col-sm-2">			                        			
+                                    			<select class="form-control" ng-model='formData.status' ng-options="status.id as status.name for status in statusList">
+													<option value="" disabled>--请选择--</option>
+												</select>       
+			                        		</div>		      			                     		                   	
+		                                	<div class="col-sm-1">
+		                                		<button class="btn btn-default"  ng-click="pageChanged()">查询</button> 
+		                                	</div>		                                	
+		                                	
+		                                	<div class="col-sm-1" style="float:right;margin-right:10px;">
+		                                		<button class="btn btn-default"  ng-click="exportExcle()">导出表格</button>
+                        	                </div>	
+                                			 
+                                			 
+                                			                              	         			                               		     					   		
+						    			</div>							    										    		
+						    		 </div>  
+		                             <!-- 搜索框 -->   
+		                              
+                                   <div id="exportable">                            
+                                    <table class="table table-striped table-bordered table-hover" id="simpledatatable">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                   	 用户
+                                                </th>
+                                                <th>
+                                                                                              金额
+                                                </th>
+                                                <th>
+                                                   	创建时间
+                                                </th>
+                                                <th>
+                                                   	状态
+                                                </th>
+                                                <th>
+                                                   	账户名
+                                                </th>
+                                                <th>
+                                                   	银行卡号
+                                                </th>
+                                                <th>
+                                                   	所属银行
+                                                </th>
+                                                <th>
+                                                   	操作人
+                                                </th>
+                                                <th>
+                                                   	处理时间
+                                                </th>
+                                                <th>
+                                                   	操作
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="memberCashRecord in memberCashRecordList">
+                                                <td>
+                                                    {{memberCashRecord.memberName}}
+                                                </td>
+                                                <td>
+                                                	{{memberCashRecord.money}}
+                                                </td>
+                                                <td>
+                                                	{{formatDateTime(memberCashRecord.createTime)}}
+                                                </td>
+                                                <td>
+                                                	{{{1:'成功',2:'待处理',3:'拒绝'}[memberCashRecord.status]}}
+                                                </td>
+                                                <td>
+                                                	{{memberCashRecord.account}}
+                                                </td>
+                                                <td>
+                                                	{{memberCashRecord.bankNo}}
+                                                </td>
+                                                <td>
+                                                	{{memberCashRecord.bankName}}
+                                                </td>
+                                                <td>
+                                                	{{memberCashRecord.operatorName}} 	
+                                                </td>
+                                                <td ng-if="memberCashRecord.updateTime!=null&&memberCashRecord.updateTime!=''">
+                                                	{{formatDateTime(memberCashRecord.updateTime)}}
+                                                </td> 
+                                                <!-- memberCashRecord.updateTime!=null||memberCashRecord.updateTime!='' 哪里错？？？-->
+                                                <td ng-if="!(memberCashRecord.updateTime!=null&&memberCashRecord.updateTime!='')">  
+                                                	
+                                                 </td>                                                                    
+                                                <td>                                                   
+                                                    <button class="btn btn-default" ng-if="memberCashRecord.status==2" ng-click="changeStatus('1',memberCashRecord.id)">通过</button>                                                   
+                                                    <button class="btn btn-default" ng-if="memberCashRecord.status==2" ng-click="changeStatus('3',memberCashRecord.id)">拒绝</button>
+                                                    <button class="btn btn-default" ng-if="memberCashRecord.status==1" >已成功</button>  
+                                                    <button class="btn btn-default" ng-if="memberCashRecord.status==3" >已拒绝</button>                                                                                                       
+                                                </td>
+                                                
+                                            </tr>
+                                        </tbody>                                        
+                                    </table>
+                                  </div> 
+                                    
+                                    <div class="row DTTTFooter">
+                                    	<pagination style="float:right" ng-change="pageChanged()" total-items="formData.total" items-per-page="formData.pageSize" ng-model="formData.pageNumber" max-size="5" class="pagination m-t m-b" boundary-links="true"></pagination>
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <script src="/r/js/beyond.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.FarmDelegateExpressDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.FarmDelegateExpress" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="delegate_order_id" property="delegateOrderId" jdbcType="BIGINT" />
+    <result column="member_crops_id" property="memberCropsId" jdbcType="BIGINT" />
+    <result column="weight" property="weight" jdbcType="SMALLINT" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="shop_no" property="shopNo" jdbcType="VARCHAR" />
+    <result column="shop_time" property="shopTime" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="receive_name" property="receiveName" jdbcType="VARCHAR" />
+    <result column="receive_mobile" property="receiveMobile" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="bazaar_order_id" property="bazaarOrderId" jdbcType="BIGINT" />
+  </resultMap>
+
+  <resultMap id="BaseVoResultMap" type="com.smartfarm.base.farm.core.entity.vo.FarmDelegateExpressVo" extends="BaseResultMap" >
+    <result column="crops_name" property="cropsName" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="INTEGER" />
+  </resultMap>
+  
+  
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.FarmDelegateExpress" >
+    insert into farm_delegate_express
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="delegateOrderId != null" >
+        delegate_order_id,
+      </if>
+      <if test="memberCropsId != null" >
+        member_crops_id,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="shopNo != null" >
+        shop_no,
+      </if>
+      <if test="shopTime != null" >
+        shop_time,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="receiveName != null" >
+        receive_name,
+      </if>
+      <if test="receiveMobile != null" >
+        receive_mobile,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="bazaarOrderId != null" >
+        bazaar_order_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="delegateOrderId != null" >
+        #{delegateOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="memberCropsId != null" >
+        #{memberCropsId,jdbcType=BIGINT},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=SMALLINT},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopTime != null" >
+        #{shopTime,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveName != null" >
+        #{receiveName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveMobile != null" >
+        #{receiveMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="bazaarOrderId != null" >
+        #{bazaarOrderId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getExpressIdByLogId" resultType="long" parameterType="java.lang.Long" >
+    select id from farm_delegate_express where delegate_order_id=(select plan_detail_id from working_log
+    where id=#{logId,jdbcType=BIGINT})
+  </select>
+
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.FarmDelegateExpress" >
+    update farm_delegate_express
+    set shop_name=#{shopName,jdbcType=VARCHAR},shop_no=#{shopNo,jdbcType=VARCHAR},status=#{status,jdbcType=SMALLINT}
+    where id=#{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByBazaarOrderId" resultMap="BaseResultMap">
+    SELECT fde.* FROM farm_delegate_express fde
+WHERE fde.bazaar_order_id=#{orderId}
+  </select>
+
+  <select id="getExpressDelegateInfo" resultMap="BaseVoResultMap" parameterType="java.lang.Long">
+    select fde.id, fde.weight,fde.receive_name, fde.receive_mobile, fde.address, fmc.area, fci.name crops_name from farm_delegate_express fde, farm_member_crops fmc, farm_crops_info fci where fde.member_crops_id=fmc.id and fmc.crops_id=fci.id
+    and fde.delegate_order_id=#{orderId,jdbcType=BIGINT}
+  </select>
+
+
+
+  
+  <sql id="Base_Column_List" >
+    id, delegate_order_id, member_crops_id, weight, shop_name, shop_no, shop_time, address, 
+    receive_name, receive_mobile, status, bazaar_order_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from farm_delegate_express
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from farm_delegate_express
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert2" parameterType="com.smartfarm.base.farm.core.entity.FarmDelegateExpress" >
+    insert into farm_delegate_express (id, delegate_order_id, member_crops_id,
+      weight, shop_name, shop_no,
+      shop_time, address, receive_name,
+      receive_mobile, status)
+    values (#{id,jdbcType=BIGINT}, #{delegateOrderId,jdbcType=BIGINT}, #{memberCropsId,jdbcType=BIGINT},
+      #{weight,jdbcType=SMALLINT}, #{shopName,jdbcType=VARCHAR}, #{shopNo,jdbcType=VARCHAR},
+      #{shopTime,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{receiveName,jdbcType=VARCHAR},
+      #{receiveMobile,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT})
+  </insert>
+  
+  <update id="updateById1" parameterType="com.smartfarm.base.farm.core.entity.FarmDelegateExpress" >
+    update farm_delegate_express
+    <set >
+      <if test="delegateOrderId != null" >
+        delegate_order_id = #{delegateOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="memberCropsId != null" >
+        member_crops_id = #{memberCropsId,jdbcType=BIGINT},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=SMALLINT},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopNo != null" >
+        shop_no = #{shopNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopTime != null" >
+        shop_time = #{shopTime,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveName != null" >
+        receive_name = #{receiveName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveMobile != null" >
+        receive_mobile = #{receiveMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="bazaarOrderId != null" >
+        bazaar_order_id = #{bazaarOrderId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

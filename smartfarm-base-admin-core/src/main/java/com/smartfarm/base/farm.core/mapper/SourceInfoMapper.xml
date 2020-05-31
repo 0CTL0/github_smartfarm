@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.SourceInfoDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.SourceInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="prefix" property="prefix" jdbcType="VARCHAR" />
+    <result column="max_search_times" property="maxSearchTimes" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="batch_id" property="batchId" jdbcType="BIGINT" />
+    <result column="code_status" property="codeStatus" jdbcType="SMALLINT" />
+    <result column="folder_name" property="folderName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="SourceInfoBatchMap" type="com.smartfarm.base.farm.core.entity.vo.SourceInfoBatchVo" extends="BaseResultMap">
+  	<result column="yield" property="yield" jdbcType="INTEGER" />
+  	<result column="package_specs" property="packageSpecs" jdbcType="INTEGER" />
+  </resultMap>
+  
+   <resultMap type="com.smartfarm.base.farm.core.entity.vo.SourceInfoVo" id="BaseVoResultMap" extends="BaseResultMap">
+  	<collection property="works" ofType="com.smartfarm.base.farm.core.entity.vo.WorkInfoVo" column="id">
+  		<id column="infoId" property="id" jdbcType="BIGINT" />
+	    <result column="source_id" property="sourceId" jdbcType="BIGINT" />
+	    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+	    <result column="pics" property="pics" jdbcType="VARCHAR" />
+	    <result column="operator" property="operator" jdbcType="BIGINT" />
+	    <result column="report_time" property="reportTime" jdbcType="VARCHAR" />
+	    <result column="sort" property="sort" jdbcType="INTEGER" />
+	    <collection property="details" ofType="com.smartfarm.base.farm.core.entity.WorkDetail" column="infoId">
+			<id column="detailId" property="id" jdbcType="BIGINT" />
+		    <result column="infoId" property="workId" jdbcType="BIGINT" />
+		    <result column="attribute_id" property="attributeId" jdbcType="BIGINT" />
+		    <result column="serial" property="serial" jdbcType="INTEGER" />
+		    <result column="attribute_name" property="attributeName" jdbcType="VARCHAR" />
+		    <result column="content" property="content" jdbcType="VARCHAR" />
+  		</collection>
+  	</collection>
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.SourceInfo" useGeneratedKeys="true" keyProperty="id">
+    insert into core_source_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="prefix != null" >
+        prefix,
+      </if>
+      <if test="maxSearchTimes != null" >
+        max_search_times,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="batchId != null" >
+        batch_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="prefix != null" >
+        #{prefix,jdbcType=VARCHAR},
+      </if>
+      <if test="maxSearchTimes != null" >
+        #{maxSearchTimes,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="batchId != null" >
+        #{batchId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.SourceInfo" >
+    update core_source_info
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="prefix != null" >
+        prefix = #{prefix,jdbcType=VARCHAR},
+      </if>
+      <if test="maxSearchTimes != null" >
+        max_search_times = #{maxSearchTimes,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="qurySourceInfoList" resultMap="SourceInfoBatchMap">
+  	select csi.*,pb.yield,pb.package_specs from core_source_info csi,product_batch pb
+	<where>
+		csi.batch_id=pb.id and pb.farm_id=#{farmId,jdbcType=BIGINT}
+		<if test="name != null and name != '' ">
+			and csi.name LIKE CONCAT('%',#{name},'%')
+		</if>
+		<if test="prefix != null and prefix != '' ">
+			and csi.prefix LIKE CONCAT('%',#{prefix},'%')
+		</if>
+	</where>
+      order by csi.id desc
+	limit #{start}, #{limit}
+  </select>
+  
+  <select id="quryCountSourceInfoList" resultType="int">
+    select count(*) from core_source_info csi,product_batch pb
+    where csi.batch_id=pb.id and pb.farm_id=#{farmId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="queryAttributeDataById" resultMap="BaseVoResultMap">
+  	SELECT si.`name`,wd.work_id infoId,wd.content,wd.serial,wd.attribute_name,si.*,wi.id infoId,wi.operator,wi.pics,wi.report_time,wi.type_name,wi.sort,wd.id detailId
+	FROM core_work_detail wd,core_work_info wi,core_source_info si
+	WHERE wd.work_id = wi.id
+	AND wi.source_id = si.id
+	AND wi.source_id = #{id}
+	ORDER BY wi.sort
+  </select>
+  
+  <update id="addSourceAmount" parameterType="com.smartfarm.base.farm.core.entity.SourceInfo" >
+    update core_source_info set amount = #{amount,jdbcType=INTEGER} where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="addCodeStatus" parameterType="com.smartfarm.base.farm.core.entity.SourceInfo" >
+    update core_source_info set code_status = #{codeStatus,jdbcType=SMALLINT} where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateFolderNameById">
+    update core_source_info set folder_name = #{folderName,jdbcType=VARCHAR} where id=#{id,jdbcType=BIGINT}
+  </update>
+</mapper>

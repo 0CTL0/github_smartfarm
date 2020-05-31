@@ -1,0 +1,7 @@
+[2020-05-24 22:37:18] INFO   [AdminController:login]{account:admin, password:zhihuinongchang}login.
+[2020-05-24 22:40:05] INFO   [AdminController:login]{account:admin, password:zhihuinongchang}login.
+[2020-05-24 22:40:09] INFO   [FunctionController:getAllFunctions]{id=1}query all available functions by admin id.
+[2020-05-24 22:40:10] INFO   [AdminController:queryChannelAdminInfo]query channel admin info.
+[2020-05-24 22:40:15] INFO   [CouponController:queryCouponBatchList]{pageSize:10,pageNumber:1}query couponBatch info for page.
+[2020-05-24 22:40:15] INFO   [AdminController:queryChannelAdminInfo]query channel admin info.
+[2020-05-24 22:40:15] INFO   [FunctionController:getAllFunctions]{id=1}query all available functions by admin id.

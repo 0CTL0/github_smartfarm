@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.admin.core.dao.AdminDao">
+    <resultMap id="BaseResultMap" type="com.smartfarm.base.admin.core.entity.Admin">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="account" property="account" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="SMALLINT"/>
+        <result column="type" property="type" jdbcType="SMALLINT"/>
+        <result column="farm_id" property="farmId" jdbcType="BIGINT"/>
+    </resultMap>
+    
+    <resultMap type="com.smartfarm.base.admin.core.entity.vo.AdminVo" id="BaseVoResultMap" extends="BaseResultMap">
+    </resultMap>
+
+    <insert id="insert" parameterType="com.smartfarm.base.admin.core.entity.Admin">
+        insert into base_adm_admin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="account != null">
+                account,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="farmId != null">
+                farm_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="account != null">
+                #{account,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=SMALLINT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=SMALLINT},
+            </if>
+            <if test="farmId != null">
+                #{farmId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateById" parameterType="com.smartfarm.base.admin.core.entity.Admin">
+        update base_adm_admin
+        <set>
+            <if test="account != null">
+                account = #{account,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=SMALLINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="loginCheck" resultMap="BaseResultMap">
+    select * 
+    from base_adm_admin
+    where account = #{account}
+    and password = #{password}
+    and status =1 
+  </select>
+
+
+    <select id="queryAdminById" resultMap="BaseResultMap">
+  	select co.*
+    from base_adm_admin co
+  	where co.id=#{id}
+  </select>
+
+
+    <select id="querySearchPage" resultMap="BaseVoResultMap">
+        select co.*,f.name as farmName
+        from base_adm_admin co
+        left join farm_info f on f.id = co.farm_id
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="adminVo != null">
+                <if test="adminVo.account != null and adminVo.account != ''">
+                    and co.account like concat("%", #{adminVo.account}, "%")
+                </if>
+                <if test="adminVo.remark != null and adminVo.remark != ''">
+                    and co.remark like concat("%", #{adminVo.remark}, "%")
+                </if>
+            </if>
+        </trim>
+        limit #{start},#{pageSize}
+    </select>
+    <select id="countSearch" resultType="java.lang.Integer">
+        select count(*)
+        from base_adm_admin co
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="adminVo != null">
+                <if test="adminVo.account != null and adminVo.account != ''">
+                    and co.account like concat("%", #{adminVo.account}, "%")
+                </if>
+                <if test="adminVo.remark != null and adminVo.remark != ''">
+                    and co.remark like concat("%", #{adminVo.remark}, "%")
+                </if>
+            </if>
+        </trim>
+    </select>
+</mapper>

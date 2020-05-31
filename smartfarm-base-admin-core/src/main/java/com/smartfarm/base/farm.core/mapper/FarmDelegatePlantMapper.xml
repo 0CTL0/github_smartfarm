@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.FarmDelegatePlantDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.FarmDelegatePlant" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="crops_id" property="cropsId" jdbcType="BIGINT" />
+    <result column="plant_area" property="plantArea" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+  </resultMap>
+
+  <resultMap id="BaseVoResultMap" type="com.smartfarm.base.farm.core.entity.vo.FarmDelegatePlantVo" extends="BaseResultMap" >
+    <result column="crops_name" property="cropsName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.FarmDelegatePlant" >
+    insert into farm_delegate_plant
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cropsId != null" >
+        crops_id,
+      </if>
+      <if test="plantArea != null" >
+        plant_area,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cropsId != null" >
+        #{cropsId,jdbcType=BIGINT},
+      </if>
+      <if test="plantArea != null" >
+        #{plantArea,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getPlantDelegateInfo" resultMap="BaseVoResultMap" parameterType="java.lang.Long" >
+    select fdp.*, fci.name crops_name from farm_delegate_plant fdp, farm_crops_info fci where fdp.crops_id=fci.id
+    and fdp.order_id=#{orderId,jdbcType=BIGINT}
+  </select>
+
+
+  
+  
+  
+  <sql id="Base_Column_List" >
+    id, crops_id, plant_area, order_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from farm_delegate_plant
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from farm_delegate_plant
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert2" parameterType="com.smartfarm.base.farm.core.entity.FarmDelegatePlant" >
+    insert into farm_delegate_plant (id, crops_id, plant_area, 
+      order_id)
+    values (#{id,jdbcType=BIGINT}, #{cropsId,jdbcType=BIGINT}, #{plantArea,jdbcType=INTEGER}, 
+      #{orderId,jdbcType=BIGINT})
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.FarmDelegatePlant" >
+    update farm_delegate_plant
+    <set >
+      <if test="cropsId != null" >
+        crops_id = #{cropsId,jdbcType=BIGINT},
+      </if>
+      <if test="plantArea != null" >
+        plant_area = #{plantArea,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartfarm.base.farm.core.entity.FarmDelegatePlant" >
+    update farm_delegate_plant
+    set crops_id = #{cropsId,jdbcType=BIGINT},
+      plant_area = #{plantArea,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

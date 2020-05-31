@@ -1,0 +1,301 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="/r/css/fileinput.min.css" rel="stylesheet" />
+
+    <script src="/r/js/skins.min.js"></script>
+    <script src="/r/js/jquery-2.1.1.js"></script>
+    <script src="/r/js/bootstrap.min.js"></script>
+    <script src="/r/js/angular.min.js"></script>
+    <script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>
+	<script src="/r/js/fileinput.min.js"></script>
+	<script src="/r/js/distpicker.data.js"></script>
+	<script src="/r/js/distpicker.js"></script>	
+	<script src="/r/js/core.js"></script>
+	<script src="/r/js/beyond.min.js"></script>
+	<script src="/r/core/controller/shop/productCategoryInfo.js"></script>
+	<script src="/r/core/controller/base/menu.js"></script>
+	<script src="/r/js/checkUtil.js"></script>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+	<!-- 头部 -->
+
+    <div class="main-container container-fluid">
+        <div class="page-container">
+        
+			<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+            
+            <!-- 右半页 -->
+            <div class="page-content">
+                 <div class="page-breadcrumbs">
+					<ul class="breadcrumb">
+						<li><i class="fa fa-comments"></i> <a href="/admin/main.htm">首页</a>
+						</li>
+						<li class="active">分类管理</li>
+					</ul>
+				</div>
+                <!-- Page Header -->
+                
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="widget">
+                                <div class="widget-header ">
+                                    <span class="widget-caption">分类列表</span>
+                                </div>
+                                <div class="widget-body">
+                                	<div style="position: relative;height:35px">
+                                		<div class="DTTT btn-group" style="right:0px">
+                                			<a class="btn btn-default DTTT_button_copy" ng-click="showAddMsg()"><span>添加</span></a>
+                                		</div>
+                                	</div>
+                                
+                                    <table class="table table-striped table-bordered table-hover" id="simpledatatable">
+                                        <thead>
+                                            <tr>
+                                            	<th>
+                                                   	分类id
+                                                </th>
+                                                <th>
+                                                   	 分类名称
+                                                </th>
+                                                <th>
+													类目图标
+                                                </th>
+                                                <th>
+                                                   	上一级分类
+                                                </th>
+                                                <th>
+                                                   	等级
+                                                </th>
+                                                 <th>
+                                                   	排序
+                                                </th>
+                                                 <th>
+                                                   	状态
+                                                </th>
+                                                <th>
+                                                   	操作
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="category in list">
+                                            	<td>
+                                                    {{category.id}}
+                                                </td>
+                                                <td>
+                                                    {{category.name}}
+                                                </td>
+                                                <td>
+                                                	<img style="width:100px" ng-src="{{picurl1 + category.iconUrl}}">
+                                                </td>
+                                                <td>
+                                                	{{category.parentName}}
+                                                </td>
+                                                <td>
+                                                	{{category.level}}
+                                                </td>
+                                               <td>
+                                                	{{category.sortOrder}}
+                                                </td>
+                                                <td>
+                                                	{{{1:'启用',2:'禁用'}[category.status]}}
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-default" ng-click="showEditMsg(category.id)">修改</button>
+                                                    <button class="btn btn-default" ng-click="changestatus(category.id)">{{{2:'点击启用',1:'点击禁用'}[category.status]}}</button>
+                                                    
+                                                </td>
+                                                
+                                            </tr>
+                                        </tbody>
+                                        
+                                    </table>
+                                    <div class="row DTTTFooter">
+                                    	<pagination style="float:right" ng-change="pageChanged()" total-items="formData.total" items-per-page="formData.pageSize" ng-model="formData.pageNumber" max-size="5" class="pagination m-t m-b" boundary-links="true"></pagination>
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 添加类别的窗口 -->
+    <div class="modal-backdrop fade in" ng-if="common.showAdd"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showAdd">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    		
+	    		<div class="modal-header">
+	    		
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeAddMsg()">×</button>
+	    			<h4 class="modal-title">添加类别</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:400px;overflow-y:scroll">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">类别名称</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='categoryAdd.name'>
+	                        	</div>
+			    			</div>
+			    		
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">上级分类</label>
+			    				<div class="col-sm-10">
+				    				<select ng-model='categoryAdd.parentId'>
+										<option ng-repeat="x in categories" value="{{x.id}}">{{x.name}}</option>
+									</select>
+	                        	</div>
+			    			</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">等级</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control"  ng-model='categoryAdd.level'>
+								</div>
+							</div>
+
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">排序</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='categoryAdd.sortOrder'>
+	                        	</div>
+			    			</div>
+
+
+
+
+                         	<div class="form-group">
+                       			<label class="col-sm-2 control-label no-padding-right">类别图片</label>
+                        		<div class="col-sm-10">
+                          			<input id="addImg" type="file" class="file" name="addImg"  
+                          			data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+                          		</div>
+								<div>
+									<div class="col-sm-2"></div>
+									<div class="col-sm-8"><p style="color:gray;">推荐尺寸：100px*100px</p></div>
+								</div>
+                       		</div>
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeAddMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitAdd()">保存</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+    
+    
+    <!-- 编辑类别的窗口 -->
+    <div class="modal-backdrop fade in" ng-if="common.showEdit"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showEdit">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    		
+	    		<div class="modal-header">
+	    		
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeEditMsg()">×</button>
+	    			<h4 class="modal-title">修改类别</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:400px;overflow-y:scroll">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+
+							<input type="text" name="someData" ng-model="categoryInfo.id" style="display: none;"/>
+			    			
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">类别名称</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control"   ng-model='categoryInfo.name' >
+	                        	</div>
+			    			</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">上级分类</label>
+								<div class="col-sm-10">
+									<select ng-model='categoryInfo.parentId' ng-options="item.id as item.name for item in categories">
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">等级</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control"  ng-model='categoryInfo.level'>
+								</div>
+							</div>
+			    		
+
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">排序</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control"  ng-model='categoryInfo.sortOrder'>
+	                        	</div>
+			    			</div>
+			    			
+
+
+                         	<div class="form-group">
+                       			<label class="col-sm-2 control-label no-padding-right">类别图片</label>
+                        		<div class="col-sm-10">
+                          			<input id="editImg" type="file" class="file" name="editImg" 
+                          			data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+                          		</div>
+								<div>
+									<div class="col-sm-2"></div>
+									<div class="col-sm-8"><p style="color:gray;">推荐尺寸：100px*100px</p></div>
+								</div>
+                       		</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">类别图片(旧)</label>
+								<div class="col-sm-10">
+									<img ng-src="{{picurl+categoryInfo.iconUrl}}" style="width:100px;height:100px;">
+								</div>
+							</div>
+
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeEditMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitEdit()">确定</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+</body>
+
+</html>

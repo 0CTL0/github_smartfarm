@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.smartfarm.base.shop.core.dao.ProductSkuAttributeDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.ProductSkuAttribute" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="attribute" property="attribute" jdbcType="VARCHAR" />
+    <result column="att_value" property="attValue" jdbcType="VARCHAR" />
+    <result column="product_sku_id" property="productSkuId" jdbcType="BIGINT" />
+  </resultMap>
+  
+  
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.ProductSkuAttribute" >
+    insert into product_sku_attribute
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="attribute != null" >
+        attribute,
+      </if>
+      <if test="attValue != null" >
+        att_value,
+      </if>
+      <if test="productSkuId != null" >
+        product_sku_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="attribute != null" >
+        #{attribute,jdbcType=VARCHAR},
+      </if>
+      <if test="attValue != null" >
+        #{attValue,jdbcType=VARCHAR},
+      </if>
+      <if test="productSkuId != null" >
+        #{productSkuId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.ProductSkuAttribute" >
+    update product_sku_attribute
+    <set >
+      <if test="attribute != null" >
+        attribute = #{attribute,jdbcType=VARCHAR},
+      </if>
+      <if test="attValue != null" >
+        att_value = #{attValue,jdbcType=VARCHAR},
+      </if>
+      <if test="productSkuId != null" >
+        product_sku_id = #{productSkuId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryByProductSkuId" resultMap="BaseResultMap">
+  	select *
+  	from product_sku_attribute
+  	where product_sku_id = #{productSkuId}
+  </select>
+</mapper>

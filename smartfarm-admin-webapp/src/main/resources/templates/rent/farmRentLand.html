@@ -1,0 +1,688 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="/r/css/fileinput.min.css" rel="stylesheet" />
+
+	
+	<script src="/r/js/skins.min.js"></script>
+	<script src="/r/js/jquery-2.1.1.js"></script>
+	<script src="/r/js/bootstrap.min.js"></script>
+	<script src="/r/js/angular.min.js"></script>
+	<script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>	    	
+	<script src="/r/js/fileinput.min.js"></script>
+	<script src="/r/js/distpicker.data.js"></script>
+	<script src="/r/js/distpicker.js"></script>
+		<script src="/r/js/core.js"></script>
+	<script src="/r/js/beyond.min.js"></script>
+
+	<script src="/r/js/checkUtil.js"></script>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+	<!-- 头部 -->
+	   
+    <div class="main-container container-fluid">
+        <div class="page-container">
+        
+        	<!-- 菜单 -->
+        	<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+			<!-- 菜单 -->
+            
+            <!-- 右半页 -->
+            <div class="page-content">
+            	<div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="fa fa-comments"></i>
+                            <a href="/admin/main.htm">首页</a>
+                        </li>
+						<li>
+							<a href="/admin/rent/farmBase.htm">基地列表</a>
+						</li>
+						<li>
+							<a href="/admin/rent/farmTunnel.htm">地块列表</a>
+						</li>
+						<li>
+							<a>租地信息</a>
+						</li>
+                    </ul>
+                </div>
+                
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="widget">
+                                <div class="widget-header ">
+                                    <span class="widget-caption">租地信息列表</span>
+                                </div>
+                                
+                                <div class="widget-body">                                                   	
+                                
+		                               <!-- 搜索框 -->
+			                          <div class="table table-striped table-bordered table-hover" style="margin-bottom:20px;padding:10px;overflow:hidden; position:relative;">
+			                            <div class="row">	                            
+			                            	<div class="col-sm-1 control-label no-padding-right" for="inputEmail3" style="padding-top:7px;"><label>租地名称</label></div>
+					    					<div class="col-sm-2">
+			                            		<input type="text" class="form-control" ng-model='formData.name'>
+			                        		</div>	 
+			                        		<div class="col-sm-1" style="padding-top:7px;"><label>选择状态</label></div>
+			                        		<div class="col-sm-2">			                        		
+                                    			<select class="form-control" ng-model='formData.status' ng-options="status.id as status.name for status in statusList">
+													<option value="" disabled>--请选择--</option>
+												</select>       
+			                        		</div>		      			                     		                   	
+		                                	<div class="col-sm-1">
+		                                		<button class="btn btn-default"  ng-click="pageChanged()">查询</button> 
+		                                	</div>		                                	
+		                                	
+		                                	<div class="col-sm-1" style="position:absolute;right:30px;top:10px;">
+		                                		<button class="btn btn-default"  ng-click="showAddMsg()">新增租地</button>
+                        	                </div>	                                  		
+	                                		     					   		
+						    			</div>							    										    		
+						    		 </div>  
+		                             <!-- 搜索框 -->    
+                                     
+                                     <!-- 主列表 -->                           
+                                    <table class="table table-striped table-bordered table-hover" id="simpledatatable">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                   	 租地名称
+                                                </th>
+                                                <th>
+                                                     所属租地
+                                                </th>
+                                                 <th>
+                                                     面积
+                                                </th>
+                                                <th>
+													 价格
+                                                </th>
+
+												<th>
+													状态
+												</th>
+                                                <th>
+                                                   	操作
+                                                </th>                                             
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="rantLand in list">
+                                                <td>
+                                                    {{rantLand.name}}
+                                                </td>
+                                                <td>
+                                                	{{rantLand.tunnelName}}
+                                                </td>
+                                                <td>
+                                                	{{rantLand.area}}
+                                                </td>
+                                                <td>
+                                                	{{rantLand.price}}
+                                                </td>                                                
+
+												<td>
+													{{{1:'未租用',2:'已租用'}[rantLand.status]}}
+												</td>
+                                                <td>                                                   
+<!--                                                    <button class="btn btn-default" ng-click="changeStatus(rantLand.id)">{{{1:'禁用',2:'启用'}[rantLand.status]}}</button>-->
+                                                    <button class="btn btn-default" ng-click="showEditMsg(rantLand.id)">编辑</button>
+													<button class="btn btn-default" ng-click="showDeviceMsg(rantLand.id)">配置设备</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        
+                                    </table>
+                                    <div class="row DTTTFooter">
+                                    	<pagination style="float:right" ng-change="pageChanged()" total-items="formData.total" items-per-page="formData.pageSize" ng-model="formData.pageNumber" max-size="5" class="pagination m-t m-b" boundary-links="true"></pagination>
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    
+    
+        <!-- 新增弹窗-->
+    <div class="modal-backdrop fade in" ng-if="common.showAdd"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showAdd" >
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    		
+	    		<div class="modal-header">	    		
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeAddMsg()">×</button>
+	    			<h4 class="modal-title">添加租地</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:350px;overflow-y:scroll;overflow-x:hidden">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">租地名称</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="rentLandAdd.name"></input>
+	                        	</div>
+			    		</div>
+			    		
+			    		<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">面积(㎡)</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="rentLandAdd.area" placeholder="请输入整数，如7"></input>
+	                        	</div>
+			    		</div>
+			    		
+			    		<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">价格(元)</label>
+			    				<div class="col-sm-10">
+	                            	<input class="form-control" rows="3" ng-model="rentLandAdd.price" placeholder="请输入价格"></input>
+	                        	</div>
+			    		</div>
+
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeAddMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitAdd()">确定</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+    <!-- 新增弹窗 -->
+    
+     <!-- 编辑弹窗 -->
+    <div class="modal-backdrop fade in" ng-if="common.showEdit"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showEdit" >
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+
+	    		<div class="modal-header">	    		
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeEditMsg()">×</button>
+	    			<h4 class="modal-title">编辑土地</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:350px;overflow-y:scroll;overflow-x:hidden">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+
+							<input ng-model="rentLandEdit.id" type="hidden">
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">租地名称</label>
+								<div class="col-sm-10">
+									<input class="form-control" rows="3" ng-model="rentLandEdit.name"></input>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">面积(㎡)</label>
+								<div class="col-sm-10">
+									<input class="form-control" rows="3" ng-model="rentLandEdit.area" placeholder="请输入整数，如7"></input>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">价格(元)</label>
+								<div class="col-sm-10">
+									<input class="form-control" rows="3" ng-model="rentLandEdit.price" placeholder="请输入价格"></input>
+								</div>
+							</div>
+
+
+
+						</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeEditMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitEdit()">确定</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+    <!-- 编辑弹窗 -->
+
+	<!-- 设备弹窗-->
+	<div class="modal-backdrop fade in" ng-if="common.showDevice"></div>
+	<div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showDevice" >
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<button type="button" class="bootbox-close-button close"  ng-click="closeDeviceMsg()">×</button>
+					<h4 class="modal-title">配置租地设备</h4>
+				</div>
+
+				<div class="modal-body" style="height:350px;overflow-y:scroll;overflow-x:hidden">
+					<div class="bootbox-body">
+						<div class="form-horizontal">
+
+							<div class="form-group" ng-if="cameraList.length>0">
+								<div class="col-lg-12 col-sm-12 col-xs-12">
+									<div class="page-header">
+										<h2 style="margin-top: 0px;margin-bottom: 0px;"><span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> 摄像头</h2>
+									</div>
+								</div>
+								<div class="col-lg-4 col-sm-4 col-xs-4" ng-repeat="camera in cameraList">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" class="colored-success" ng-model="camera.selected" ng-checked="isSelected($index,1)" ng-click="updateSelection($index,1)">
+											<span class="text">{{camera.cameraName}}</span>
+										</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group" ng-if="controlNodeList.length>0">
+								<div class="col-lg-12 col-sm-12 col-xs-12">
+									<div class="page-header">
+										<h2 style="margin-top: 0px;margin-bottom: 0px;"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> 控制阀</h2>
+									</div>
+								</div>
+								<div class="col-lg-4 col-sm-4 col-xs-4" ng-repeat="controlNode in controlNodeList">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" class="colored-success" ng-model="controlNode.selected" ng-checked="isSelected($index,2)" ng-click="updateSelection($index,2)">
+											<span class="text">{{controlNode.name}}</span>
+										</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group" ng-if="sensorNodeList.length>0">
+								<div class="col-lg-12 col-sm-12 col-xs-12">
+									<div class="page-header">
+										<h2 style="margin-top: 0px;margin-bottom: 0px;"><span class="glyphicon glyphicon-leaf" aria-hidden="true"></span> 传感器</h2>
+									</div>
+									<label  class="col-sm-2 control-label no-padding-right"></label>
+								</div>
+								<div class="col-lg-4 col-sm-4 col-xs-4" ng-repeat="sensorNode in sensorNodeList">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" class="colored-success" ng-model="sensorNode.selected" ng-checked="isSelected($index,3)" ng-click="updateSelection($index,3)">
+											<span class="text">{{sensorNode.nodeName}}</span>
+										</label>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-warning shiny" ng-click="resetDevice()" style="float: left;margin-left: 20px;">重置</button>
+					<button type="button" class="btn btn-warning" ng-click="closeDeviceMsg()">取消</button>
+					<button type="button" class="btn btn-primary" ng-click="submitDevice()">确定</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- 设备弹窗 -->
+
+    <script src="/r/js/beyond.min.js"></script>
+</body>
+	<script>
+		var app = angular.module("myApp", ["ui.bootstrap"]);
+		var submitNow = false;
+		app.controller("myCtrl", function($scope,$http) {
+			$scope.common = {
+				showAdd:false,
+				showEdit:false,
+				showDevice:false
+			};
+			$scope.statusList = [
+				{id:1,name:'未租赁'},
+				{id:2,name:'已租赁'}
+			];
+
+			$scope.formData = {
+				total:0,
+				pageSize:10,
+				pageNumber:1,
+				name:'',
+				status:'',
+				tunnelId:''
+			}
+
+			$scope.device = {
+				rentLandId : '',
+				cameraSelected : [],
+				controlNodeSelected : [],
+				sensorNodeSelected : []
+			}
+
+			$scope.getParams=function(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if (r != null) return unescape(r[2]);
+				return null;
+			}
+
+			$scope.pageChanged = function() {
+				$scope.formData.tunnelId=$scope.getParams("tunnelId");
+				$http({
+					method  : 'POST',
+					url     : '/farmInfo/getFarmRentLandList.htm',
+					data    : $.param($scope.formData),
+					headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+				}).then(function(response) {
+					if(!response.data.success) {
+						Notify("操作失败！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+						return;
+					}
+					$scope.list = response.data.farmBaseInfoList;
+					$scope.formData.total = response.data.total;
+				});
+			}
+			$scope.pageChanged();
+
+
+			$scope.showAddMsg=function(){
+				$scope.common.showAdd=true;
+			}
+			$scope.closeAddMsg=function(){
+				$scope.common.showAdd=false;
+			}
+
+			$scope.submitAdd=function () {
+				if(submitNow) {
+					return;
+				}
+
+				if(!stringCheck("租地名称",$scope.rentLandAdd.name)){return;}
+				if(!intCheck("租地面积",$scope.rentLandAdd.area)){return;}
+				if(!doubleCheck("租地价格",$scope.rentLandAdd.price)){return;}
+
+				var fd = new FormData();
+				fd.append("name", $scope.rentLandAdd.name);
+				fd.append("tunnelId", $scope.formData.tunnelId);
+				fd.append("area", $scope.rentLandAdd.area);
+				fd.append("status", 1);
+				fd.append("price", $scope.rentLandAdd.price);
+				submitNow = true;
+				$http({
+					method  : 'POST',
+					url     : '/farmInfo/addFarmRentLand.htm',
+					data : fd,
+					transformRequest: angular.identity,
+					headers : {'Content-Type' : undefined}  //angularjs设置文件上传的content-type修改方式
+				}).then(function(response){
+					if(!response.data.success) {
+						Notify("操作失败！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+						submitNow = false;
+						return;
+					}
+
+					Notify('操作成功', 'top-right', '5000', 'success', 'fa-check', true);
+					$scope.common.showAdd = false;
+					$scope.pageChanged();
+					submitNow = false;
+
+					$scope.rentLandAdd = {
+						name:'',
+						area:'',
+						price:''
+					};
+
+				});
+			}
+
+			$scope.showEditMsg=function(id){
+				$http({
+					method  : 'POST',
+					url     : '/farmInfo/getFarmRentLand.htm',
+					params:{
+						'id':id
+					},
+					headers : {'Content-Type' : 'application/x-www-form-urlencoded'}
+				}).then(function(response) {
+					if(!response.data.success) {
+						Notify("操作失败！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+						return;
+					}
+					$scope.rentLandEdit = response.data.rentLand;
+					$scope.common.showEdit=true;
+				});
+			}
+			$scope.closeEditMsg=function(){
+				$scope.common.showEdit=false;
+			}
+
+
+			//提交编辑
+			$scope.submitEdit=function () {
+				console.log(submitNow);
+				if(submitNow) {
+					return;
+				}
+				var fd = new FormData();
+				fd.append("id",$scope.rentLandEdit.id)
+				fd.append("name", $scope.rentLandEdit.name);
+				fd.append("area", $scope.rentLandEdit.area);
+				fd.append("price", $scope.rentLandEdit.price);
+				submitNow = true;
+				$http({
+					method  : 'POST',
+					url     : '/farmInfo/editFarmRentLand.htm',
+					data : fd,
+					transformRequest: angular.identity,
+					headers : {'Content-Type' : undefined}  //angularjs设置文件上传的content-type修改方式
+				}).then(function(response){
+					if(!response.data.success) {
+						Notify("操作失败！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+						submitNow = false;
+						return;
+					}
+					Notify('操作成功', 'top-right', '5000', 'success', 'fa-check', true);
+					$scope.common.showEdit = false;
+					$scope.pageChanged();
+					submitNow = false;
+				});
+			}
+
+
+			$scope.changeStatus=function (id) {
+				$http({
+					method  : 'POST',
+					url     : '/farmInfo/changeFarmRentLandStatus.htm',
+					params:{
+						'id':id
+					},
+					headers : {'Content-Type' : 'application/x-www-form-urlencoded'}
+				}).then(function(response) {
+					if(!response.data.success) {
+						Notify("操作失败！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+						return;
+					}
+					Notify('操作成功', 'top-right', '5000', 'success', 'fa-check', true);
+					$scope.pageChanged();
+				});
+			}
+
+			//打开配置设备弹窗
+			$scope.showDeviceMsg = function(id){
+				$scope.device.rentLandId = id;
+				$http({
+					method  : 'POST',
+					url     : '/landDevice/getFarmDeviceInfo.htm',
+					params:{
+						'rentLandId':$scope.device.rentLandId
+					},
+					headers : {'Content-Type' : 'application/x-www-form-urlencoded'}
+				}).then(function(response) {
+					if(!response.data.success) {
+						Notify("操作失败！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+						return;
+					}
+					$scope.cameraList = response.data.cameraList;
+					$scope.controlNodeList = response.data.controlNodeList;
+					$scope.sensorNodeList = response.data.sensorNodeList;
+					$scope.device.cameraSelected = response.data.cameraSelected.split(",").map(Number);
+					$scope.device.controlNodeSelected = response.data.controlNodeSelected.split(",").map(Number);
+					$scope.device.sensorNodeSelected = response.data.sensorNodeSelected.split(",").map(Number);
+					if ($scope.device.cameraSelected.indexOf(0) > -1){
+						$scope.device.cameraSelected.splice($scope.device.cameraSelected.indexOf(0),1);
+					}
+					if ($scope.device.controlNodeSelected.indexOf(0) > -1){
+						$scope.device.controlNodeSelected.splice($scope.device.controlNodeSelected.indexOf(0),1);
+					}
+					if ($scope.device.sensorNodeSelected.indexOf(0) > -1){
+						$scope.device.sensorNodeSelected.splice($scope.device.sensorNodeSelected.indexOf(0),1);
+					}
+				});
+				$scope.common.showDevice = true;
+			}
+
+			//关闭配置设备弹窗
+			$scope.closeDeviceMsg = function(){
+				$scope.common.showDevice = false;
+			}
+
+			//提交设备配置
+			$scope.submitDevice = function(){
+				if(submitNow) {
+					return;
+				}
+				submitNow = true;
+				var fd = new FormData();
+				fd.append("rentLandId", $scope.device.rentLandId);
+				fd.append("cameras", $scope.device.cameraSelected.toString());
+				fd.append("controlNodes", $scope.device.controlNodeSelected.toString());
+				fd.append("sensorNodes", $scope.device.sensorNodeSelected.toString());
+				$http({
+					method  : 'POST',
+					url     : '/landDevice/configureDevice.htm',
+					data : fd,
+					transformRequest: angular.identity,
+					headers : {'Content-Type' : undefined}  //angularjs设置文件上传的content-type修改方式
+				}).then(function(response){
+					if(!response.data.success) {
+						Notify("操作失败！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+						submitNow = false;
+						return;
+					}
+
+					Notify('操作成功', 'top-right', '5000', 'success', 'fa-check', true);
+					submitNow = false;
+					$scope.common.showDevice = false;
+					$scope.pageChanged();
+
+					$scope.device = {
+						rentLandId : '',
+						cameraSelected : [],
+						controlNodeSelected : [],
+						sensorNodeSelected : []
+					};
+
+				});
+			}
+
+			$scope.updateSelected = function(action,id,type){
+				console.log(id);
+				if (type==1){
+					if(action == 'add' && $scope.device.cameraSelected.indexOf(id) == -1){
+						$scope.device.cameraSelected.push(id);
+						// $scope.selectedTags.push(name);
+					}
+					if(action == 'remove' && $scope.device.cameraSelected.indexOf(id)!=-1){
+						var idx = $scope.device.cameraSelected.indexOf(id);
+						$scope.device.cameraSelected.splice(idx,1);
+						// $scope.selectedTags.splice(idx,1);
+					}
+				}
+				if (type==2){
+					if(action == 'add' && $scope.device.controlNodeSelected.indexOf(id) == -1){
+						$scope.device.controlNodeSelected.push(id);
+					}
+					if(action == 'remove' && $scope.device.controlNodeSelected.indexOf(id)!=-1){
+						var idx = $scope.device.controlNodeSelected.indexOf(id);
+						$scope.device.controlNodeSelected.splice(idx,1);
+					}
+				}
+				if (type==3){
+					if(action == 'add' && $scope.device.sensorNodeSelected.indexOf(id) == -1){
+						$scope.device.sensorNodeSelected.push(id);
+					}
+					if(action == 'remove' && $scope.device.sensorNodeSelected.indexOf(id)!=-1){
+						var idx = $scope.device.sensorNodeSelected.indexOf(id);
+						$scope.device.sensorNodeSelected.splice(idx,1);
+					}
+				}
+				console.log("camera:",$scope.device.cameraSelected);
+				console.log("controlNode:",$scope.device.controlNodeSelected);
+				console.log("sensorNode:",$scope.device.sensorNodeSelected);
+			}
+
+			$scope.updateSelection = function(index,type){
+				var item;
+				if (type==1){
+					item = $scope.cameraList[index];
+				}
+				if (type==2){
+					item = $scope.controlNodeList[index];
+				}
+				if (type==3){
+					item = $scope.sensorNodeList[index];
+				}
+				var action = (item.selected?'add':'remove');
+				$scope.updateSelected(action,item.id,type);
+			}
+
+			$scope.isSelected = function(index,type){
+				var item;
+				var flag;
+				if (type==1){
+					item = $scope.cameraList[index];
+					flag = $scope.device.cameraSelected.indexOf(item.id)>=0;
+				}
+				if (type==2){
+					item = $scope.controlNodeList[index];
+					flag = $scope.device.controlNodeSelected.indexOf(item.id)>=0;
+				}
+				if (type==3){
+					item = $scope.sensorNodeList[index];
+					flag = $scope.device.sensorNodeSelected.indexOf(item.id)>=0;
+				}
+				return flag;
+			}
+
+			//重置设备
+			$scope.resetDevice = function () {
+				$scope.device.cameraSelected = [];
+				$scope.device.controlNodeSelected = [];
+				$scope.device.sensorNodeSelected = [];
+			}
+
+		});
+	</script>
+	<script src="/r/core/controller/base/menu.js"></script>
+</html>

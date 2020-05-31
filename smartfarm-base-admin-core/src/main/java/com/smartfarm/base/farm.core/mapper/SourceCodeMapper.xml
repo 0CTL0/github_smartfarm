@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.SourceCodeDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.SourceCode" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="source_id" property="sourceId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="search_times" property="searchTimes" jdbcType="INTEGER" />
+    <result column="first_search_time" property="firstSearchTime" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.farm.core.entity.vo.SourceCodeVo" id="BaseVoResultMap" extends="BaseResultMap">
+  	<result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <insert id="insertBatchInfoList" parameterType="java.util.List" >
+    insert into core_source_code(
+        source_id,
+        status,
+        code,
+        search_times,
+        first_search_time,
+        create_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+        (#{item.sourceId,jdbcType=BIGINT},
+        #{item.status,jdbcType=SMALLINT},
+        #{item.code,jdbcType=VARCHAR},
+        #{item.searchTimes,jdbcType=INTEGER},
+        #{item.firstSearchTime,jdbcType=VARCHAR},
+        #{item.createTime,jdbcType=VARCHAR})
+     </foreach>
+  </insert>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.SourceCode" >
+    insert into core_source_code
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sourceId != null" >
+        source_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="searchTimes != null" >
+        search_times,
+      </if>
+      <if test="firstSearchTime != null" >
+        first_search_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sourceId != null" >
+        #{sourceId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="searchTimes != null" >
+        #{searchTimes,jdbcType=INTEGER},
+      </if>
+      <if test="firstSearchTime != null" >
+        #{firstSearchTime,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.SourceCode" >
+    update core_source_code
+    <set >
+      <if test="sourceId != null" >
+        source_id = #{sourceId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="searchTimes != null" >
+        search_times = #{searchTimes,jdbcType=INTEGER},
+      </if>
+      <if test="firstSearchTime != null" >
+        first_search_time = #{firstSearchTime,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="querySourceCodeList" resultMap="BaseVoResultMap">
+  	SELECT sc.id,sc.create_time,sc.first_search_time,sc.`code`,sc.search_times,sc.source_id,sc.`status`,ci.`name`
+	FROM core_source_code sc,core_source_info ci,product_batch pb
+	WHERE sc.source_id = ci.id and ci.batch_id=pb.id
+	and pb.farm_id=#{farmId,jdbcType=BIGINT}
+	<if test="name != null">
+		AND ci.name like CONCAT('%',#{name},'%')
+	</if>
+	<if test="code != null">
+		AND sc.code like CONCAT('%',#{code},'%')
+	</if>
+	<if test="status != null" >
+        AND sc.status = #{status,jdbcType=SMALLINT},
+    </if>
+	limit #{start}, #{limit}
+  </select>
+  
+  <select id="queryCountSourceCodeList" resultType="int">
+  	SELECT COUNT(*)
+	FROM core_source_code sc,core_source_info ci,product_batch pb
+	WHERE sc.source_id = ci.id and ci.batch_id=pb.id
+    and pb.farm_id=#{farmId,jdbcType=BIGINT}
+	<if test="name != null">
+		AND ci.name like CONCAT('%',#{name},'%')
+	</if>
+	<if test="code != null">
+		AND sc.code like CONCAT('%',#{code},'%')
+	</if>
+	<if test="status != null" >
+        AND sc.status = #{status,jdbcType=SMALLINT},
+    </if>
+  </select>
+  
+  <select id="getSourceInquireWe" resultMap="BaseVoResultMap">
+  	select csc.id,csc.code,csc.search_times,csc.first_search_time,pif.name 
+  	from core_source_code csc,core_source_info csi,product_batch pb,product_info pif 
+  	where csc.source_id=csi.id and csi.batch_id=pb.id and pb.product_info_id=pif.id 
+  	and csc.code=#{code,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getCodeBySourceId" resultMap="BaseResultMap">
+  	select code from core_source_code where source_id=#{sourceId,jdbcType=BIGINT}
+  </select>
+  
+</mapper>

@@ -1,0 +1,83 @@
+
+#server是默認的配置項，也可自定義配置項
+server:
+  servlet:
+    context-path: /
+    #port: 8082
+
+debug: false
+
+logging:
+  level:
+    root: info
+  #file: /local/user/app-prd.log
+
+#spring:
+#  thymeleaf:
+#    prefix: classpath:/templates
+#    suffix: html
+
+
+jdbc:
+  datasource:
+    driver: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://120.27.68.148:3306/smartfarm?characterencoding=utf-8
+    #username: fresh
+   # password: admin
+    username: Ww60mr3NrsM=
+    password: MxKI9sQyfJ4=
+
+mybatis:
+  config_file: mybatis-config.xml
+#  mapper_path: mapper/*.xml;com/smartfarm/base/admin/core/dao/*.xml;com/smartfarm/base/admin/core/mapper/*.xml;com/smartfarm/base/shop/core/mapper/*.xml;com/smartfarm/base/shop/core/mapper/*.xml;com/smartfarm/base/farm/core/mapper/*.xml
+  mapper_path: com/smartfarm/base/**/*.xml
+  type_alias_package: com.smartfarm.base.admin.core.entity;com.smartfarm.base.shop.core.entity;com.smartfarm.base.monitor.core.entity;com.smartfarm.base.farm.core.entity
+
+
+  #Redis配置
+spring:
+  redis:
+    host: localhost # Redis服务器地址
+    database: 0 # Redis数据库索引（默认为0）
+    port: 6379 # Redis服务器连接端口
+    password: # Redis服务器连接密码（默认为空）
+    timeout: 300ms # 连接超时时间（毫秒）
+
+
+
+  #Kaptcha的配置
+kaptcha:
+  border: no
+  textproducer:
+    font:
+      color: red
+      names: Arial
+      size: 43
+    char:
+      string: ACDEFHKPRSTWX345679
+      length: 4
+  image:
+    height: 50
+    width: 135
+  noise:
+    color: black
+
+
+  #Path管理
+win:
+  base:
+    path: D:/projectdev/image
+linux:
+  base:
+    path: /Users/baidu/work/image
+shop:
+  relevant:
+    path: /upload/images/item/shop/
+headline:
+  relevant:
+    path: /upload/images/item/headtitle/
+shopcategoty:
+  relevant:
+    path: /upload/images/item/shopcategory/
+
+

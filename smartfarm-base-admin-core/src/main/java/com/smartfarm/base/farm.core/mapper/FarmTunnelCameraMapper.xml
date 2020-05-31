@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartfarm.base.farm.core.dao.FarmTunnelCameraDao">
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.FarmTunnelCamera">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tunnel_id" jdbcType="BIGINT" property="tunnelId" />
+    <result column="camera_id" jdbcType="BIGINT" property="cameraId" />
+    <result column="farm_id" jdbcType="BIGINT" property="farmId" />
+  </resultMap>
+
+
+  <delete id="deleteByTunnelId" parameterType="java.lang.Long">
+    delete from farm_tunnel_camera where tunnel_id=#{tunnelId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertCameras" parameterType="java.util.List">
+    insert into farm_tunnel_camera (tunnel_id, camera_id, farm_id)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.tunnelId,jdbcType=BIGINT}, #{item.cameraId,jdbcType=BIGINT}, #{item.farmId,jdbcType=BIGINT})
+    </foreach>
+  </insert>
+
+  <select id="getFarmCameraConfig" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select * from farm_tunnel_camera where tunnel_id=#{tunnelId,jdbcType=BIGINT}
+  </select>
+
+
+  <select id="getFarmCameraByBaseId" resultMap="BaseResultMap">
+    select c.* from farm_tunnel_camera c
+    left join farm_tunnel_info t on t.id = c.tunnel_id
+    where t.base_id = #{baseId}
+  </select>
+
+
+  <sql id="Base_Column_List">
+    id, tunnel_id, camera_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from farm_tunnel_camera
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from farm_tunnel_camera
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.FarmTunnelCamera">
+    insert into farm_tunnel_camera (id, tunnel_id, camera_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{tunnelId,jdbcType=BIGINT}, #{cameraId,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartfarm.base.farm.core.entity.FarmTunnelCamera">
+    insert into farm_tunnel_camera
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tunnelId != null">
+        tunnel_id,
+      </if>
+      <if test="cameraId != null">
+        camera_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tunnelId != null">
+        #{tunnelId,jdbcType=BIGINT},
+      </if>
+      <if test="cameraId != null">
+        #{cameraId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartfarm.base.farm.core.entity.FarmTunnelCamera">
+    update farm_tunnel_camera
+    <set>
+      <if test="tunnelId != null">
+        tunnel_id = #{tunnelId,jdbcType=BIGINT},
+      </if>
+      <if test="cameraId != null">
+        camera_id = #{cameraId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartfarm.base.farm.core.entity.FarmTunnelCamera">
+    update farm_tunnel_camera
+    set tunnel_id = #{tunnelId,jdbcType=BIGINT},
+      camera_id = #{cameraId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

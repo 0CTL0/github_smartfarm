@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.CrowdfundingOrderDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.CrowdfundingOrder" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="crowdfunding_id" property="crowdfundingId" jdbcType="BIGINT" />
+    <result column="grade_id" property="gradeId" jdbcType="BIGINT" />
+    <result column="order_time" property="orderTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="pay_status" property="payStatus" jdbcType="SMALLINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="real_amount" property="realAmount" jdbcType="DECIMAL" />
+    <result column="grant_time" property="grantTime" jdbcType="VARCHAR" />
+    <result column="grant_amount" property="grantAmount" jdbcType="DECIMAL" />
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="receive_name" property="receiveName" jdbcType="VARCHAR" />
+    <result column="receive_mobile" property="receiveMobile" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="ship_name" property="shipName" jdbcType="VARCHAR" />
+    <result column="ship_code" property="shipCode" jdbcType="VARCHAR" />
+    <result column="ship_no" property="shipNo" jdbcType="VARCHAR" />
+    <result column="ship_time" property="shipTime" jdbcType="VARCHAR" />
+    <result column="ship_status" property="shipStatus" jdbcType="SMALLINT" />
+  </resultMap>
+  
+   <resultMap type="com.smartfarm.base.farm.core.entity.vo.CrowFundingOrderVo" id="BaseVoResultMap" extends="BaseResultMap">
+  		<result column="cover" property="cover" jdbcType="VARCHAR" />
+  		<result column="profit_type" property="profitType" jdbcType="SMALLINT" />
+  		<result column="description" property="description" jdbcType="VARCHAR" />
+  		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+  		<result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+  		<result column="name" property="name" jdbcType="VARCHAR" />
+  		<association property="grade" javaType="com.smartfarm.base.farm.core.entity.Grade">
+  			<id column="gid" property="id" jdbcType="BIGINT" />
+		    <result column="price" property="price" jdbcType="DECIMAL" />
+		    <result column="des" property="description" jdbcType="VARCHAR" />
+		    <result column="crowfunding_id" property="crowfundingId" jdbcType="BIGINT" />
+  		</association>
+   </resultMap>
+   
+    <resultMap type="com.smartfarm.base.farm.core.entity.vo.CrowdfundingOrderDetailVo" id="BaseOrderDetailResultMap" extends="BaseResultMap">
+  		<result column="profit_type" property="profitType" jdbcType="SMALLINT" />
+  		<result column="bonus_rate" property="bonusRate" jdbcType="DOUBLE" />
+  		<result column="cover" property="cover" jdbcType="VARCHAR" />
+  		<result column="provide_time" property="provideTime" jdbcType="VARCHAR" />
+  		<result column="crowdId" property="crowdId" jdbcType="BIGINT" />
+   </resultMap>
+   
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.CrowdfundingOrder" >
+    insert into crfd_crowdfunding_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="crowdfundingId != null" >
+        crowdfunding_id,
+      </if>
+      <if test="gradeId != null" >
+        grade_id,
+      </if>
+      <if test="orderTime != null" >
+        order_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="totalAmount != null" >
+        total_amount,
+      </if>
+      <if test="realAmount != null" >
+        real_amount,
+      </if>
+      <if test="grantTime != null" >
+        grant_time,
+      </if>
+      <if test="grantAmount != null" >
+        grant_amount,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="receiveName != null" >
+        receive_name,
+      </if>
+      <if test="receiveMobile != null" >
+        receive_mobile,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="shipName != null" >
+        ship_name,
+      </if>
+      <if test="shipCode != null" >
+        ship_code,
+      </if>
+      <if test="shipNo != null" >
+        ship_no,
+      </if>
+      <if test="shipTime != null" >
+        ship_time,
+      </if>
+      <if test="shipStatus != null" >
+        ship_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="crowdfundingId != null" >
+        #{crowdfundingId,jdbcType=BIGINT},
+      </if>
+      <if test="gradeId != null" >
+        #{gradeId,jdbcType=BIGINT},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realAmount != null" >
+        #{realAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="grantTime != null" >
+        #{grantTime,jdbcType=VARCHAR},
+      </if>
+      <if test="grantAmount != null" >
+        #{grantAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="receiveName != null" >
+        #{receiveName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveMobile != null" >
+        #{receiveMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="shipName != null" >
+        #{shipName,jdbcType=VARCHAR},
+      </if>
+      <if test="shipCode != null" >
+        #{shipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shipNo != null" >
+        #{shipNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shipTime != null" >
+        #{shipTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shipStatus != null" >
+        #{shipStatus,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <insert id="saveCrowdfundingOrder" parameterType="com.smartfarm.base.farm.core.entity.CrowdfundingOrder" useGeneratedKeys="true" keyProperty="id">
+  	insert into crfd_crowdfunding_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="crowdfundingId != null" >
+        crowdfunding_id,
+      </if>
+      <if test="gradeId != null" >
+        grade_id,
+      </if>
+      <if test="orderTime != null" >
+        order_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="totalAmount != null" >
+        total_amount,
+      </if>
+      <if test="realAmount != null" >
+        real_amount,
+      </if>
+      <if test="grantTime != null" >
+        grant_time,
+      </if>
+      <if test="grantAmount != null" >
+        grant_amount,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="receiveName != null" >
+        receive_name,
+      </if>
+      <if test="receiveMobile != null" >
+        receive_mobile,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="shipName != null" >
+        ship_name,
+      </if>
+      <if test="shipCode != null" >
+        ship_code,
+      </if>
+      <if test="shipNo != null" >
+        ship_no,
+      </if>
+      <if test="shipTime != null" >
+        ship_time,
+      </if>
+      <if test="shipStatus != null" >
+        ship_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="crowdfundingId != null" >
+        #{crowdfundingId,jdbcType=BIGINT},
+      </if>
+      <if test="gradeId != null" >
+        #{gradeId,jdbcType=BIGINT},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realAmount != null" >
+        #{realAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="grantTime != null" >
+        #{grantTime,jdbcType=VARCHAR},
+      </if>
+      <if test="grantAmount != null" >
+        #{grantAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="receiveName != null" >
+        #{receiveName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveMobile != null" >
+        #{receiveMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="shipName != null" >
+        #{shipName,jdbcType=VARCHAR},
+      </if>
+      <if test="shipCode != null" >
+        #{shipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shipNo != null" >
+        #{shipNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shipTime != null" >
+        #{shipTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shipStatus != null" >
+        #{shipStatus,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.CrowdfundingOrder">
+    update crfd_crowdfunding_order
+    <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="crowdfundingId != null" >
+        crowdfunding_id = #{crowdfundingId,jdbcType=BIGINT},
+      </if>
+      <if test="gradeId != null" >
+        grade_id = #{gradeId,jdbcType=BIGINT},
+      </if>
+      <if test="orderTime != null" >
+        order_time = #{orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="quantity != null" >
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmount != null" >
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realAmount != null" >
+        real_amount = #{realAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="grantTime != null" >
+        grant_time = #{grantTime,jdbcType=VARCHAR},
+      </if>
+      <if test="grantAmount != null" >
+        grant_amount = #{grantAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="receiveName != null" >
+        receive_name = #{receiveName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveMobile != null" >
+        receive_mobile = #{receiveMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="shipName != null" >
+        ship_name = #{shipName,jdbcType=VARCHAR},
+      </if>
+      <if test="shipCode != null" >
+        ship_code = #{shipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shipNo != null" >
+        ship_no = #{shipNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shipTime != null" >
+        ship_time = #{shipTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shipStatus != null" >
+        ship_status = #{shipStatus,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateOrderOk" parameterType="com.smartfarm.base.farm.core.entity.CrowdfundingOrder">
+  		update crfd_crowdfunding_order
+  		<set>
+  			<if test="shipStatus != null" >
+		       ship_status = #{shipStatus,jdbcType=SMALLINT},
+		    </if>
+  		</set>
+  		 where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryOrderList" resultMap="BaseVoResultMap">
+  	SELECT cf.cover,cf.profit_type,mi.nick_name,mi.pic_url,
+	co.id,co.price,co.quantity,co.member_id,co.receive_mobile,co.order_time,co.`status`,co.real_amount,co.order_no,co.receive_name,co.ship_status
+	FROM crfd_crowdfunding cf,crfd_crowdfunding_order co,member_info mi
+	WHERE cf.id = co.crowdfunding_id
+	AND mi.id = co.member_id
+	<if test="orderNo != null and orderNo != ''">
+		AND co.order_no = #{orderNo}
+	</if>
+	<if test="status != null">
+		AND co.status = #{status}
+	</if>
+	<if test="shipStatus != null">
+		AND co.ship_status = #{shipStatus}
+	</if>
+	limit #{start}, #{limit}
+  </select>
+  
+  <select id="queryCountOrderList" resultType="int">
+  	SELECT COUNT(*)
+	FROM crfd_crowdfunding cf,crfd_crowdfunding_order co
+	WHERE cf.id = co.crowdfunding_id
+	<if test="orderNo != null">
+		AND co.order_no = #{orderNo}
+	</if>
+	<if test="status != null">
+		AND co.status = #{status}
+	</if>
+	<if test="shipStatus != null">
+		AND co.ship_status = #{shipStatus}
+	</if>
+  </select>
+  
+  <select id="queryOrderDetailById" resultMap="BaseVoResultMap">
+  	SELECT cf.cover,cf.profit_type,co.*,cg.price gradePrice,cg.description
+	FROM crfd_crowdfunding cf,crfd_crowdfunding_order co,crfd_grade cg
+	WHERE cf.id = co.crowdfunding_id
+	AND cg.id = co.grade_id
+	AND co.id = #{id}
+  </select>
+  
+  <select id="queryCrowOrderList" resultMap="BaseVoResultMap">
+  	<!-- SELECT
+	co.order_no,mi.pic_url,mi.nick_name,co.receive_mobile,cf.profit_type,cg.price,co.id,co.receive_name,co.grant_time
+	FROM crfd_crowdfunding_order co,core_member_info mi,crfd_crowdfunding cf,crfd_grade cg
+	WHERE co.crowdfunding_id = cf.id
+	AND co.member_id = mi.id
+	AND co.grade_id = cg.id
+	AND cf.id = #{id} -->
+	SELECT
+      co.order_no,
+      co.receive_mobile,
+      cf.profit_type,co.id,co.receive_name,co.grant_time,mi.pic_url,mi.`name`,cg.price
+	FROM crfd_crowdfunding cf 
+      INNER JOIN crfd_crowdfunding_order co ON co.crowdfunding_id = cf.id
+      INNER JOIN member_info mi ON co.member_id = mi.id
+      INNER JOIN crfd_grade cg ON cg.id = co.grade_id
+	WHERE cf.id = #{id}
+	limit #{start}, #{limit}
+  </select>
+  
+  <select id="queryCountCrowdList" resultType="int">
+  	SELECT
+	    COUNT(*)
+	FROM crfd_crowdfunding_order co,member_info mi,crfd_crowdfunding cf,crfd_grade cg
+	    WHERE co.crowdfunding_id = cf.id
+	AND co.member_id = mi.id
+	AND co.grade_id = cg.id
+	AND cf.id = #{id}
+  </select>
+  
+  <update id="updateBonusById" parameterType="com.smartfarm.base.farm.core.entity.CrowdfundingOrder">
+  	UPDATE 
+	crfd_crowdfunding cf,crfd_crowdfunding_order co
+	<set>
+	  <if test="grantTime != null" >
+        grant_time = #{grantTime,jdbcType=VARCHAR},
+      </if>
+		co.grant_amount = cf.bonus_rate*co.price*co.quantity
+	</set>
+	WHERE co.crowdfunding_id = cf.id
+	AND co.id = #{id}
+  </update>
+  
+  <update id="updateAllBonus">
+  	UPDATE 
+	crfd_crowdfunding cf,crfd_crowdfunding_order co
+	SET co.grant_amount = cf.bonus_rate*co.price*co.quantity,
+	co.grant_time = (SELECT date_format(now(), '%Y%m%d%H%i%s'))
+	WHERE co.crowdfunding_id = cf.id
+  </update>
+  
+  
+  <select id="queryOrderNoById" resultType="string">
+  	SELECT order_no
+	FROM crfd_crowdfunding_order WHERE id = #{id}
+  </select>
+  
+  
+  <select id="getAllCrowdfundingOrderList" resultMap="BaseVoResultMap">
+  	SELECT co.*,cf.`name`,cf.profit_type,cg.id gid,cg.price,cg.description des,cg.crowfunding_id
+	FROM crfd_crowdfunding cf,crfd_crowdfunding_order co,crfd_grade cg
+	WHERE cf.id = co.crowdfunding_id
+	AND cg.id = co.grade_id
+	<if test="status != null">
+		AND co.status = #{status}
+	</if>
+	<if test="shipStatus != null">
+		AND co.ship_status = #{shipStatus}
+	</if>
+  </select>
+  
+  <select id="getCrowdfundingOrderDetail" resultMap="BaseVoResultMap">
+  	SELECT co.*,cf.`name`,cf.profit_type,cg.id gid,cg.price,cg.description des,cg.crowfunding_id
+	FROM crfd_crowdfunding cf,crfd_crowdfunding_order co,crfd_grade cg
+	WHERE cf.id = co.crowdfunding_id
+	AND cg.id = co.grade_id
+	AND co.order_no = #{orderNo}
+  </select>
+  
+  <select id="queryOrderDetailByOrderNo" resultMap="BaseOrderDetailResultMap">
+  	SELECT
+        co.price,
+        co.quantity,
+        cf.profit_type,
+        cf.bonus_rate,
+        co.order_no,
+        co.order_time,
+        co.pay_type,
+        co.real_amount,
+        cf.cover,
+        co.`name`,
+        co.total_amount,
+        co.address
+    FROM
+        crfd_crowdfunding_order co
+        INNER JOIN crfd_crowdfunding cf ON co.crowdfunding_id = cf.id
+    WHERE
+        co.order_no = #{orderNo}
+  </select>
+  
+  <select id="queryMemberOrderList" resultMap="BaseOrderDetailResultMap">
+  	SELECT cf.provide_time,co.`status`,co.pay_status,co.`name`,cf.cover,co.price,co.quantity,co.order_no,co.order_time,co.total_amount,co.real_amount,co.id,cf.id crowdId
+	FROM crfd_crowdfunding_order co
+	INNER JOIN crfd_crowdfunding cf ON co.crowdfunding_id = cf.id
+	WHERE co.member_id = #{memberId}
+	AND co.`status` &lt; 7
+	ORDER BY co.order_time DESC
+  </select>
+  
+   <select id="queryMemberOrderListWithStatus" resultMap="BaseOrderDetailResultMap">
+  	SELECT cf.provide_time,co.`status`,co.pay_status,co.`name`,cf.cover,co.price,co.quantity,co.order_no,co.order_time,co.total_amount,co.real_amount,co.id,cf.id crowdId
+	FROM crfd_crowdfunding_order co
+	INNER JOIN crfd_crowdfunding cf ON co.crowdfunding_id = cf.id
+	WHERE co.member_id = #{memberId}
+	AND co.`status` = #{status}
+	ORDER BY co.order_time DESC
+  </select>
+  
+  <update id="cancelOrder" parameterType="com.smartfarm.base.farm.core.entity.CrowdfundingOrder">
+  	update crfd_crowdfunding_order
+    <set >
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="payTimeOut">
+    update crfd_crowdfunding_order set status = 2 where  id = #{id}
+  </update>
+  <select id="queryOrderById" resultMap="BaseResultMap">
+    select * from crfd_crowdfunding_order where  id = #{id}
+
+  </select>
+</mapper>

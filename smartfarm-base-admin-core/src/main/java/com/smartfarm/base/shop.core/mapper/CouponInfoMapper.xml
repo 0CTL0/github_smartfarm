@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.CouponInfoDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.CouponInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="coupon_no" property="couponNo" jdbcType="VARCHAR" />
+    <result column="coupon_name" property="couponName" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="reduct_price" property="reductPrice" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="SMALLINT" />
+    <result column="coupon_batch_id" property="couponBatchId" jdbcType="BIGINT" />
+    <result column="discount" property="discount" jdbcType="INTEGER" />
+      <result column="use_time" property="useTime" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.shop.core.entity.vo.CouponInfoVo" id="BaseVoResultMap" extends="BaseResultMap">
+   	<result column="nick_name" property='nickName' jdbcType="VARCHAR"/>
+  </resultMap>
+  
+   <insert id="insertBatchInfoList" parameterType="java.util.List" >
+    insert into coupon_info(
+        member_id,
+        coupon_no,
+        coupon_name,
+        description,
+        status,
+        amount,
+        reduct_price,
+        create_time,
+        end_time,
+        type,
+        coupon_batch_id,
+        discount,
+        use_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+        (#{item.memberId,jdbcType=BIGINT},
+        #{item.couponNo,jdbcType=VARCHAR},
+        #{item.couponName,jdbcType=VARCHAR},
+        #{item.description,jdbcType=VARCHAR},
+        #{item.status,jdbcType=SMALLINT},
+        #{item.amount,jdbcType=DECIMAL},
+        #{item.reductPrice,jdbcType=DECIMAL},
+        #{item.createTime,jdbcType=BIGINT},
+        #{item.endTime,jdbcType=VARCHAR},
+        #{item.type,jdbcType=SMALLINT},
+        #{item.couponBatchId,jdbcType=BIGINT},
+        #{item.discount,jdbcType=INTEGER},
+        #{item.useTime,jdbcType=INTEGER})
+     </foreach>
+  </insert>
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.CouponInfo"  keyProperty="id" useGeneratedKeys="true">
+    insert into coupon_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="couponNo != null" >
+        coupon_no,
+      </if>
+      <if test="couponName != null" >
+        coupon_name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="reductPrice != null" >
+        reduct_price,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="couponBatchId != null" >
+        coupon_batch_id,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+        <if test="useTime != null" >
+            use_time,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="couponNo != null" >
+        #{couponNo,jdbcType=VARCHAR},
+      </if>
+      <if test="couponName != null" >
+        #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="reductPrice != null" >
+        #{reductPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="couponBatchId != null" >
+        #{couponBatchId,jdbcType=BIGINT},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=INTEGER},
+      </if>
+        <if test="useTime != null" >
+            #{useTime,jdbcType=INTEGER},
+        </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.CouponInfo" >
+    update coupon_info
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="couponNo != null" >
+        coupon_no = #{couponNo,jdbcType=VARCHAR},
+      </if>
+      <if test="couponName != null" >
+        coupon_name = #{couponName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="reductPrice != null" >
+        reduct_price = #{reductPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="couponBatchId != null" >
+        coupon_batch_id = #{couponBatchId,jdbcType=BIGINT},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=INTEGER},
+      </if>
+        <if test="useTime != null" >
+            use_time = #{useTime,jdbcType=INTEGER},
+        </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryCouponInfoList" resultMap="BaseVoResultMap">
+  	SELECT ci.id,ci.member_id,ci.coupon_batch_id,ci.coupon_name,ci.coupon_no,ci.description,ci.`status`,ci.amount,ci.reduct_price,ci.create_time,ci.end_time,ci.type,ci.discount,mi.nick_name
+	FROM coupon_info ci
+	LEFT JOIN member_info mi on mi.id = ci.member_id
+	left join coupon_batch cb on cb.id=ci.coupon_batch_id
+	WHERE cb.business_id = #{businessId}
+	<if test="couponName != null">
+		AND ci.coupon_name like CONCAT('%',#{couponName},'%')
+	</if>
+	<if test="memberId != null">
+		AND ci.member_id = #{memberId}
+	</if>
+	<if test="status != null">
+		AND ci.status = #{status}
+	</if>
+	order by id desc
+	limit #{start}, #{limit}
+  </select>
+  
+  <select id="queryCountCouponInfoList" resultType="int">
+	SELECT COUNT(*)
+	FROM coupon_info ci
+	LEFT JOIN member_info mi on mi.id = ci.member_id
+	left join coupon_batch cb on cb.id=ci.coupon_batch_id
+	WHERE cb.business_id = #{businessId}
+	<if test="couponName != null">
+		AND ci.coupon_name like CONCAT('%',#{couponName},'%')
+	</if>
+	<if test="memberId != null">
+		AND ci.member_id = #{memberId}
+	</if>
+	<if test="status != null">
+		AND ci.status = #{status}
+	</if>
+  </select>
+  
+  <select id="queryByOrderInfo" resultMap="BaseVoResultMap">
+  	select c.* 
+  	from coupon_info c
+  	left join coupon_batch_rule r on r.coupon_batch_id = c.coupon_batch_id and r.rule_type = 1
+  	where c.member_id = #{memberId}
+  	and c.reduct_price <![CDATA[ <= ]]> #{price}
+  	and c.end_time <![CDATA[ > ]]> #{nowTime}
+  	and c.status = 1
+  	and (r.param_value = 'all' or
+  	<foreach collection="ids" item="item" index="index" open="(" separator=" or " close=") ">
+  		r.param_value = #{item} 
+  	</foreach>
+  	)
+  	group by c.id
+  </select>
+  
+  <select id="queryById" resultMap="BaseResultMap">
+  	select *
+  	from coupon_info
+  	where id=#{id}
+  </select>
+  
+  <select id="queryUseableByMemberId" resultMap="BaseVoResultMap">
+  	select *
+  	from coupon_info 
+  	where member_id = #{memberId}
+  	and status = 1 
+  	and end_time <![CDATA[ > ]]> #{nowTime}
+  </select>
+  
+  <select id="queryUsedByMemberId" resultMap="BaseVoResultMap">
+  	select *
+  	from coupon_info 
+  	where member_id = #{memberId}
+  	and status = 2 
+  </select>
+  
+  <select id="queryExpiredByMemberId" resultMap="BaseVoResultMap">
+  	select *
+  	from coupon_info 
+  	where member_id = #{memberId}
+  	and status = 1
+  	and end_time <![CDATA[ <= ]]> #{nowTime}
+  </select>
+
+    <select id="queryCouponByCode" resultMap="BaseResultMap">
+        select *
+        from coupon_info
+        where coupon_no = #{couponNo}
+    </select>
+
+    <select id="countCouponByUserIdAndBatchId" resultType="Integer">
+        select count(id)
+        from coupon_info
+        where coupon_batch_id = #{couponBatchId}
+        and member_id = #{memberId}
+    </select>
+</mapper>

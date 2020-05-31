@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.BaseOrderDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.BaseOrder" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="SMALLINT" />
+    <result column="ref_id" property="refId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+  </resultMap>
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.BaseOrder"  keyProperty="id" useGeneratedKeys="true">
+    insert into base_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="refId != null" >
+        ref_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="type != null" >
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="refId != null" >
+        #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.BaseOrder" >
+    update base_order
+    <set >
+      <if test="type != null" >
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="refId != null" >
+        ref_id = #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryByTypeAndRefId" resultMap="BaseResultMap">
+  	select * from base_order
+  	where type=#{type} and ref_id=#{refId}
+  	limit 1
+  </select>
+  
+  <select id="queryById" resultMap="BaseResultMap">
+  	select * from base_order
+  	where id=#{id}
+  </select>
+  
+  <select id="queryOrderUnPay" resultType="Long">
+  	select id 
+  	from base_order
+  	where status = 1
+  </select>
+</mapper>

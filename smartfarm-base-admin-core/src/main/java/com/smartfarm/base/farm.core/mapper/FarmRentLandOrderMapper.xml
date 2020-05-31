@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartfarm.base.farm.core.dao.FarmRentLandOrderDao">
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.FarmRentLandOrder">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="rent_date" jdbcType="VARCHAR" property="rentDate" />
+    <result column="rent_time" jdbcType="VARCHAR" property="rentTime" />
+    <result column="rent_land_id" jdbcType="BIGINT" property="rentLandId" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="quantity" jdbcType="SMALLINT" property="quantity" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="real_amount" jdbcType="DECIMAL" property="realAmount" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="rent_name" jdbcType="VARCHAR" property="rentName" />
+    <result column="rent_mobile" jdbcType="VARCHAR" property="rentMobile" />
+    <result column="pay_time" jdbcType="VARCHAR" property="payTime" />
+    <result column="pay_no" jdbcType="VARCHAR" property="payNo" />
+    <result column="pay_status" jdbcType="SMALLINT" property="payStatus" />
+    <result column="pay_type" jdbcType="SMALLINT" property="payType" />
+    <result column="pay_end_time" jdbcType="VARCHAR" property="payEndTime" />
+  </resultMap>
+
+  <resultMap type="com.smartfarm.base.farm.core.entity.vo.FarmRentLandOrderVo" id="BaseVoResultMap" extends="BaseResultMap">
+    <result column="farmName" property="farmName" jdbcType="VARCHAR" />
+    <result column="baseName" property="baseName" jdbcType="VARCHAR" />
+    <result column="tunnelName" property="tunnelName" jdbcType="VARCHAR" />
+    <result column="rentLandName" property="rentLandName" jdbcType="VARCHAR" />
+    <result column="area" jdbcType="INTEGER" property="area" />
+    <result column="mainPic" property="mainPic" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+
+  <sql id="Base_Column_List">
+    id, member_id, order_code, rent_date, rent_time, rent_land_id, price, quantity, total_amount, 
+    real_amount, status, rent_name, rent_mobile, pay_time, pay_no, pay_status, pay_type, pay_end_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from farm_rentland_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+
+  <insert id="insertSelective" parameterType="com.smartfarm.base.farm.core.entity.FarmRentLandOrder" useGeneratedKeys="true" keyProperty="id"  >
+    insert into farm_rentland_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="orderCode != null">
+        order_code,
+      </if>
+      <if test="rentDate != null">
+        rent_date,
+      </if>
+      <if test="rentTime != null">
+        rent_time,
+      </if>
+      <if test="rentLandId != null">
+        rent_land_id,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="totalAmount != null">
+        total_amount,
+      </if>
+      <if test="realAmount != null">
+        real_amount,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="rentName != null">
+        rent_name,
+      </if>
+      <if test="rentMobile != null">
+        rent_mobile,
+      </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="payNo != null">
+        pay_no,
+      </if>
+      <if test="payStatus != null">
+        pay_status,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="memberId != null">
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="orderCode != null">
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rentDate != null">
+        #{rentDate,jdbcType=VARCHAR},
+      </if>
+      <if test="rentTime != null">
+        #{rentTime,jdbcType=VARCHAR},
+      </if>
+      <if test="rentLandId != null">
+        #{rentLandId,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=SMALLINT},
+      </if>
+      <if test="totalAmount != null">
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realAmount != null">
+        #{realAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="rentName != null">
+        #{rentName,jdbcType=VARCHAR},
+      </if>
+      <if test="rentMobile != null">
+        #{rentMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payNo != null">
+        #{payNo,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        #{payStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartfarm.base.farm.core.entity.FarmRentLandOrder">
+    update farm_rentland_order
+    <set>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="orderCode != null">
+        order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rentDate != null">
+        rent_date = #{rentDate,jdbcType=VARCHAR},
+      </if>
+      <if test="rentTime != null">
+        rent_time = #{rentTime,jdbcType=VARCHAR},
+      </if>
+      <if test="rentLandId != null">
+        rent_land_id = #{rentLandId,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=SMALLINT},
+      </if>
+      <if test="totalAmount != null">
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realAmount != null">
+        real_amount = #{realAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="rentName != null">
+        rent_name = #{rentName,jdbcType=VARCHAR},
+      </if>
+      <if test="rentMobile != null">
+        rent_mobile = #{rentMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payNo != null">
+        pay_no = #{payNo,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        pay_status = #{payStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=SMALLINT},
+      </if>
+      <if test="payEndTime != null">
+        pay_end_time = #{payEndTime,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <select id="selectPageList" resultMap="BaseResultMap">
+    select fro.* from farm_rentland_order fro
+    left join farm_rentland_info fri on fro.rent_land_id=fri.id
+    left join farm_tunnel_info fti on fri.tunnel_id=fti.id
+    left join farm_base_info fbi on fti.base_id=fbi.id
+    left join farm_info fi on fbi.farm_id=fi.id
+    where fi.id=#{farmId}
+
+      <if test="orderCode != null">
+        and fro.order_code LIKE CONCAT('%',#{orderCode},'%')
+      </if>
+      <if test="rentName != null">
+        and fro.rent_name LIKE CONCAT('%',#{rentName},'%')
+      </if>
+      <if test="status != null">
+        and fro.status = #{status}
+      </if>
+
+    order by fro.id desc
+    limit #{start}, #{limit}
+  </select>
+
+  <select id="selectPageTotal" resultType="java.lang.Integer">
+    select COUNT(*) from farm_rentland_order fro
+    left join farm_rentland_info fri on fro.rent_land_id=fri.id
+    left join farm_tunnel_info fti on fri.tunnel_id=fti.id
+    left join farm_base_info fbi on fti.base_id=fbi.id
+    left join farm_info fi on fbi.farm_id=fi.id
+    where fi.id=#{farmId}
+
+      <if test="orderCode != null">
+        and fro.order_code LIKE CONCAT('%',#{orderCode},'%')
+      </if>
+      <if test="rentName != null">
+        and fro.rent_name LIKE CONCAT('%',#{rentName},'%')
+      </if>
+      <if test="status != null">
+        and fro.status = #{status}
+      </if>
+
+  </select>
+
+  <select id="selectIdListByStatus" resultType="java.lang.Long">
+    SELECT fro.id FROM farm_rentland_order fro
+    WHERE fro.`status`=#{status}
+  </select>
+
+
+  <select id="selectByOrderCode" resultMap="BaseResultMap">
+    SELECT * FROM farm_rentland_order fro
+    WHERE fro.order_code=#{orderCode}
+  </select>
+
+  <select id="selectAllRentOrder" resultMap="BaseVoResultMap">
+    SELECT fro.*,fri.`name` rentLandName,fri.area,fti.`name` tunnelName,fti.main_pic mainPic,fbi.`name` baseName,fi.`name` farmName FROM farm_rentland_order fro
+LEFT JOIN farm_rentland_info fri ON fri.id=fro.rent_land_id
+LEFT JOIN farm_tunnel_info fti ON fti.id=fri.tunnel_id
+LEFT JOIN farm_base_info fbi ON fbi.id=fti.base_id
+LEFT JOIN farm_info fi ON fi.id=fbi.farm_id
+where fro.member_id=#{memberId}
+ORDER BY fro.id DESC
+  </select>
+
+  <delete id="deleteById" parameterType="java.lang.Long">
+    delete FROM farm_rentland_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <select id="queryByMemberIdAndLandId" resultMap="BaseResultMap">
+  	select *
+  	from farm_rentland_order
+  	where rent_land_id = #{rentLandId}
+  	and member_id = #{memberId}
+  	and status = 0
+  </select>
+
+</mapper>

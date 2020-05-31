@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="smartfarm-service-core" />
+        <module name="smartfarm-service-webapp" />
+        <module name="smartfarm-admin-webapp" />
+        <module name="smartfarm-base-admin-core" />
+        <module name="smartfarm-admin-core" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="smartfarm" target="1.8" />
+      <module name="smartfarm-admin-core" target="1.8" />
+      <module name="smartfarm-admin-webapp" target="1.8" />
+      <module name="smartfarm-base-admi-core" target="1.8" />
+      <module name="smartfarm-base-admin-core" target="1.8" />
+      <module name="smartfarm-service-core" target="1.8" />
+      <module name="smartfarm-service-webapp" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="smartfarm" options="-parameters" />
+      <module name="smartfarm-admin-core" options="-parameters" />
+      <module name="smartfarm-admin-webapp" options="-parameters" />
+      <module name="smartfarm-base-admi-core" options="-parameters" />
+      <module name="smartfarm-base-admin-core" options="-parameters" />
+      <module name="smartfarm-service-core" options="-parameters" />
+      <module name="smartfarm-service-webapp" options="-parameters" />
+    </option>
+  </component>
+</project>

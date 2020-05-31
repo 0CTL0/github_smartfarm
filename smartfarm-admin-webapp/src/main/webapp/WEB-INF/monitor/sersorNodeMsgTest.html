@@ -1,0 +1,426 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>智慧农业系统-可视化决策驾驶舱</title>
+	
+    <link href="/r/css/video-js.min.css" rel="stylesheet">
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/azure.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="/r/css/fileinput.min.css" rel="stylesheet" />
+    <link href="/r/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+
+	<!--引入videoJS插件播放m3u8格式视频的HLS功能-->
+	<script src="/r/js/video/video.min.js"></script>
+	<script src="/r/js/ezuikit.js"></script>
+	<script src="/r/js/video/videojs-contrib-hls.js" type="module"></script>
+	<script src="/r/js/video/videojs-flash.min.js"></script>
+    <script src="/r/js/skins.min.js"></script>
+    <script src="/r/js/jquery-2.1.1.js"></script>
+    <script src="/r/js/bootstrap.min.js"></script>
+    <script src="/r/js/angular.min.js"></script>
+    <script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>
+	<script src="/r/js/fileinput.min.js"></script>
+	<script src="/r/js/distpicker.data.js"></script>
+	<script src="/r/js/distpicker.js"></script>	
+	<script src="/r/js/bootstrap-datetimepicker.js"></script>
+    <script src="/r/js/beyond.min.js"></script>
+    <script src="/r/js/core.js"></script>
+	<script src="/r/js/jquery.cxscroll.min.js"></script>
+	<script src="/r/core/controller/monitor/sersorNodeMsgTest.js"></script>
+</head>
+<style type="text/css">
+	*{margin:0px; padding:0px;}
+	div,form,img,ul,ol,li,dl,dt,dd,p,button,fieldset{margin: 0; padding: 0; border: 0; list-style:none}
+	body{font-family:"Microsoft Yahei","微软雅黑";margin:0; padding:0;color:#333;font-size:14px; background:#11290F url(/r/image/bg_bot.png) center bottom no-repeat;clear:both;}
+	ul{list-style:none;}
+	
+	.pop-videobox{width:472px;font-size:0;border:4px solid #1D543D; position:absolute; z-index:2;lefT:0;top:0; background:#fff;display:none}
+	
+	video{
+			 width: 464px;
+		    height:261px;
+		}
+	
+	.conbox:after,.projectbox .listbox:after{content: "";display: block;height: 0;clear: both;visibility: hidden;}
+	
+	.header{width:100%;text-align:center;position: relative}
+	.header .bg{width:100%;height:48px;font-size:0; background:#143D2B; position:absolute; z-index:-1}
+	.header .title{padding:0 40px;line-height:68px;font-size:30px; color:#fff;background:#143D2B; display:inline-block;position:relative;}
+	.header .title:before,.header .title:after{content: "";width:10px;height:68px; background:#143D2B; transform:rotate(-20deg); position:absolute;top:2px;left:-13px;}
+	.header .title:after{transform:rotate(20deg);left:auto;right:-13px;}
+	
+	.conbox{margin:0 auto;margin-top:40px;margin-bottom:40px;width:1860px;}
+	.conbox .leftbox{float:left;width:528px;}
+	
+	.conbox .rightbox{float:right;width:1292px;font-size:0; position:relative}
+.conbox .rightbox .bg-pic,.conbox .rightbox .bg-pic img{width:100%;}
+
+	.panelbox.bg-map{ background: rgba(25,77,53,0.5) url(/r/image/bg_map.png) center top no-repeat;}
+	.panelbox.height875{height:875px;}
+	.popbox{width:400px;padding:35px 20px 20px 20px;border: 1px solid #255942; background:#143D2B;position:absolute; z-index:2;display:none}
+	.popbox .title{width:126px;line-height:30px; text-align:center;font-size:22px;color:#B2FFDE;border:1px solid #265843; background:#113726; position:absolute;top:-16px;left:50%;margin-left:-64px;}
+	.list-data-pop{width:100%;}
+	.list-data-pop ul li{width:173px;line-height:50px;margin:0 8px 8px 0;text-align:center;font-size:18px;color:#fff; background:#1D543D;border:1px solid #265843; display:inline-block}
+.list-data-pop ul li:nth-child(2n){margin:0 0 8px 0;}
+.list-data-pop ul li strong{margin-left:15px;font-size:20px;color:#ff0;font-weight:normal;}
+	
+	
+	.rollingbox{width:526px;height:179px;margin-bottom:43px;}
+	.icon-corners{width:10px;height:10px; position:absolute}
+	.icon-top-left{ background:url(/r/image/icon_border_topleft.png) no-repeat;top:-1px;left:-1px;}
+	.icon-top-right{ background:url(/r/image/icon_border_topright.png) no-repeat;top:-1px;right:-1px;}
+	.icon-bottom-left{ background:url(/r/image/icon_border_botleft.png) no-repeat;bottom:-1px;left:-1px;}
+	.icon-bottom-right{ background:url(/r/image/icon_border_botright.png) no-repeat;bottom:-1px;right:-1px;}
+	
+	.panelbox .icon-corners{width:10px;height:10px; position:absolute}
+	.panelbox .icon-top-left{ background:url(/r/image/icon_border_topleft.png) no-repeat;top:-1px;left:-1px;}
+	.panelbox .icon-top-right{ background:url(/r/image/icon_border_topright.png) no-repeat;top:-1px;right:-1px;}
+	.panelbox .icon-bottom-left{ background:url(/r/image/icon_border_botleft.png) no-repeat;bottom:-1px;left:-1px;}
+	.panelbox .icon-bottom-right{ background:url(/r/image/icon_border_botright.png) no-repeat;bottom:-1px;right:-1px;}
+	
+	
+	.scroll_horizontal{position:relative;width:526px;height:179px;}
+	.scroll_horizontal .box{overflow:hidden;position:relative;width:440px;height:179px;margin:0 auto;}
+	.scroll_horizontal .list{overflow:hidden;width:9999px;margin-top:38px;}
+	.scroll_horizontal .list li{float:left;width:110px; text-align:center}
+	.scroll_horizontal .list li img{width:82px;height:82px;margin-bottom:2px;}
+	.scroll_horizontal .list li strong{font-size:18px;color:#FFF200; display:block}
+	.scroll_horizontal .list li p{font-size:12px;color:#fff;line-height:18px;}
+	.scroll_horizontal .prev,
+	.scroll_horizontal .next{position:absolute;top:50%;margin-top:-28px;width:28px;height:56px;background:url(/r/image/btn_left.png) no-repeat;font:0/0 Arial;cursor:pointer;}
+	.scroll_horizontal .prev{left:0;background-position:0 0;}
+	.scroll_horizontal .next{right:0;background:url(/r/image/btn_right.png) no-repeat;}
+	
+	.projectbox{width:452px;margin:0 auto; text-align:center}
+	.projectbox h2{padding-top:60px;font-size:18px;color:#fff;/* height:30px; */font-weight:normal;}
+	.projectbox .listbox{width:100%;margin-bottom:10px;}
+	.projectbox .listbox.nomargin{margin-bottom:0;}
+	.projectbox .listbox.nomargin .list{width:140px;}
+	.projectbox .listbox .list{float:left;margin:5px 5px;/* height:70px; */text-align:center;padding:15px 0 0 0;background:rgba(25,77,53,0.6);}
+	/* .projectbox .listbox .list.half{width:216px;}
+	.projectbox .listbox .list.three{width:140px;} */
+	.projectbox .listbox .list.half:nth-child(1){width:216px;}
+	.projectbox .listbox .list.half:nth-child(2){width:216px;}
+	.projectbox .listbox .list.half:nth-child(3){width:140px;}
+	.projectbox .listbox .list.half:nth-child(4){width:140px;}
+	.projectbox .listbox .list.half:nth-child(5){width:140px;}
+	.projectbox .listbox .list.half:nth-child(6){width:216px;}
+	.projectbox .listbox .list.half:nth-child(7){width:216px;}
+	.projectbox .listbox .list .icon{width:26px;height:26px; display:inline-block; vertical-align:middle}
+	.projectbox .listbox .list span{font-size:16px;color:#fff;display:inline-block; vertical-align:middle}
+	.projectbox .listbox .list p{font-size:20px;color: #FFF200;line-height:38px;}
+	
+	.tips-small-pop{position:absolute; z-index:2;display:none;}
+	.tips-small-pop .icon{width:26px;height:26px;marign-right:10px; display:inline-block; vertical-align:middle;}
+	.tips-small-pop span{font-size:24px;color:#fff;display:inline-block; vertical-align:middle;}
+	
+	.icon-wd{ background:url(/r/image/icon_kqwd.png) no-repeat;}
+	.icon-sd{ background:url(/r/image/icon_kqsd.png) no-repeat;}
+	.icon-fx{ background:url(/r/image/icon_fx.png) no-repeat;}
+	.icon-fs{ background:url(/r/image/icon_fs.png) no-repeat;}
+	.icon-jy{ background:url(/r/image/icon_jy.png) no-repeat;}
+	.icon-gz{ background:url(/r/image/icon_gz.png) no-repeat;}
+	.icon-ghzy{ background:url(/r/image/icon_ghzy.png) no-repeat;}
+	.icon-tdwd{ background:url(/r/image/icon_tdwd.png) no-repeat;}
+	.icon-sp{ background:url(/r/image/icon_sp.png) no-repeat;}
+	.icon-tdsd{ background:url(/r/image/icon_tdsd.png) no-repeat;}
+	
+	.controlbox{padding:10px 35px 10px 25px;background:#1D543D;border:1px solid #265843;}
+.controlbox ul li{padding:10px 0;font-size:0;}
+.controlbox ul li .text{width:196px;font-size:18px;color:#fff; display:inline-block; vertical-align:middle}
+.controlbox ul li .text strong{color:#ff0;}
+.controlbox ul li .text a{line-height:24px;color:#73BA9A; text-decoration:underline; display:block}
+.controlbox ul li .btn{width:100px;line-height:36px;border-radius:18px; text-align:center;display:inline-block; vertical-align:middle;}
+.controlbox ul li .btn .icon{width:20px;height:20px; display:inline-block; vertical-align:middle;margin-right:5px;}
+.controlbox ul li .btn span{font-size:18px;color:#fff;display:inline-block; vertical-align:middle;}
+.controlbox ul li .btn.gray{background:#455C52}
+.controlbox ul li .btn.green{background:#41B284}
+.controlbox ul li .btn.red{background:#D94B4B}
+.controlbox ul li .btn.gray span{color:#858585}
+.icon-sj-gray{ background:url(/r/image/icon_sj_gray.png) no-repeat;}
+.icon-sj-white{ background:url(/r/image/icon_sj_white.png) no-repeat;}
+.icon-fx-gray{ background:url(/r/image/icon_fx_gray.png) no-repeat;}
+.icon-fx-white{ background:url(/r/image/icon_fx_white.png) no-repeat;}
+
+
+.icon-tr{ background:url(/r/image/icon_tr.png) no-repeat;}
+.icon-qx{ background:url(/r/image/icon_qx.png) no-repeat;}
+.icon-kz{ background:url(/r/image/icon_kz.png) no-repeat;}
+.icon-sz{ background:url(/r/image/icon_sz.png) no-repeat;}
+.icon-tr-warn{background:url(/r/image/icon_tr_warn.png) no-repeat;}
+.icon-qx-warn{background:url(/r/image/icon_qx_warn.png) no-repeat;}
+.icon-kz-warn{background:url(/r/image/icon_kz_warn.png) no-repeat;}
+.icon-sz-warn{background:url(/r/image/icon_sz_warn.png) no-repeat;}
+
+	#soilData {
+    		left:100px;
+    		top:0;
+		    width: 200px;
+		    min-height: 200px;
+		    border: 1px solid #fff;
+		    margin-right: 5px;
+		    display: none;
+		    background-color:grey;
+		    position:absolute;
+		    border-radius:5px;
+		    padding:10px;
+		    line-height:25px;
+		    z-index:100;
+		    display: table;
+		}
+		#soilData .soil_detail{
+			line-height:25px;
+			display: table-cell;
+		}
+		body:before{
+			content:inherit;
+		}
+		
+/* 		#video-player1{ */
+/* 			left:100px; */
+/*     		top:100px; */
+/* 		    width: 600px; */
+/* 		    height:400px; */
+/* 		    min-height: 150px; */
+/* 		    display: none; */
+/* 		    position:absolute; */
+/* 		    z-index:100; */
+/* 		} */
+</style>
+<body ng-app="myApp" ng-controller="myCtrl">
+
+<div class="header">
+	<div class="bg"></div>
+    <div class="title" id="titleOpen" ng-click="clickWindow()"><strong>智慧农业系统</strong>可视化决策驾驶舱</div>
+</div>
+
+<div class="conbox">
+	<div class="leftbox">
+    
+<!--     	<div class="panelbox rollingbox"> -->
+<!--         	<div class="icon-corners icon-top-left"></div> -->
+<!--             <div class="icon-corners icon-top-right"></div> -->
+<!--             <div class="icon-corners icon-bottom-left"></div> -->
+<!--             <div class="icon-corners icon-bottom-right"></div> -->
+            
+<!--             <div class="title">专家团队</div> -->
+            
+<!--             <div id="pic_list_1" class="scroll_horizontal"> -->
+<!--                 <div class="box"> -->
+<!--                    <ul class="list"> -->
+<!--                          <li ng-repeat="pro in proficientList"> -->
+<!--                        	<img ng-src="{{picUrl + pro.headPic}}"> -->
+<!--                              <strong>{{pro.name}}</strong> -->
+<!--                            <p>{{pro.mobile}}</p> -->
+<!--                         </li> -->
+<!--                     </ul> -->
+<!--                 </div> -->
+<!--             </div> -->
+<!--             scroll_horizontal end -->
+            
+<!--          </div> -->
+         <!--panelbox end-->
+         
+         <div class="panelbox bg-map height875">
+        	<div class="icon-corners icon-top-left"></div>
+            <div class="icon-corners icon-top-right"></div>
+            <div class="icon-corners icon-bottom-left"></div>
+            <div class="icon-corners icon-bottom-right"></div>
+            
+            <div class="title">环境监测</div>
+            
+            <div class="projectbox">
+            	<h2>气象监测</h2>
+                <div class="listbox">
+                	<div class="list half" ng-repeat="mo in meteorologicalList">
+                    	<div class="icon icon-wd"></div>
+                        <span>{{mo.name}}</span>
+                        <p>{{mo.realDataList[0].realValue + mo.unit }}</p>
+                    </div>
+                </div>
+            </div>
+            <!--projectbox end-->
+            
+            <div class="projectbox">
+            	<h2>土地监测</h2>
+                <div class="listbox">
+                	<div class="list half"  ng-repeat="avg in avgSoilList">
+                    	<div class="icon icon-tdsd"></div>
+                        <span>{{avg.name}}</span>
+                        <p>{{avg.realDataList[0].realValue + avg.unit}}</p>
+                    </div>
+                </div>
+            </div>
+            <!--projectbox end-->
+            
+          	<div class="projectbox"> 
+            	<h2>水质监测</h2>
+            	<div class="listbox nomargin">
+                	<div class="list three" ng-repeat="liq in liquidList">
+                    	<div class="icon icon-tdsd"></div>
+                        <span>{{liq.name}}</span>
+                        <p>{{liq.realDataList[0].realValue + liq.unit}}</p>
+                    </div>
+                    <div class="list three">
+                    	<div class="icon icon-tdsd"></div>
+                        <span>电导率</span>
+                        <p>0 uS/cm</p>
+                    </div>
+                    <div class="list three">
+                    	<div class="icon icon-tdsd"></div>
+                        <span>水位</span>
+                        <p>0 mm</p>
+                    </div>
+                    <div class="list three">
+                    	<div class="icon icon-tdsd"></div>
+                        <span>PH值</span>
+                        <p>0 ph</p>
+                    </div>
+                </div>
+                <!--listbox end-->
+        	</div>
+            <!--projectbox end-->
+          
+          
+            
+        </div>
+        <!--panelbox end-->
+        
+    </div>
+    <!--leftbox end-->
+    
+    <div class="rightbox">
+    	<div class="bg-pic"><img src="/r/image/pic_farm.jpg" width="100%"></div>
+        
+        <div class="tips-small-pop" ng-click="showSoilDataByCode(tr.flag,tr.cameraId,tr.index)" ng-repeat="tr in cgList" ng-if="tr.type==2" 
+        	ng-style="{top:tr.top,right:tr.right,display:'block'}">
+<!--             <div class="icon icon-tr-warn"></div> -->
+            <div class="icon icon-tr"></div>
+<!--             <span>土壤采集</span> -->
+        </div>
+        
+        <div class="tips-small-pop" ng-click="showSoilDataByCode(tr.flag,tr.cameraId,tr.index)" ng-repeat="tr in cgList" ng-if="tr.type==1"
+        	ng-style="{top:tr.top,right:tr.right,display:'block'}">
+<!--             <div class="icon icon-qx-warn"></div> -->
+            <div class="icon icon-qx"></div>
+<!--             <span>气象站</span> -->
+        </div>
+        
+        <div class="tips-small-pop" ng-click="showNodeWindow(tr.index)" ng-repeat="tr in cgList" ng-if="tr.type==4"
+        	ng-style="{top:tr.top,right:tr.right,display:'block'}">
+<!--             <div class="icon icon-kz-warn"></div> -->
+            <div class="icon icon-kz"></div>
+<!--             <span>控制</span> -->
+        </div>
+        
+        <div class="tips-small-pop" ng-click="showSoilDataByCode(tr.flag,tr.cameraId,tr.index)" ng-repeat="tr in cgList" ng-if="tr.type==3"
+        ng-style="{top:tr.top,right:tr.right,display:'block'}">
+<!--             <div class="icon icon-sz-warn"></div> -->
+            <div class="icon icon-sz"></div>
+<!--             <span>水质采集</span> -->
+        </div>
+        
+        <!-- 数据 -->
+        <div class="popbox" style="left:0;top:310px;display:block" ng-if="common.showData">
+        	<div class="icon-corners icon-top-left"></div>
+            <div class="icon-corners icon-top-right"></div>
+            <div class="icon-corners icon-bottom-left"></div>
+            <div class="icon-corners icon-bottom-right"></div>
+            
+            <div class="title">土壤墒情</div>
+            
+            <div class="list-data-pop">
+            	<ul>
+                    <li ng-repeat="se in sersorSoilDataList">{{se.name}}<strong>{{se.realValue + se.unit}}</strong></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 控制器 -->
+        <div class="popbox" style="left:0;top:320px;display:block" ng-if="common.showNodeInfo">
+        	<div class="icon-corners icon-top-left"></div>
+            <div class="icon-corners icon-top-right"></div>
+            <div class="icon-corners icon-bottom-left"></div>
+            <div class="icon-corners icon-bottom-right"></div>
+            
+            <div class="title">智能控制</div>
+            
+            <div class="controlbox">
+            	<ul>
+                	<li>
+                    	<div class="text">{{controlNodeEdit.name}}</div>
+                    	<div class="btn gray" ng-if="controlNodeEdit.operateStatus == 1">
+                            <div class="icon icon-sj-gray"></div>
+                            <span>开启</span>
+                        </div>
+                        <div class="btn green" ng-if="controlNodeEdit.operateStatus != 1" ng-click="changeNodeStatus(1)">
+                            <div class="icon icon-sj-white"></div>
+                            <span>开启</span>
+                        </div>
+                    </li>
+                    	<div class="row" style="height:60px;margin:auto;">
+						  <div class="col-md-12" style="padding-top:10px;">
+						  	<button type="button" ng-disabled="controlNodeEdit.operateStatus == 2 || controlNodeEdit.operateStatus == 3" id="pause" class="btn btn-default btn-lg" ng-show="controlNodeEdit.type != 1" ng-click="changeNodeStatus(3)" style="padding-top:5px;height:40px;border-radius:30px;">
+								<div style="height:30px;line-height:30px;display: flex;align-items: center;">
+									<img src="/r/image/pause.png" style="height:30px;width:30px;"><span style="font-size:18px;margin-left:5px;">暂停</span>
+								</div>
+							</button>
+						  </div>
+						</div>
+                    <li>
+                    	<div class="text">状态 <strong>{{numToWord(controlNodeEdit.operateStatus)}}</strong>
+<!--                         	<a href="#">设备控制记录</a> -->
+                        </div>
+                    	<div class="btn red" ng-if="controlNodeEdit.operateStatus != 2" ng-click="changeNodeStatus(2)">
+                            <div class="icon icon-fx-white"></div>
+                            <span>关闭</span>
+                        </div>
+                        <div class="btn gray" ng-if="controlNodeEdit.operateStatus == 2">
+                            <div class="icon icon-fx-gray"></div>
+                            <span>关闭</span>
+                        </div>
+                    </li>
+                    <li>
+                    	<div class="text"></div>
+                    	<div class="btn gray" ng-if="controlNodeEdit.operateStatus == 1 && controlNodeEdit.type != 1" ng-click="changeNodeStatus(3)">
+                            <div class="icon icon-fx-white"></div>
+                            <span>暂停</span>
+                        </div>
+                        <div class="btn green" ng-if="controlNodeEdit.operateStatus != 1 && controlNodeEdit.type != 1">
+                            <div class="icon icon-fx-gray"></div>
+                            <span>暂停</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+        </div>
+        
+        <!-- 视频显示 -->
+        <div class="pop-videobox" style="display:block" id="video-player1" ng-if="common.showVideo">
+			<video 
+				    id="myPlayer"
+				    autoplay
+				    src=""
+				    controls
+				    playsInline 
+				    webkit-playsinline
+				  >
+  				</video>
+		</div>
+    </div>
+</div>
+
+
+</body>
+</html>

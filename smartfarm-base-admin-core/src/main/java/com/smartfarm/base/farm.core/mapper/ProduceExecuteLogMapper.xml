@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.ProduceExecuteLogDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.ProduceExecuteLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="plan_time" property="planTime" jdbcType="VARCHAR" />
+    <result column="execute_time" property="executeTime" jdbcType="VARCHAR" />
+    <result column="operator" property="operator" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="task_type" property="taskType" jdbcType="SMALLINT" />
+    <result column="is_show" property="isShow" jdbcType="SMALLINT" />
+    <result column="plan_detail_id" property="planDetailId" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <resultMap id="BaseVoResultMap" type="com.smartfarm.base.farm.core.entity.vo.ProduceExecuteLogVo" extends="BaseResultMap">
+  	<result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.ProduceExecuteLog" >
+    insert into produce_execute_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="planTime != null" >
+        plan_time,
+      </if>
+      <if test="executeTime != null" >
+        execute_time,
+      </if>
+      <if test="operator != null" >
+        operator,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="pic != null" >
+        pic,
+      </if>
+      <if test="taskType != null" >
+        task_type,
+      </if>
+      <if test="isShow != null" >
+        is_show,
+      </if>
+      <if test="planDetailId != null" >
+        plan_detail_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="planTime != null" >
+        #{planTime,jdbcType=VARCHAR},
+      </if>
+      <if test="executeTime != null" >
+        #{executeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="pic != null" >
+        #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="taskType != null" >
+        #{taskType,jdbcType=SMALLINT},
+      </if>
+      <if test="isShow != null" >
+        #{isShow,jdbcType=SMALLINT},
+      </if>
+      <if test="planDetailId != null" >
+        #{planDetailId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="getExecuteLogsPageList" resultMap="BaseVoResultMap">
+    select pel.*,ei.name operator_name from produce_execute_log pel,employee_info ei,produce_plan_detail ppd,produce_plan_master ppm,product_batch pb
+    <where>
+    	pel.operator=ei.id and pel.plan_detail_id=ppd.id and ppd.plant_id=ppm.id and ppm.batch_id=pb.id
+        and pb.farm_id=#{farmId,jdbcType=BIGINT}
+		<if test="content != null">
+			and pel.content LIKE CONCAT('%',#{content},'%')
+		</if>
+		<if test="planTime != null and planTime != '' ">
+			and pel.plan_time=#{planTime}
+		</if>
+		<if test="executeTime != null and executeTime != '' ">
+			and pel.execute_time=#{executeTime}
+		</if>
+		<if test="status != null">
+			and pel.status=#{status}
+		</if>
+	</where>
+    order by pel.execute_time asc
+    limit #{start}, #{limit}
+  </select>
+  
+  <select id="getExecuteLogTotal" resultType="Integer" >
+    select count(*) from produce_execute_log pel,produce_plan_detail ppd,produce_plan_master ppm,product_batch pb
+    <where>
+      pel.plan_detail_id=ppd.id and ppd.plant_id=ppm.id and ppm.batch_id=pb.id
+      and pb.farm_id=#{farmId,jdbcType=BIGINT}
+		<if test="content != null">
+			and content LIKE CONCAT('%',#{content},'%')
+		</if>
+		<if test="planTime != null and planTime != '' ">
+			and plan_time=#{planTime}
+		</if>
+		<if test="executeTime != null and executeTime != '' ">
+			and execute_time=#{executeTime}
+		</if>
+		<if test="status != null">
+			and status=#{status}
+		</if>
+	</where>
+  </select>
+  
+  <update id="updateShowStatusById">
+    update produce_execute_log set is_show=#{isShow,jdbcType=SMALLINT} where id=#{id,jdbcType=BIGINT}
+  </update>
+  
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    delete from produce_execute_log where id=#{id,jdbcType=BIGINT}
+  </delete>
+  
+  <select id="getExecuteLogsByOperator" resultMap="BaseResultMap">
+    select * from produce_execute_log where operator=#{operator,jdbcType=BIGINT} order by id desc
+  </select>
+
+  <select id="getLogById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select * from produce_execute_log where id=#{id,jdbcType=BIGINT}
+  </select>
+
+  <update id="completeLog">
+    update produce_execute_log set status=#{status,jdbcType=SMALLINT},pic=#{pic,jdbcType=VARCHAR} where id=#{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getLogsBySourceIdAndTaskType" resultMap="BaseVoResultMap">
+    select pel.*,ei.name operator_name from produce_execute_log pel,employee_info ei where plan_detail_id in (select id from produce_plan_detail where plant_id=(select id from produce_plan_master where batch_id=(select batch_id from core_source_info
+    where id=#{sourceId,jdbcType=BIGINT}))) and task_type=#{taskType,jdbcType=SMALLINT} and pel.operator=ei.id
+  </select>
+  
+  <select id="getLogsBySCodeIdAndTypeWe" resultMap="BaseVoResultMap">
+    select pel.id,pel.execute_time,pel.content,pel.pic,ei.name operator_name from produce_execute_log pel,employee_info ei where pel.operator=ei.id and pel.plan_detail_id in (select id from produce_plan_detail where plant_id=(select id from produce_plan_master where batch_id=(select batch_id from core_source_info where id=(select source_id from core_source_code 
+    where id=#{sourceCodeId,jdbcType=BIGINT})))) and task_type=#{taskType,jdbcType=SMALLINT} 
+    and pel.is_show=1
+  </select>
+  
+  
+  
+  
+  <sql id="Base_Column_List" >
+    id, plan_time, execute_time, operator, content, status, pic, task_type, is_show, 
+    plan_detail_id
+  </sql>
+
+  
+  <insert id="insert2" parameterType="com.smartfarm.base.farm.core.entity.ProduceExecuteLog" >
+    insert into produce_execute_log (id, plan_time, execute_time, 
+      operator, content, status, 
+      pic, task_type, is_show, 
+      plan_detail_id)
+    values (#{id,jdbcType=BIGINT}, #{planTime,jdbcType=VARCHAR}, #{executeTime,jdbcType=VARCHAR}, 
+      #{operator,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT}, 
+      #{pic,jdbcType=VARCHAR}, #{taskType,jdbcType=SMALLINT}, #{isShow,jdbcType=SMALLINT}, 
+      #{planDetailId,jdbcType=BIGINT})
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.ProduceExecuteLog" >
+    update produce_execute_log
+    <set >
+      <if test="planTime != null" >
+        plan_time = #{planTime,jdbcType=VARCHAR},
+      </if>
+      <if test="executeTime != null" >
+        execute_time = #{executeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="pic != null" >
+        pic = #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="taskType != null" >
+        task_type = #{taskType,jdbcType=SMALLINT},
+      </if>
+      <if test="isShow != null" >
+        is_show = #{isShow,jdbcType=SMALLINT},
+      </if>
+      <if test="planDetailId != null" >
+        plan_detail_id = #{planDetailId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartfarm.base.farm.core.entity.ProduceExecuteLog" >
+    update produce_execute_log
+    set plan_time = #{planTime,jdbcType=VARCHAR},
+      execute_time = #{executeTime,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=BIGINT},
+      content = #{content,jdbcType=VARCHAR},
+      status = #{status,jdbcType=SMALLINT},
+      pic = #{pic,jdbcType=VARCHAR},
+      task_type = #{taskType,jdbcType=SMALLINT},
+      is_show = #{isShow,jdbcType=SMALLINT},
+      plan_detail_id = #{planDetailId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

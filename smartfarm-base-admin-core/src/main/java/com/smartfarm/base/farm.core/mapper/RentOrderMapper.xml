@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.RentOrderDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.RentOrder" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="acreage_id" property="acreageId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="areage_cost" property="areageCost" jdbcType="DECIMAL" />
+    <result column="seed_cost" property="seedCost" jdbcType="DECIMAL" />
+    <result column="order_time" property="orderTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="pay_status" property="payStatus" jdbcType="SMALLINT" />
+    <result column="pay_time" property="payTime" jdbcType="VARCHAR" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="real_amount" property="realAmount" jdbcType="DECIMAL" />
+    <result column="rent_name" property="rentName" jdbcType="VARCHAR" />
+    <result column="rent_mobile" property="rentMobile" jdbcType="VARCHAR" />
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="receive_name" property="receiveName" jdbcType="VARCHAR" />
+    <result column="receive_mobile" property="receiveMobile" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="expire_time" property="expireTime" jdbcType="VARCHAR" />
+    <result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+    <result column="pay_type" property="payType" jdbcType="SMALLINT" />
+    <result column="period" property="period" jdbcType="INTEGER" />
+    <result column="ship_times" property="shipTimes" jdbcType="SMALLINT" />   
+    <result column="strategy_id" property="strategyId" jdbcType="BIGINT" />   
+     
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.farm.core.entity.vo.RentOrderVo" id="BaseVoResultMap" extends="BaseResultMap">
+  	<result column="nickName" property="nickName" jdbcType="VARCHAR" />  	
+  	<result column="landName" property="landName" jdbcType="VARCHAR" />  	
+  	<result column="aName" property="aName" jdbcType="VARCHAR" />  	
+  	<result column="cover" property="cover" jdbcType="VARCHAR" />  	
+  	<result column="area" property="area" jdbcType="INTEGER" />
+  	<result column="deliverCount" property="deliverCount" jdbcType="INTEGER" />
+  	<result column="leastShipTimes" property="leastShipTimes" jdbcType="INTEGER" />
+  	<result column="landPeriod" property="landPeriod" jdbcType="INTEGER" />
+  	<collection property="seedDetails" ofType="com.smartfarm.base.farm.core.entity.SeedDetail" column="order_id">
+	    <result column="sName" property="name" jdbcType="VARCHAR" />
+	    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+  	</collection>
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.farm.core.entity.vo.RentOrderDetailVo" id="BaseRentOrderDetailResultMap" extends="BaseResultMap">
+  	<result column="nickName" property="nickName" jdbcType="VARCHAR" />  	
+  	<result column="landName" property="landName" jdbcType="VARCHAR" />  	
+  	<result column="aName" property="aName" jdbcType="VARCHAR" />  	
+  	<result column="cover" property="cover" jdbcType="VARCHAR" />  	
+  	<result column="area" property="area" jdbcType="INTEGER" />
+  	<result column="leastShipTimes" property="leastShipTimes" jdbcType="INTEGER" />
+  	<result column="landPeriod" property="landPeriod" jdbcType="INTEGER" />
+  	<result column="unDeliverCount" property="unDeliverCount" jdbcType="INTEGER" />
+  	<collection property="seedDetails" ofType="com.smartfarm.base.farm.core.entity.vo.SeedDetailVo" column="order_id">
+	    <result column="detailId" property="id" jdbcType="BIGINT" />
+	    <result column="sName" property="name" jdbcType="VARCHAR" />
+	    <result column="sCover" property="cover" jdbcType="VARCHAR" />
+	    <result column="seedArea" property="area" jdbcType="INTEGER" />
+	    <result column="plant_status" property="plantStatus" jdbcType="SMALLINT" />  
+	    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+	    <result column="sInfoId" property="sInfoId" jdbcType="BIGINT" />
+  	</collection>
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.RentOrder" useGeneratedKeys="true" keyProperty="id">
+    insert into farm_rent_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="acreageId != null" >
+        acreage_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="areageCost != null" >
+        areage_cost,
+      </if>
+      <if test="seedCost != null" >
+        seed_cost,
+      </if>
+      <if test="orderTime != null" >
+        order_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="totalAmount != null" >
+        total_amount,
+      </if>
+      <if test="realAmount != null" >
+        real_amount,
+      </if>
+      <if test="rentName != null" >
+        rent_name,
+      </if>
+      <if test="rentMobile != null" >
+        rent_mobile,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="receiveName != null" >
+        receive_name,
+      </if>
+      <if test="receiveMobile != null" >
+        receive_mobile,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="expireTime != null" >
+        expire_time,
+      </if>
+      <if test="payNo != null" >
+        pay_no,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+       <if test="period != null" >
+        period,
+      </if>
+       <if test="shipTimes != null" >
+        ship_times,
+      </if>           
+       <if test="strategyId != null" >
+        strategy_id,
+      </if>           
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="acreageId != null" >
+        #{acreageId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="areageCost != null" >
+        #{areageCost,jdbcType=DECIMAL},
+      </if>
+      <if test="seedCost != null" >
+        #{seedCost,jdbcType=DECIMAL},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realAmount != null" >
+        #{realAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="rentName != null" >
+        #{rentName,jdbcType=VARCHAR},
+      </if>
+      <if test="rentMobile != null" >
+        #{rentMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="receiveName != null" >
+        #{receiveName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveMobile != null" >
+        #{receiveMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="expireTime != null" >
+        #{expireTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payNo != null" >
+        #{payNo,jdbcType=VARCHAR},
+      </if>
+       <if test="payType != null" >
+        #{payType,jdbcType=SMALLINT},
+      </if>
+         <if test="period != null" >
+        #{period,jdbcType=INTEGER},
+      </if>
+       <if test="shipTimes != null" >
+        #{shipTimes,jdbcType=SMALLINT},
+      </if>   
+       <if test="strategyId != null" >
+        #{strategyId,jdbcType=BIGINT},
+      </if>   
+    </trim>
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.RentOrder" >
+    update farm_rent_order
+    <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="acreageId != null" >
+        acreage_id = #{acreageId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="areageCost != null" >
+        areage_cost = #{areageCost,jdbcType=DECIMAL},
+      </if>
+      <if test="seedCost != null" >
+        seed_cost = #{seedCost,jdbcType=DECIMAL},
+      </if>
+      <if test="orderTime != null" >
+        order_time = #{orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmount != null" >
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realAmount != null" >
+        real_amount = #{realAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="rentName != null" >
+        rent_name = #{rentName,jdbcType=VARCHAR},
+      </if>
+      <if test="rentMobile != null" >
+        rent_mobile = #{rentMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="receiveName != null" >
+        receive_name = #{receiveName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveMobile != null" >
+        receive_mobile = #{receiveMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="expireTime != null" >
+        expire_time = #{expireTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payNo != null" >
+        pay_no = #{payNo,jdbcType=VARCHAR},
+      </if>
+       <if test="payType != null" >
+        pay_type = #{payType,jdbcType=SMALLINT},
+      </if>
+       <if test="period != null" >
+        period = #{period,jdbcType=INTEGER},
+      </if>
+      <if test="shipTimes != null" >
+        ship_times = #{shipTimes,jdbcType=SMALLINT},
+      </if>
+      <if test="strategyId != null" >
+        strategy_id = #{strategyId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+   <select id="selectPageList" resultMap="BaseVoResultMap"> 	
+  	select fro.*,cmi.nick_name nickName,fai.area area from farm_rent_order fro
+  	left join member_info cmi on fro.member_id=cmi.id
+  	left join farm_acreage_info fai on fro.acreage_id=fai.id
+	<where>             
+		<if test="orderNo != null and orderNo!=''">
+			fro.order_no =#{orderNo}
+		</if>
+		<if test="status != null">
+			and fro.status = #{status}
+		</if>
+	</where>
+	 limit #{start}, #{limit}
+  </select>
+  
+  <select id="selectPageTotal" resultType="Integer">
+  	select COUNT(*) from farm_rent_order fro 
+ 	<where>
+ 		<if test="orderNo != null">
+			fro.order_no =#{orderNo}
+		</if>
+		<if test="status != null">
+			and fro.status = #{status}
+		</if>
+ 	</where>
+  </select>
+   
+  <select id="selectById" resultMap="BaseVoResultMap">
+  select  fro.*,fai.area area from farm_rent_order fro
+  left join farm_acreage_info fai on fro.acreage_id=fai.id
+  where fro.id = #{id,jdbcType=BIGINT} 
+  </select>
+  
+  <select id="queryRentOrderUnPayList" resultMap="BaseVoResultMap">
+  	SELECT ro.id,
+  	li.`name` landName,
+  	ai.`name` aName,
+  	li.ship_times leastShipTimes,
+  	ai.area,
+  	li.cover,
+  	ro.order_time,
+  	li.period landPeriod,
+  	ro.period,
+	sd.`name` sName,
+	sd.order_id,
+	ro.`status`,
+	ro.pay_status,
+	ro.real_amount,
+	ro.total_amount,
+	ro.order_no
+	FROM farm_rent_order ro 
+	INNER JOIN farm_acreage_info ai ON ai.id = ro.acreage_id
+	INNER JOIN farm_land_info li ON li.id = ai.land_id
+	INNER JOIN farm_shipping_info si ON ro.id = si.order_id
+	INNER JOIN farm_seed_detail sd ON sd.order_id = ro.id
+	WHERE ro.pay_status = #{payStatus}
+	AND ro.member_id = #{memberId}
+	AND ro.`status` &lt; 4
+	GROUP BY ro.id,li.`name`,ai.`name`,li.ship_times,ai.area,ro.order_time,li.period,
+	sd.`name`
+  </select>
+  
+  <select id="queryRentOrderPlantList" resultMap="BaseVoResultMap">
+  	SELECT ro.id,
+  	li.`name` landName,
+  	ai.`name` aName,
+  	li.ship_times leastShipTimes,
+  	ai.area,
+  	li.cover,
+  	ro.order_time,
+  	li.period landPeriod,
+  	ro.period,
+	sd.`name` sName,
+	sd.order_id,
+	deliver.deliverCount
+	FROM farm_rent_order ro 
+	INNER JOIN farm_acreage_info ai ON ai.id = ro.acreage_id
+	INNER JOIN farm_land_info li ON li.id = ai.land_id
+	LEFT OUTER JOIN (SELECT COUNT(`status`) deliverCount,order_id FROM farm_shipping_info si WHERE `status` &gt; 1 GROUP BY order_id) deliver ON ro.id = deliver.order_id
+	INNER JOIN farm_seed_detail sd ON sd.order_id = ro.id
+	WHERE sd.plant_status = #{plantStatus}
+	AND ro.member_id = #{memberId}
+	GROUP BY ro.id,li.`name`,ai.`name`,li.ship_times,ai.area,ro.order_time,li.period,
+	sd.`name`
+  </select>
+  
+  
+  <select id="queryRentOrderStatusById" resultMap="BaseRentOrderDetailResultMap">
+  	SELECT ro.`status`,
+  	li.ship_times leastShipTimes,
+  	si.ship_name,
+  	si.ship_no,
+  	si.ship_time,
+  	ro.id,
+  	li.period landPeriod,
+	li.cover,
+	li.`name` landName,
+	ai.area,
+	ai.`name` aName,
+	ro.order_no,
+	ro.order_time,
+	ro.real_amount,
+	ro.pay_time,
+	ro.pay_type,
+	ro.pay_no,
+	ro.period,
+	sd.id detailId,
+	sd.`name` sName,
+	sd.area seedArea,
+	sd.plant_status,
+	sd.order_id,
+	sei.id sInfoId,
+	sei.cover sCover,
+	deliver.unDeliverCount
+	FROM farm_rent_order ro 
+	INNER JOIN farm_shipping_info si ON si.order_id = ro.id
+	INNER JOIN farm_acreage_info ai ON ro.acreage_id = ai.id
+	INNER JOIN farm_land_info li ON li.id = ai.land_id
+	INNER JOIN farm_seed_detail sd ON sd.order_id = ro.id
+	INNER JOIN farm_seed_info sei ON sei.id = sd.seed_id
+	LEFT OUTER JOIN (SELECT COUNT(`status`) unDeliverCount,order_id FROM farm_shipping_info si WHERE `status` = 1 GROUP BY order_id) deliver ON ro.id = deliver.order_id
+	WHERE ro.id = #{orderId}
+  </select>
+
+  
+</mapper>

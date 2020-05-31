@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.smartfarm.base.shop.core.dao.MemberCashRecordDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.MemberCashRecord" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="cash_type" property="cashType" jdbcType="SMALLINT" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="bank_no" property="bankNo" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />   
+    <result column="operator_id" property="operatorId" jdbcType="BIGINT" />    
+  </resultMap>
+  
+   <resultMap type="com.smartfarm.base.shop.core.entity.vo.MemberCashRecordVo" id="BaseVoResultMap" extends="BaseResultMap">
+   	<result column="operatorName" property="operatorName" jdbcType="VARCHAR" /> 	
+  	<result column="memberName" property="memberName" jdbcType="VARCHAR" />	
+  </resultMap> 
+  
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.MemberCashRecord" >
+    insert into member_cash_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="cashType != null" >
+        cash_type,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="bankNo != null" >
+        bank_no,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
+       <if test="operatorId != null" >
+        operator_id,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="cashType != null" >
+        #{cashType,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+       <if test="bankNo != null" >
+        #{bankNo,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+       <if test="operatorId != null" >
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.MemberCashRecord" >
+    update member_cash_record
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="cashType != null" >
+        cash_type = #{cashType,jdbcType=SMALLINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="bankNo != null" >
+        bank_no = #{bankNo,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null" >
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  <select id="queryCashRecord" resultMap="BaseResultMap">
+  	select *
+  	from member_cash_record
+  	where member_id = #{memberId}
+  	<if test="status != null">
+  	and status = #{status}
+  	</if>
+  	and cash_type = #{cashType}
+  </select>
+       
+  <select id="queryMemberCashRecordList" resultMap="BaseVoResultMap">	
+  	select mcr.*,oi.account operatorName,mi.nick_name memberName 
+	FROM  member_cash_record mcr
+	LEFT JOIN base_adm_admin oi ON mcr.operator_id=oi.id
+	LEFT JOIN member_info mi ON mcr.member_id=mi.id
+	<where>
+		<if test="true">
+			mcr.cash_type=2
+		</if>
+		<if test="mName != null">
+			and mi.nick_name LIKE CONCAT('%',#{mName},'%')
+		</if>
+		<if test="status != null">
+			and mcr.status = #{status}
+		</if>
+	</where>
+	 limit #{start}, #{limit}
+  </select>
+  
+  
+  <select id="countCashRecordListPage" resultType="Integer">
+  	select COUNT(*)
+ 	FROM member_cash_record mcr 
+ 	LEFT JOIN member_info mi ON mcr.member_id=mi.id
+ 	<where>
+ 		<if test="true">
+			mcr.cash_type=2
+		</if>
+ 		<if test="mName != null">
+ 			and mi.nick_name LIKE CONCAT('%',#{mName},'%')
+ 		</if>
+ 		<if test="status != null">
+ 			and mcr.status = #{status}
+ 		</if>
+ 	</where>
+  </select>
+  
+</mapper>

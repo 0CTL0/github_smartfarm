@@ -1,0 +1,21 @@
+[2020-05-19 00:01:07] INFO   [AdminController:login]{account:admin, password:123456}login.
+[2020-05-19 00:01:15] INFO   [AdminController:login]{account:admin, password:123456}login.
+[2020-05-19 00:01:26] INFO   [AdminController:login]{account:greensun, password:123456}login.
+[2020-05-19 00:02:14] INFO   [AdminController:login]{account:admin, password:zhihuinongchang}login.
+[2020-05-19 00:02:17] INFO   [AdminController:queryChannelAdminInfo]query channel admin info.
+[2020-05-19 00:02:17] INFO   [FunctionController:getAllFunctions]{id=1}query all available functions by admin id.
+[2020-05-19 00:08:47] INFO   [AdminController:queryChannelAdminInfo]query channel admin info.
+[2020-05-19 00:08:47] INFO   [FunctionController:getAllFunctions]{id=null}query all available functions by admin id.
+[2020-05-19 00:08:51] INFO   [AdminController:login]{account:admin, password:zhihuinongchang}login.
+[2020-05-19 00:08:54] INFO   [AdminController:queryChannelAdminInfo]query channel admin info.
+[2020-05-19 00:08:54] INFO   [FunctionController:getAllFunctions]{id=1}query all available functions by admin id.
+[2020-05-19 00:09:14] INFO   [AdminController:login]{account:admin, password:zhihuinongchang}login.
+[2020-05-19 00:09:16] INFO   [AdminController:queryChannelAdminInfo]query channel admin info.
+[2020-05-19 00:09:16] INFO   [FunctionController:getAllFunctions]{id=1}query all available functions by admin id.
+[2020-05-19 00:10:12] INFO   [AdminController:login]{account:admin, password:zhihuinongchang}login.
+[2020-05-19 00:12:05] INFO   [AdminController:login]{account:admin, password:zhihuinongchang}login.
+[2020-05-19 00:12:58] INFO   [AdminController:login]{account:admin, password:zhihuinongchang}login.
+[2020-05-19 00:18:24] INFO   [AdminController:login]{account:admin, password:zhihuinongchang}login.
+[2020-05-19 00:25:22] INFO   [AdminController:login]{account:admin, password:zhihuinongchang}login.
+[2020-05-19 00:27:33] INFO   [AdminController:login]{account:admin, password:zhihuinongchang}login.
+[2020-05-19 00:28:42] INFO   [AdminController:login]{account:admin, password:zhihuinongchang}login.

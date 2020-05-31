@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartfarm.base.farm.core.dao.FarmRentLandInfoDao">
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.FarmRentLandInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="tunnel_id" jdbcType="BIGINT" property="tunnelId" />
+    <result column="area" jdbcType="INTEGER" property="area" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+  </resultMap>
+
+  <resultMap type="com.smartfarm.base.farm.core.entity.vo.FarmRentLandInfoVo" id="BaseVoResultMap" extends="BaseResultMap">
+    <result column="tunnelName" property="tunnelName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id,name,tunnel_id,area,status,price
+    </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from farm_rentland_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from farm_rentland_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.smartfarm.base.farm.core.entity.FarmRentLandInfo">
+    insert into farm_rentland_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="tunnelId != null">
+        tunnel_id,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="tunnelId != null">
+        #{tunnelId,jdbcType=BIGINT},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartfarm.base.farm.core.entity.FarmRentLandInfo">
+    update farm_rentland_info
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="tunnelId != null">
+        tunnel_id = #{tunnelId,jdbcType=BIGINT},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <select id="selectPageList" resultMap="BaseVoResultMap">
+    select fri.*,fti.name tunnelName from farm_rentland_info fri
+    left join farm_tunnel_info fti on fri.tunnel_id=fti.id
+    where fri.tunnel_id=#{tunnelId}
+    <if test="name != null">
+      and fri.name LIKE CONCAT('%',#{name},'%')
+    </if>
+    <if test="status != null">
+      and fri.status = #{status}
+    </if>
+    order by fri.id desc
+    limit #{start}, #{limit}
+  </select>
+
+  <select id="selectPageTotal" resultType="java.lang.Integer">
+    select COUNT(*) from farm_rentland_info fri
+    where fri.tunnel_id=#{tunnelId}
+    <if test="name != null">
+      and fri.name LIKE CONCAT('%',#{name},'%')
+    </if>
+    <if test="status != null">
+      and fri.status = #{status}
+    </if>
+
+  </select>
+
+
+  <select id="selectRentLandVoList" resultMap="BaseVoResultMap">
+    select * from farm_rentland_info fri
+    WHERE fri.tunnel_id=#{tunnelId}
+  </select>
+
+  <select id="getRentLandByMemberLandId" resultMap="BaseResultMap">
+    select fri.* from farm_rentland_info fri where fri.id=(select fml.rent_land_id from farm_member_land fml
+    where fml.id=#{memberLandId,jdbcType=BIGINT})
+  </select>
+
+  <select id="selectFarmId" resultType="java.lang.Long">
+    select fi.id from farm_rentland_info fri
+    left join farm_tunnel_info fti on fri.tunnel_id=fti.id
+    left join farm_base_info fbi on fti.base_id=fbi.id
+    left join farm_info fi on fbi.farm_id=fi.id
+    where fri.id=#{rentLandId}
+  </select>
+</mapper>

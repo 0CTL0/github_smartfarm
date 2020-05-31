@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartfarm.base.farm.core.dao.FarmBazaarProductDao">
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.FarmBazaarProduct">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="member_land_id" jdbcType="BIGINT" property="memberLandId" />
+    <result column="member_crops_id" jdbcType="BIGINT" property="memberCropsId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="cover" jdbcType="VARCHAR" property="cover" />
+    <result column="stock" jdbcType="INTEGER" property="stock" />
+    <result column="unit" jdbcType="INTEGER" property="unit" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="member_seller_id" jdbcType="BIGINT" property="memberSellerId" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, member_land_id,member_crops_id, name, cover, stock, unit, price, end_time, member_seller_id,status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from farm_bazaar_product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from farm_bazaar_product
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.smartfarm.base.farm.core.entity.FarmBazaarProduct">
+    insert into farm_bazaar_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="memberLandId != null">
+        member_land_id,
+      </if>
+      <if test="memberCropsId != null">
+        member_crops_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="cover != null">
+        cover,
+      </if>
+      <if test="stock != null">
+        stock,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="memberSellerId != null">
+        member_seller_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="memberLandId != null">
+        #{memberLandId,jdbcType=BIGINT},
+      </if>
+      <if test="memberCropsId != null">
+        #{memberCropsId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cover != null">
+        #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="stock != null">
+        #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="memberSellerId != null">
+        #{memberSellerId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartfarm.base.farm.core.entity.FarmBazaarProduct">
+    update farm_bazaar_product
+    <set>
+      <if test="memberLandId != null">
+        member_land_id = #{memberLandId,jdbcType=BIGINT},
+      </if>
+      <if test="memberCropsId != null">
+        member_crops_id = #{memberCropsId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cover != null">
+        cover = #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="stock != null">
+        stock = #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="memberSellerId != null">
+        member_seller_id = #{memberSellerId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectMemberLandProduct" resultMap="BaseResultMap">
+    SELECT * FROM farm_bazaar_product fbp
+    WHERE fbp.member_land_id=#{memberLandId} AND fbp.status=1
+  </select>
+
+  <select id="selectAllBazaarProduct" resultMap="BaseResultMap">
+       SELECT fbp.* FROM farm_bazaar_product fbp
+	    LEFT JOIN farm_member_land fml ON fml.id=fbp.member_land_id
+        LEFT JOIN farm_rentland_info fri ON fri.id=fml.rent_land_id
+        LEFT JOIN farm_tunnel_info fti ON fti.id=fri.tunnel_id
+        LEFT JOIN farm_base_info fbi ON fbi.id=fti.base_id
+        LEFT JOIN farm_info fi ON fi.id=fbi.farm_id
+        WHERE fbp.status=1 AND fi.id=#{farmId}
+  </select>
+
+  <select id="selectAllFarmBazaarProduct" resultMap="BaseResultMap">
+    SELECT fbp.* FROM farm_bazaar_product fbp WHERE fbp.status=1
+  </select>
+
+</mapper>

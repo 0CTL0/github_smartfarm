@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.monitor.core.dao.MonitorControlSetConditionDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.monitor.core.entity.MonitorControlSetCondition" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="control_set_id" property="controlSetId" jdbcType="BIGINT" />
+    <result column="control_node_id" property="controlNodeId" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="SMALLINT" />
+    <result column="data_value" property="dataValue" jdbcType="DOUBLE" />
+    <result column="kinds" property="kinds" jdbcType="SMALLINT" />
+  </resultMap>
+  <insert id="insert" parameterType="com.smartfarm.base.monitor.core.entity.MonitorControlSetCondition" >
+    insert into monitor_control_set_condition
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="controlSetId != null" >
+        control_set_id,
+      </if>
+      <if test="controlNodeId != null" >
+        control_node_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="dataValue != null" >
+        data_value,
+      </if>
+      <if test="kinds != null" >
+        kinds,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="controlSetId != null" >
+        #{controlSetId,jdbcType=BIGINT},
+      </if>
+      <if test="controlNodeId != null" >
+        #{controlNodeId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="dataValue != null" >
+        #{dataValue,jdbcType=DOUBLE},
+      </if>
+      <if test="kinds != null" >
+        #{kinds,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.monitor.core.entity.MonitorControlSetCondition" >
+    update monitor_control_set_condition
+    <set >
+      <if test="controlSetId != null" >
+        control_set_id = #{controlSetId,jdbcType=BIGINT},
+      </if>
+      <if test="controlNodeId != null" >
+        control_node_id = #{controlNodeId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="dataValue != null" >
+        data_value = #{dataValue,jdbcType=DOUBLE},
+      </if>
+      <if test="kinds != null" >
+        kinds = #{kinds,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="querySetConditionByvalue" resultMap="BaseResultMap">
+  	select c.*
+  	from monitor_control_set_condition c
+  	left join monitor_control_set s on s.id=c.control_set_id
+  	where s.status = 1 and s.type=2
+  	and CONCAT(s.start_date,s.start_time,'00') <![CDATA[ < ]]> #{nowTime}
+  	and CONCAT(s.end_date,s.end_time,'00') <![CDATA[ > ]]> #{nowTime}
+  	and ((c.type = 1 and c.data_value <![CDATA[ < ]]> #{dataValue})
+  	or (c.type = 2 and c.data_value <![CDATA[ > ]]> #{dataValue}))
+  	and c.control_node_id = #{controlNodeId}
+  </select>
+</mapper>

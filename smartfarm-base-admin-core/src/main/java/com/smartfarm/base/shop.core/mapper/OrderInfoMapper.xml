@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.OrderInfoDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.OrderInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+    <result column="freight_price" property="freightPrice" jdbcType="DECIMAL" />
+    <result column="coupon_price" property="couponPrice" jdbcType="DECIMAL" />
+    <result column="integral_price" property="integralPrice" jdbcType="DECIMAL" />
+    <result column="group_price" property="groupPrice" jdbcType="DECIMAL" />
+    <result column="order_price" property="orderPrice" jdbcType="DECIMAL" />
+    <result column="real_price" property="realPrice" jdbcType="DECIMAL" />
+    <result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="pay_time" property="payTime" jdbcType="VARCHAR" />
+    <result column="pay_status" property="payStatus" jdbcType="SMALLINT" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="SMALLINT" />
+    <result column="business_id" property="businessId" jdbcType="BIGINT" />
+      <result column="refund_msg" property="refundMsg" jdbcType="VARCHAR" />
+  </resultMap>
+  
+   <resultMap type="com.smartfarm.base.shop.core.entity.vo.OrderInfoVo" id="BaseVoResultMap" extends="BaseResultMap">
+  		<result column="nick_name" property="nick_name" jdbcType="VARCHAR" />
+  		<collection property="orderDetailVoList" ofType="com.smartfarm.base.shop.core.entity.vo.OrderDetailVo" column="id">
+  			<id column="order_detail_id" property="id" jdbcType="BIGINT" />
+		    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+		    <result column="detailOrderNo" property="orderNo" jdbcType="VARCHAR" />
+		    <result column="status" property="status" jdbcType="SMALLINT" />
+		    <result column="receive_name" property="receiveName" jdbcType="VARCHAR" />
+		    <result column="receive_mobile" property="receiveMobile" jdbcType="VARCHAR" />
+		    <result column="address" property="address" jdbcType="VARCHAR" />
+		    <result column="message" property="message" jdbcType="VARCHAR" />
+		    <result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+		    <result column="freight_price" property="freightPrice" jdbcType="DECIMAL" />
+		    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		    <result column="ship_no" property="shipNo" jdbcType="VARCHAR" />
+		    <result column="ship_name" property="shipName" jdbcType="VARCHAR" />
+		    <result column="ship_code" property="shipCode" jdbcType="VARCHAR" />
+		    <result column="ship_time" property="shipTime" jdbcType="VARCHAR" />
+		    <result column="confirm_time" property="confirmTime" jdbcType="VARCHAR" />
+		    <result column="shipping_status" property="shippingStatus" jdbcType="SMALLINT" />
+		    <result column="pay_status" property="payStatus" jdbcType="SMALLINT" />
+		    <result column="business_id" property="businessId" jdbcType="BIGINT" />
+		    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+  			<collection property="productList" ofType="com.smartfarm.base.shop.core.entity.OrderProduct" column="order_detail_id">
+  				<id column="productId" property="id" jdbcType="BIGINT" />
+			    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+			    <result column="product_id" property="productId" jdbcType="BIGINT" />
+			    <result column="product_sku_id" property="productSkuId" jdbcType="BIGINT" />
+			    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+			    <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+			    <result column="product_norm" property="productNorm" jdbcType="VARCHAR" />
+			    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+			    <result column="price" property="price" jdbcType="DECIMAL" />
+			    <result column="status" property="status" jdbcType="SMALLINT" />
+			    <result column="order_detail_id" property="orderDetailId" jdbcType="BIGINT" />
+  			</collection>
+  		</collection>
+   </resultMap>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.OrderInfo"  keyProperty="id" useGeneratedKeys="true">
+    insert into order_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="totalPrice != null" >
+        total_price,
+      </if>
+      <if test="freightPrice != null" >
+        freight_price,
+      </if>
+      <if test="couponPrice != null" >
+        coupon_price,
+      </if>
+      <if test="integralPrice != null" >
+        integral_price,
+      </if>
+      <if test="groupPrice != null" >
+        group_price,
+      </if>
+      <if test="orderPrice != null" >
+        order_price,
+      </if>
+      <if test="realPrice != null" >
+        real_price,
+      </if>
+      <if test="payNo != null" >
+        pay_no,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="businessId != null" >
+        business_id,
+      </if>
+        <if test="refundMsg != null" >
+            refund_msg,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="totalPrice != null" >
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="freightPrice != null" >
+        #{freightPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="couponPrice != null" >
+        #{couponPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="integralPrice != null" >
+        #{integralPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="groupPrice != null" >
+        #{groupPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderPrice != null" >
+        #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="realPrice != null" >
+        #{realPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="payNo != null" >
+        #{payNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="businessId != null" >
+        #{businessId,jdbcType=BIGINT},
+      </if>
+        <if test="refundMsg != null" >
+            #{refundMsg,jdbcType=VARCHAR},
+        </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.OrderInfo" >
+    update order_info
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="totalPrice != null" >
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="freightPrice != null" >
+        freight_price = #{freightPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="couponPrice != null" >
+        coupon_price = #{couponPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="integralPrice != null" >
+        integral_price = #{integralPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="groupPrice != null" >
+        group_price = #{groupPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderPrice != null" >
+        order_price = #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="realPrice != null" >
+        real_price = #{realPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="payNo != null" >
+        pay_no = #{payNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="businessId != null" >
+        business_id = #{businessId,jdbcType=BIGINT},
+    </if>
+        <if test="refundMsg != null" >
+            refund_msg = #{refundMsg,jdbcType=VARCHAR},
+        </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryById" resultMap="BaseResultMap">
+  	select *
+  	from order_info
+  	where id =  #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="queryOrderUnPayByDate" resultType="java.lang.Long">
+  	select id 
+  	from order_info
+  	where status = 0 and left(create_time,8) = #{nowDate}
+  </select>
+  
+  <select id="queryByOrderNo" resultMap="BaseResultMap">
+  	select * 
+  	from order_info
+  	where order_no = #{orderNo}
+  </select>
+  
+  <select id="queryOrderByMemberId" resultMap="BaseVoResultMap">
+  	select *
+  	from order_info
+  	where member_id=#{memberId}
+  	order by create_time desc,id desc
+  </select>
+
+    <select id="getOrderByMemberId" resultMap="BaseVoResultMap">
+  	select *
+  	from farm_rentland_order
+  	where member_id=#{memberId}
+  	order by rent_date desc
+  </select>
+  
+    <select id="queryAllOrder" resultMap="BaseVoResultMap">
+  	SELECT oi.*,mi.nick_name
+	FROM order_info oi INNER JOIN member_info mi on oi.member_id = mi.id
+	where oi.business_id = #{businessId}
+	<if test="status != null">
+		and status = #{status}
+	</if>
+	<if test="order_no != null">
+		and order_no like CONCAT('%',#{order_no},'%')
+	</if>
+        <if test="startDate != null and startDate != ''">
+            and oi.create_time >= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and oi.create_time &lt;=  #{endDate}
+        </if>
+    order by id desc
+	limit #{start}, #{limit}
+  </select>
+  
+   <select id="queryCountAllOrder" resultType="java.lang.Integer">
+  	SELECT count(*)
+	FROM order_info oi INNER JOIN member_info mi on oi.member_id = mi.id
+	where oi.business_id = #{businessId}
+	<if test="status != null ">
+		and status = #{status}
+	</if>
+	<if test="order_no != null">
+		and order_no like CONCAT('%',#{order_no},'%')
+	</if>
+       <if test="startDate != null and startDate != ''">
+           and oi.create_time >= #{startDate}
+       </if>
+       <if test="endDate != null and endDate != ''">
+           and oi.create_time &lt;= #{endDate}
+       </if>
+  </select>
+  
+  <select id="queryOrderByOid" resultMap="BaseVoResultMap">
+  	SELECT oi.*,
+	mi.nick_name,od.ship_code,od.order_id,od.id order_detail_id,od.ship_name,od.ship_no,od.address,od.receive_mobile,od.`status` detailStatus,od.order_no detailOrderNo,od.receive_name,od.message,
+	op.product_name,op.product_norm,op.quantity,op.order_detail_id,op.id productId
+	from order_info oi
+	left join order_detail od on od.order_id=oi.id
+	left join order_product op on op.order_detail_id=od.id
+	left join member_info mi on mi.id=oi.member_id
+	WHERE oi.id = #{id}
+  </select>
+
+
+    <select id="queryTodayOrder" resultMap="BaseVoResultMap">
+        SELECT oi.*,mi.nick_name
+        FROM order_info oi INNER JOIN member_info mi on oi.member_id = mi.id
+        where oi.business_id = #{businessId} and left(oi.create_time,8) = #{nowDate} and oi.status = 1
+        order by id desc
+        limit #{start}, #{limit}
+    </select>
+
+    <select id="queryCountTodayOrder" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM order_info oi INNER JOIN member_info mi on oi.member_id = mi.id
+        where oi.business_id = #{businessId} and left(oi.create_time,8) = #{nowDate} and oi.status = 1
+    </select>
+
+
+
+    <select id="queryAllOrderRefund" resultMap="BaseVoResultMap">
+        SELECT oi.*,mi.nick_name
+        FROM order_info oi INNER JOIN member_info mi on oi.member_id = mi.id
+        where oi.business_id = #{businessId} and oi.status &lt; -2
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        <if test="order_no != null">
+            and order_no like CONCAT('%',#{order_no},'%')
+        </if>
+        <if test="startDate != null and startDate != ''">
+            and left(oi.create_time,8)>= left(#{startDate},8)
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and left(oi.create_time,8) &lt;= left(#{endDate},8)
+        </if>
+        order by id desc
+        limit #{start}, #{limit}
+    </select>
+
+    <select id="queryCountAllOrderRefund" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM order_info oi INNER JOIN member_info mi on oi.member_id = mi.id
+        where oi.business_id = #{businessId} and oi.status &lt; -2
+        <if test="status != null ">
+            and status = #{status}
+        </if>
+        <if test="order_no != null">
+            and order_no like CONCAT('%',#{order_no},'%')
+        </if>
+        <if test="startDate != null and startDate != ''">
+            and left(oi.create_time,8)>= left(#{startDate},8)
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and left(oi.create_time,8) &lt;= left(#{endDate},8)
+        </if>
+    </select>
+
+</mapper>

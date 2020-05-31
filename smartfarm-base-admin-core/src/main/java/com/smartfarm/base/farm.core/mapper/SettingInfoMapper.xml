@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.SettingInfoDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.SettingInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="param_code" property="paramCode" jdbcType="VARCHAR" />
+    <result column="param_name" property="paramName" jdbcType="VARCHAR" />
+    <result column="param_value" property="paramValue" jdbcType="VARCHAR" />
+    <result column="farm_id" property="farmId" jdbcType="BIGINT"/>
+    <result column="setting_type" property="settingType" jdbcType="SMALLINT"/>
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="control_type" property="controlType" jdbcType="SMALLINT"/>
+  </resultMap>
+
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.SettingInfo" >
+    insert into crfd_setting_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="paramCode != null" >
+        param_code,
+      </if>
+      <if test="paramName != null" >
+        param_name,
+      </if>
+      <if test="paramValue != null" >
+        param_value,
+      </if>
+      <if test="farmId != null" >
+        farm_id,
+      </if>
+      <if test="settingType != null" >
+        setting_type,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="paramCode != null" >
+        #{paramCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramName != null" >
+        #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramValue != null" >
+        #{paramValue,jdbcType=VARCHAR},
+      </if>
+      <if test="farmId != null" >
+        #{farmId,jdbcType=BIGINT},
+      </if>
+      <if test="settingType != null" >
+        #{settingType,jdbcType=SMALLINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.SettingInfo" >
+    update crfd_setting_info
+    <set >
+      <if test="paramCode != null" >
+        param_code = #{paramCode,jdbcType=VARCHAR},
+      </if>
+      <if test="paramName != null" >
+        param_name = #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="paramValue != null" >
+        param_value = #{paramValue,jdbcType=VARCHAR},
+      </if>
+      <if test="farmId != null" >
+        farm_id = #{farmId,jdbcType=VARCHAR},
+      </if>
+      <if test="settingType != null" >
+        setting_type = #{settingType,jdbcType=SMALLINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getCrowdfundingAgreement" resultType="string">
+  	SELECT param_value
+	FROM crfd_setting_info
+	WHERE param_code = #{paramCode}
+  </select>
+
+  <select id="getFarmSettingInfo" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select * from crfd_setting_info where farm_id=#{farmId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectValuesBycodeAndFarmId" resultType="java.lang.String">
+    select csi.param_value from crfd_setting_info csi
+    where csi.param_code=#{code} and csi.farm_id=#{farmId}
+  </select>
+
+  <update id="saveSettingInfo" parameterType="java.util.List">
+    update crfd_setting_info
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="param_value=case" suffix="end,">
+        <foreach collection="list" item="item">
+            when id=#{item.id} then #{item.paramValue}
+        </foreach>
+      </trim>
+    </trim>
+  </update>
+
+
+  <select id="getDelegateTypeInfo" resultMap="BaseResultMap">
+    select param_code,param_name from crfd_setting_info where param_name not like '浇水积分' and setting_type=1
+    and farm_id=#{farmId,jdbcType=BIGINT}
+  </select>
+
+  <select id="getInfoByType" resultMap="BaseResultMap">
+    select * from crfd_setting_info where setting_type in (1,3)
+    and farm_id=#{farmId,jdbcType=BIGINT} and param_code=#{paramCode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getFarmIdByMemberLandId" resultType="java.lang.Long">
+    select fbi.farm_id from farm_base_info fbi where fbi.id=(select fti.base_id from farm_tunnel_info fti where fti.id=(select fri.tunnel_id from farm_rentland_info fri where fri.id=(select fml.rent_land_id from farm_member_land fml
+    where fml.id=#{landId,jdbcType=BIGINT})))
+  </select>
+
+  <select id="getDelegateSettingInfo" resultMap="BaseResultMap">
+    select * from crfd_setting_info csi where csi.setting_type in (1,3)
+  </select>
+
+  <select id="countSettingTypeByFarmId" resultType="java.lang.Integer">
+    select MAX(csi.setting_type) from crfd_setting_info csi
+        WHERE csi.farm_id=#{farmId}
+  </select>
+</mapper>

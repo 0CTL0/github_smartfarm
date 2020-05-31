@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.ProductInfoDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.ProductInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="goods_sn" property="goodsSn" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="BIGINT" />
+    <result column="business_id" property="businessId" jdbcType="BIGINT" />
+    <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+    <result column="brief" property="brief" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+    <result column="share_url" property="shareUrl" jdbcType="VARCHAR" />
+    <result column="is_new" property="isNew" jdbcType="BIT" />
+    <result column="is_hot" property="isHot" jdbcType="BIT" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="show_price" property="showPrice" jdbcType="DECIMAL" />
+    <result column="point" property="point" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.shop.core.entity.vo.ProductInfoVo" id="BaseVoResultMap" extends="BaseResultMap">
+  	<result column="categoryName" property="categoryName" jdbcType="VARCHAR" />
+  	<result column="businessName" property="businessName" jdbcType="VARCHAR" />
+      <result column="minSkuPrice" property="minSkuPrice" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.ProductInfo" keyProperty="id" useGeneratedKeys="true">
+    insert into product_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="goodsSn != null" >
+        goods_sn,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="businessId != null" >
+        business_id,
+      </if>
+      <if test="picUrl != null" >
+        pic_url,
+      </if>
+      <if test="brief != null" >
+        brief,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="sortOrder != null" >
+        sort_order,
+      </if>
+      <if test="shareUrl != null" >
+        share_url,
+      </if>
+      <if test="isNew != null" >
+        is_new,
+      </if>
+      <if test="isHot != null" >
+        is_hot,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="showPrice != null" >
+        show_price,
+      </if>
+      <if test="point != null" >
+        point,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSn != null" >
+        #{goodsSn,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=BIGINT},
+      </if>
+      <if test="businessId != null" >
+        #{businessId,jdbcType=BIGINT},
+      </if>
+      <if test="picUrl != null" >
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="sortOrder != null" >
+        #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="shareUrl != null" >
+        #{shareUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isNew != null" >
+        #{isNew,jdbcType=BIT},
+      </if>
+      <if test="isHot != null" >
+        #{isHot,jdbcType=BIT},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="showPrice != null" >
+        #{showPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="point != null" >
+        #{point,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.ProductInfo" >
+    update product_info
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSn != null" >
+        goods_sn = #{goodsSn,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=BIGINT},
+      </if>
+       <if test=" businessId != null" >
+        business_id = #{businessId,jdbcType=BIGINT},
+      </if>
+      <if test="picUrl != null" >
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        brief = #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="sortOrder != null" >
+        sort_order = #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="shareUrl != null" >
+        share_url = #{shareUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isNew != null" >
+        is_new = #{isNew,jdbcType=BIT},
+      </if>
+      <if test="isHot != null" >
+        is_hot = #{isHot,jdbcType=BIT},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="showPrice != null" >
+        show_price = #{showPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="point != null" >
+        point = #{point,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <delete id="delete" parameterType="java.lang.Long" >
+		delete p.* from product_info p
+		where p.id=#{id}
+	</delete>
+  
+  <select id="selectById" resultMap="BaseResultMap">
+	select p.* from product_info p
+	where p.id=#{id}
+  </select>
+  	
+  <select id="countProductInfoList" resultType="java.lang.Integer">
+	select count(*) from product_info p
+	where p.business_id = #{businessId}
+	<if test="name != ''">
+		and p.name like CONCAT('%',#{name},'%')
+	</if>
+      <if test="categoryId != null">
+          and p.category_id =#{categoryId}
+      </if>
+  </select>
+  
+  <select id="selectProductInfoList" resultMap="BaseVoResultMap">
+      select p.*,pc.name as categoryName,bi.name as businessName,MIN(ps.price) as minSkuPrice from product_info p
+      left join product_category pc on p.category_id=pc.id
+      left join farm_info bi on p.business_id=bi.id
+      left join product_sku ps on p.id=ps.product_id
+      where p.business_id = #{businessId}
+	<if test="name != ''">
+		 and p.name like CONCAT('%',#{name},'%')
+	</if>
+      <if test="categoryId != null">
+          and p.category_id =#{categoryId}
+      </if>
+      group by p.id
+	order by id desc
+	limit #{start}, #{limit}
+  </select>
+	
+  <select id="queryAllProductBusinessList" resultMap="BaseResultMap">
+  	select * from farm_info bi
+  </select>
+  
+  <select id="queryNewProductList" resultMap="BaseVoResultMap">
+  	select *
+  	from product_info
+  	where is_new = true and status = 1
+  	and business_id = #{businessId}
+  </select>
+
+  <select id="queryNewProductListByType" resultMap="BaseVoResultMap">
+  	select info.*,MIN(sku.price) as minSkuPrice
+  	from product_info info inner join product_sku sku on info.id = sku.product_id
+  	where info.is_new = true and info.status = 1 and sku.type = #{type} and info.business_id = #{businessId}
+  	group by info.id
+  </select>
+    
+  <select id="queryHotProductList" resultMap="BaseVoResultMap">
+  	select *
+  	from product_info
+  	where is_hot = true and status = 1
+  	and business_id = #{businessId}
+  </select>
+  
+  <select id="queryHotProductListByType" resultMap="BaseVoResultMap">
+  	select info.*,MIN(sku.price) as minSkuPrice
+  	from product_info info inner join product_sku sku on info.id = sku.product_id
+  	where info.is_hot = true and info.status = 1 and sku.type = #{type}
+  	and info.business_id = #{businessId}
+  	group by info.id
+  </select>
+  
+  <select id="queryIntegralProductList" resultMap="BaseVoResultMap">
+  	select info.*
+  	from product_info info inner join product_sku sku on info.id = sku.product_id
+  	where info.status = 1 and sku.type = 2 and info.business_id = #{businessId}
+  	 group by info.id
+    order by info.point asc,id
+   
+  </select>
+    
+  <select id="queryProductListByCategoryId" resultMap="BaseVoResultMap">
+  	select *
+  	from product_info
+  	where status = 1 and category_id = #{categoryId}
+  	order by sort_order
+  </select>
+  
+  <select id="queryProductListByCategory" resultMap="BaseVoResultMap">
+  	select info.*,MIN(sku.price) as minSkuPrice
+  	from product_info info inner join product_sku sku on info.id = sku.product_id
+  	where info.status = 1 and info.category_id = #{category_id} and sku.type = #{type} 
+  	 group by info.id
+  	order by info.sort_order
+  </select>
+  
+  <select id="queryById" resultMap="BaseResultMap">
+  	select *
+  	from product_info
+  	where id = #{id}
+  </select>
+  
+  <select id="queryProductForAdvance" resultMap="BaseVoResultMap">
+  	select info.*,MIN(sku.price) as minSkuPrice
+  	from index_advance a 
+  	left join product_info info on info.id=a.ref_id
+  	left join product_sku sku on info.id = sku.product_id
+  	where a.type = 1
+  	and a.farm_id = #{farmId}
+  	and a.status = 1
+  	and info.status = 1 
+  	and sku.type = 1 
+  	group by info.id
+  </select>
+  
+  <select id="queryProductForAdvanceId" resultMap="BaseVoResultMap">
+  	select info.*
+  	from index_advance a 
+  	left join product_info info on info.id=a.ref_id
+  	left join product_sku sku on info.id = sku.product_id
+  	where a.id = #{id}
+  	group by info.id
+  </select>
+  
+  <select id="queryProductForAdvanceAdd" resultMap="BaseVoResultMap">
+  	select info.*
+  	from product_info info
+  	left join product_sku sku on info.id = sku.product_id
+  	where  info.status = 1 
+  	and sku.type = 1 
+  	and info.business_id = #{businessId}
+  	group by info.id
+  </select>
+
+    <select id="selectVoByProductId" resultMap="BaseVoResultMap">
+	select *
+  	from product_info
+  	where id = #{id}
+    </select>
+</mapper>

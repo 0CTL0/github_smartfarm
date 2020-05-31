@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.EmployeeInfoDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.EmployeeInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="farm_id" property="farmId" jdbcType="BIGINT" />
+    <result column="depart" property="depart" jdbcType="VARCHAR" />
+    <result column="postion" property="postion" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="BaseVoResultMap" type="com.smartfarm.base.farm.core.entity.vo.EmployeeInfoVo" extends="BaseResultMap" >
+    <result column="farm_name" property="farmName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <select id="getByAcountAndPwd" resultMap="BaseResultMap">
+    select * from employee_info where phone=#{phone,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getEmployeesPageList" resultMap="BaseResultMap">
+    select ei.* from employee_info ei
+    <where>
+      <if test="farmId != null">
+        and ei.farm_id=#{farmId}
+      </if>
+      <if test="name != null">
+        and ei.name like concat('%',#{name},'%')
+      </if>
+      <if test="phone != null">
+        and ei.phone like concat('%',#{phone},'%')
+      </if>
+    </where>
+    limit #{start}, #{limit}
+  </select>
+
+  <select id="getEmployeesTotal" resultType="Integer">
+    select count(*) from employee_info
+    <where>
+      <if test="farmId != null">
+        and farm_id=#{farmId}
+      </if>
+      <if test="name != null">
+        and name like concat('%',#{name},'%')
+      </if>
+      <if test="phone != null">
+        and phone like concat('%',#{phone},'%')
+      </if>
+    </where>
+  </select>
+
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.EmployeeInfo" >
+    insert into employee_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="farmId != null" >
+        farm_id,
+      </if>
+      <if test="depart != null" >
+        depart,
+      </if>
+      <if test="postion != null" >
+        postion,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="farmId != null" >
+        #{farmId,jdbcType=BIGINT},
+      </if>
+      <if test="depart != null" >
+        #{depart,jdbcType=VARCHAR},
+      </if>
+      <if test="postion != null" >
+        #{postion,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select * from employee_info where id=#{id,jdbcType=BIGINT}
+  </select>
+
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.EmployeeInfo" >
+    update employee_info
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="depart != null" >
+        depart = #{depart,jdbcType=VARCHAR},
+      </if>
+      <if test="postion != null" >
+        postion = #{postion,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    delete from employee_info where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <select id="queryEmployeeInfoByMobile" resultMap="BaseResultMap">
+  	select *
+  	from employee_info
+  	where phone = #{mobile}
+  	and farm_id = #{farmId}
+  	limit 1
+  </select>
+
+  <select id="getEmployeeByFarmId" resultMap="BaseResultMap">
+  	select * from employee_info where farm_id=#{farmId,jdbcType=BIGINT}
+  </select>
+
+
+
+
+
+
+  <sql id="Base_Column_List" >
+    id, name, phone, depart, postion
+  </sql>
+  <insert id="insert2" parameterType="com.smartfarm.base.farm.core.entity.EmployeeInfo" >
+    insert into employee_info (id, name, phone, 
+      depart, postion
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+       #{depart,jdbcType=VARCHAR}, #{postion,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.smartfarm.base.farm.core.entity.EmployeeInfo" >
+    update employee_info
+    set name = #{name,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      depart = #{depart,jdbcType=VARCHAR},
+      postion = #{postion,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+</mapper>

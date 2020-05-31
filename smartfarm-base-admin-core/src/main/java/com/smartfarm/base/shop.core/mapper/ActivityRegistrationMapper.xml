@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.ActivityRegistrationDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.ActivityRegistration" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="activity_id" property="activityId" jdbcType="BIGINT" />
+    <result column="activity_price_id" property="activityPriceId" jdbcType="BIGINT" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="real_price" property="realPrice" jdbcType="DECIMAL" />
+    <result column="pay_time" property="payTime" jdbcType="VARCHAR" />
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="ticket_no" property="ticketNo" jdbcType="VARCHAR" />
+    <result column="ticket_status" property="ticketStatus" jdbcType="SMALLINT" />
+    <result column="join_num" property="joinNum" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="total_num" property="totalNum" jdbcType="INTEGER" />
+    <result column="ticket_num" property="ticketNum" jdbcType="INTEGER" />
+    <result column="pay_end_time" property="payEndTime" jdbcType="VARCHAR" />
+    <result column="trader_no" property="traderNo" jdbcType="VARCHAR" />
+    <result column="unit_price" property="unitPrice" jdbcType="DECIMAL" />
+    <result column="price_remark" property="priceRemark" jdbcType="VARCHAR" />
+    <result column="price_name" property="priceName" jdbcType="VARCHAR" />
+  </resultMap>
+   
+   <resultMap type="com.smartfarm.base.shop.core.entity.vo.ActivityRegistrationVo" id="BaseVoResultMap" extends="BaseResultMap">
+  	<result column="name" property="priceName" jdbcType="VARCHAR" />
+  	<result column="price" property="price" jdbcType="DECIMAL" />
+  	<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+  	<result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+  	<result column="activityName" property="activityName" jdbcType="VARCHAR" />
+  	<result column="address" property="address" jdbcType="VARCHAR" />
+  	<result column="activity_time" property="activityTime" jdbcType="VARCHAR" />
+     <result column="activity_deadline" property="activityDeadline" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.ActivityRegistration"  keyProperty="id" useGeneratedKeys="true">
+    insert into activity_registration
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="activityId != null" >
+        activity_id,
+      </if>
+      <if test="activityPriceId != null" >
+        activity_price_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="realPrice != null" >
+        real_price,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="ticketNo != null" >
+        ticket_no,
+      </if>
+      <if test="ticketStatus != null" >
+        ticket_status,
+      </if>
+      <if test="joinNum != null" >
+        join_num,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="totalNum != null" >
+        total_num,
+      </if>
+      <if test="ticketNum != null" >
+        ticket_num,
+      </if>
+      <if test="unitPrice != null" >
+        unit_price,
+      </if>
+      <if test="priceRemark != null" >
+        price_remark,
+      </if>
+      <if test="priceName != null" >
+        price_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="activityId != null" >
+        #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="activityPriceId != null" >
+        #{activityPriceId,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="realPrice != null" >
+        #{realPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketNo != null" >
+        #{ticketNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketStatus != null" >
+        #{ticketStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="joinNum != null" >
+        #{joinNum,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="totalNum != null" >
+        #{totalNum,jdbcType=INTEGER},
+      </if>
+      <if test="ticketNum != null" >
+        #{ticketNum,jdbcType=INTEGER},
+      </if>
+      <if test="unitPrice != null" >
+        #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="priceRemark != null" >
+        #{priceRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="priceName != null" >
+        #{priceName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.ActivityRegistration" >
+    update activity_registration
+    <set >
+      <if test="activityId != null" >
+        activity_id = #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="activityPriceId != null" >
+        activity_price_id = #{activityPriceId,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="realPrice != null" >
+        real_price = #{realPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketNo != null" >
+        ticket_no = #{ticketNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketStatus != null" >
+        ticket_status = #{ticketStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="payEndTime != null" >
+        pay_end_time = #{payEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="traderNo != null" >
+        trader_no = #{traderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        unit_price = #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="priceRemark != null" >
+        price_remark = #{priceRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="priceName != null" >
+        price_name = #{priceName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+      
+   <select id="selectActivityRegistList" resultMap="BaseVoResultMap">
+	select ar.*,ap.name,ap.price from activity_registration ar 
+	left join activity_price ap on ar.activity_price_id=ap.id
+	where ar.activity_id =#{activityRegistration.activityId} 	
+	<if test="activityRegistration.orderNo != null and activityRegistration.orderNo !='' " >        
+        and order_no = #{activityRegistration.orderNo,jdbcType=VARCHAR}
+     </if>     
+     <if test="activityRegistration.status != null" >
+        and status = #{activityRegistration.status,jdbcType=SMALLINT}
+     </if>
+     <if test="activityRegistration.ticketStatus != null " >
+        and ticket_status = #{activityRegistration.ticketStatus,jdbcType=SMALLINT}
+     </if>
+      <if test="activityRegistration.userName != null and activityRegistration.userName !=''" >
+        and user_Name = #{activityRegistration.userName,jdbcType=VARCHAR}
+     </if>
+      <if test="activityRegistration.mobile != null and activityRegistration.mobile !=''" >
+        and mobile = #{activityRegistration.mobile,jdbcType=VARCHAR}
+     </if>   
+	limit #{start}, #{limit}
+  </select>
+    
+  <select id="countActivityRegistList" resultType="Integer">
+	select count(*) from activity_registration ar	
+	where ar.activity_id =#{activityRegistration.activityId}
+	 <if test="activityRegistration.orderNo != null and activityRegistration.orderNo !='' " >
+        and order_no = #{activityRegistration.orderNo,jdbcType=VARCHAR}
+     </if>
+     <if test="activityRegistration.status != null" >
+        and status = #{activityRegistration.status,jdbcType=SMALLINT}
+     </if>
+     <if test="activityRegistration.ticketStatus != null " >
+        and ticket_status = #{activityRegistration.ticketStatus,jdbcType=SMALLINT}
+     </if>
+      <if test="activityRegistration.userName != null and activityRegistration.userName !=''" >
+        and user_Name = #{activityRegistration.userName,jdbcType=VARCHAR}
+     </if>
+      <if test="activityRegistration.mobile != null and activityRegistration.mobile !=''" >
+        and mobile = #{activityRegistration.mobile,jdbcType=VARCHAR}
+     </if>
+  </select>
+    
+  <select id="selectActivityRegistration" resultMap="BaseVoResultMap">
+	select ar.*,ap.name,ap.price,a.activity_time,a.activity_deadline from activity_registration ar
+	left join activity_price ap on ar.activity_price_id=ap.id
+	left join activity_info a on a.id = ar.activity_id
+	where ar.ticket_no =#{ticketNo} 
+	and a.business_id = #{businessId}
+	and ar.status = 2
+  </select>
+  
+  <select id="querySuccessListByActivityId" resultMap="BaseVoResultMap">
+  	select r.*,m.nick_name,m.pic_url
+  	from activity_registration r
+  	left join member_info m on m.id=r.member_id
+  	where r.activity_id=#{activityId} and r.status=2
+  </select>
+  
+  <select id="queryById" resultMap="BaseResultMap">
+  	select *
+  	from activity_registration
+  	where id = #{id}
+  </select>
+  
+  <select id="queryByOrderNo" resultMap="BaseResultMap">
+  	select *
+  	from activity_registration
+  	where order_no = #{orderNo}
+  </select>
+  
+  <select id="queryListByMemberId" resultMap="BaseVoResultMap">
+  	select r.*,a.pic_url,a.name as activityName,a.address,a.activity_time
+  	from activity_registration r
+  	left join activity_info a on a.id=r.activity_id
+  	where r.member_id = #{memberId}
+  	order by r.id desc
+  </select>
+</mapper>

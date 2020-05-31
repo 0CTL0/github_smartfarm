@@ -1,0 +1,596 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="/r/css/fileinput.min.css" rel="stylesheet" />
+
+    <script src="/r/js/skins.min.js"></script>
+    <script src="/r/js/jquery-2.1.1.js"></script>
+    <script src="/r/js/bootstrap.min.js"></script>
+    <script src="/r/js/angular.min.js"></script>
+    <script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>
+	<script src="/r/js/fileinput.min.js"></script>
+	<script src="/r/js/distpicker.data.js"></script>
+	<script src="/r/js/distpicker.js"></script>	
+	<script src="/r/js/core.js"></script>
+	<script src="/r/js/beyond.min.js"></script>
+	<script src="/r/core/controller/shop/product.js?v=2"></script>
+	<script src="/r/core/controller/base/menu.js"></script>
+
+	<script src="/r/js/checkUtil.js"></script>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+	<!-- 头部 -->
+	   
+    <div class="main-container container-fluid">
+        <div class="page-container">
+        
+			<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+            
+            <!-- 右半页 -->
+            <div class="page-content">
+                <div class="page-breadcrumbs">
+							<ul class="breadcrumb">
+								<li><i class="fa fa-comments"></i> <a href="/admin/main.htm">首页</a>
+								</li>
+								<li class="active">产品管理</li>
+							</ul>
+						</div>
+                <!-- Page Header -->
+                
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="widget">
+                                <div class="widget-header ">
+                                    <span class="widget-caption">产品列表</span>
+                                </div>
+                                <div class="widget-body">
+
+<!--                                	<div style="position: relative;height:35px">-->
+<!--                                		<div class="DTTT btn-group" style="right:0px">-->
+<!--                                			<a class="btn btn-default DTTT_button_copy" ng-click="showAddMsg()"><span>添加</span></a>-->
+<!--                                		</div>-->
+<!--                                	</div>-->
+									<!-- 搜索框 -->
+									<div class="table table-striped table-bordered table-hover" style="margin-bottom:20px;padding:10px;overflow:hidden; position:relative;">
+										<div class="row">
+											<div class="col-sm-1 control-label no-padding-right" for="inputEmail3" style="padding-top:7px;"><label>产品名称</label></div>
+											<div class="col-sm-2">
+												<input type="text" class="form-control" ng-model='formData.name'>
+											</div>
+											<div class="col-sm-1" style="padding-top:7px;"><label>选择状态</label></div>
+											<div class="col-sm-2">
+												<select class="form-control" ng-model='formData.categoryId' ng-options="category.id as category.name for category in categoryList">
+													<option value="" disabled>--请选择--</option>
+												</select>
+											</div>
+											<div class="col-sm-1">
+												<button class="btn btn-default"  ng-click="pageChanged()">查询</button>
+											</div>
+
+											<div class="col-sm-1" style="position:absolute;right:30px;top:10px;">
+												<button class="btn btn-default"  ng-click="showAddMsg()">新增产品</button>
+											</div>
+
+										</div>
+									</div>
+									<!-- 搜索框 -->
+
+
+									<table class="table table-striped table-bordered table-hover" id="simpledatatable">
+                                            <thead>
+                                            <tr>
+												<th>
+													ID
+												</th>
+                                                <th>
+                                                   	 产品名称
+                                                </th>
+                                                <th>
+                                                    产品代号
+                                                </th>
+                                                <th>
+                                                   	分类
+                                                </th>                                           
+                                                <th>
+                                                   	 简介
+                                                </th>
+                                                <th>
+                                                 状态
+                                                </th>
+                                                <th>
+                                                   	单位
+                                                </th>
+                                                <th>
+                                                   	展示价格
+                                                </th>
+                                                <!--  
+                                                 <th>
+                                                   	排序
+                                                </th>
+                                                -->                                                
+                                                <th>
+                                                   	新品
+                                                </th>
+                                                <th>
+                                                   	人气
+                                                </th>
+                                                <th>
+                                                	积分
+                                                </th>
+                                                <!-- 
+                                                 <th>
+                                                   	创建时间
+                                                </th>
+                                                 
+                                                 <th>
+                                                   	产品图
+                                                </th>
+                                                 <th>
+                                                   	分享图
+                                                </th>
+                                                -->                                               
+                                                <th>
+                                                   	操作
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="productInfo in list">
+												<td>
+													{{productInfo.id}}
+												</td>
+                                                <td>
+                                                    {{productInfo.name}}
+                                                </td>
+                                                <td>
+                                                	{{productInfo.goodsSn}}
+                                                </td>
+                                                 <td>
+                                                    {{productInfo.categoryName}}
+                                                </td>                                        
+                                                 <td>
+                                                    {{productInfo.brief}}
+                                                </td>                                            
+                                                <td>
+                                                	{{{1:'上架',2:'下架'}[productInfo.status]}}
+                                                </td>
+                                                <td>
+                                                	{{productInfo.unit}}
+                                                </td>
+                                                 <td>
+                                                    {{productInfo.minSkuPrice}}
+                                                </td> 
+                                                <!--  
+                                                  <td>
+                                                    {{productInfo.sortOrder}}
+                                                </td>
+                                                -->                                   
+                                                <td>
+                                                	{{{false:'否',true:'是'}[productInfo.isNew]}}
+                                                </td>
+                                                 <td>
+                                                 	{{{false:'否',true:'是'}[productInfo.isHot]}}                                                   
+                                                </td> 
+                                                 <td>
+                                                	{{productInfo.point}}
+                                                </td>
+                                                <!-- 
+                                                  <td>
+                                                	{{productInfo.createTime}}
+                                                </td>
+                                               
+                                                 <td>
+                                                	{{productInfo.picUrl}}
+                                                </td>
+                                                 <td>
+                                                	{{productInfo.shareUrl}}
+                                                </td>  
+                                                -->                                             
+                                                <td>
+                                                    <button class="btn btn-default" ng-click="showEditMsg(productInfo.id)">编辑</button>                                                   
+                                                    <!-- <button class="btn btn-default" ng-click="submitDelete(productInfo.id)">删除</button>                                                                                                   
+                                                    <button class="btn btn-default" ng-click="changeNew(productInfo.id)">{{{false:'设为新品',true:'撤下新品'}[productInfo.isNew]}}</button>
+                                                    <button class="btn btn-default" ng-click="changeHot(productInfo.id)">{{{false:'设为人气',true:'撤下人气'}[productInfo.isHot]}}</button>
+                                                     -->
+                                                     <button class="btn btn-default" ng-click="changeStatus(productInfo.id)">{{{1:'下架',2:'上架'}[productInfo.status]}}</button>  
+                                                    <button class="btn btn-default" ng-click="toSKU(productInfo.id)">SKU管理</button>
+                                                    
+                                                </td>
+                                                
+                                        
+                                    </table>
+                                    <div class="row DTTTFooter">
+                                    	<pagination style="float:right" ng-change="pageChanged()" total-items="formData.total" items-per-page="formData.pageSize" ng-model="formData.pageNumber" max-size="5" class="pagination m-t m-b" boundary-links="true"></pagination>
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+
+    
+    <!-- 产品添加框 -->
+    <div class="modal-backdrop fade in" ng-if="common.showAdd"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showAdd">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    	
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeAddMsg()">×</button>
+	    			<h4 class="modal-title">添加产品</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:400px;overflow-y:scroll">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    			<form name="angularForm" novalidate method="post">
+		    			
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">产品名称</label>
+			    				<div class="col-sm-10">	                           
+	                           <input type="text" class="form-control" ng-model='productAdd.name'>
+	                        	</div>	                                     	
+			    			</div>
+			    			  
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">产品分类</label>
+			    				<div class="col-sm-10">                            	
+									<select class="form-control" ng-model='productAdd.categoryId' ng-options="item.id as item.name for item in categories">
+									<option value="" disabled>--请选择--</option> 
+									</select>									
+	                        	</div>
+			    			</div>	
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">产品代号</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='productAdd.goodsSn'>
+	                        	</div>
+			    			</div>			    					    			
+			    						    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">简介</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='productAdd.brief'>
+	                        	</div>	              
+			    			</div>			    			
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">单位</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='productAdd.unit'>
+	                        	</div>
+			    			</div>
+<!--			    			<div class="form-group">-->
+<!--			    				<label  class="col-sm-2 control-label no-padding-right">展示价格</label>-->
+<!--			    				<div class="col-sm-10">-->
+<!--	                            	<input type="text" class="form-control" ng-model='productAdd.showPrice' name="addShowPrice">-->
+<!--	                        	</div>-->
+<!--			    			</div>	-->
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">积分</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='productAdd.point' name="addShowPrice">
+	                        	</div>
+			    			</div>
+			    			
+			    			
+			    			
+			    			<!--  
+			    			<div class="form-group">
+			    				<label for="inputEmail3" class="col-sm-2 control-label no-padding-right">状态</label>
+			    				<div class="col-sm-10">			    				
+									<select class="form-control" ng-model='productAdd.status' ng-options="item.id as item.name for item in names">
+									<option value=""></option>
+									</select>
+	                        	</div>
+			    			</div>	  
+			    			  -->
+			    			  
+			    			  <div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">属性</label>
+			    				<div class="col-sm-4 ">
+			    					<div class="checkbox">
+                                        <label>
+                                        	<input type="checkbox" ng-model="productAdd.isNew">
+                                            <span class="text">是否新品</span>
+                                        </label>
+                                    </div>
+			    				</div>
+			    				<div class="col-sm-4 ">
+			    					<div class="checkbox">
+                                        <label>
+                                        	<input type="checkbox" ng-model="productAdd.isHot">
+                                            <span class="text">是否人气</span>
+                                        </label>
+                                    </div>
+			    				</div>
+			    			</div>	
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">排序</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='productAdd.sortOrder'>
+	                        	</div>
+	                        </div>		    						    					    			 
+			    			  		    		
+                         	<div class="form-group">
+                       			<label class="col-sm-2 control-label no-padding-right">封面图</label>
+                        		<div class="col-sm-10"  >
+                          			<input id="addImg" type="file" class="file" name="addImg"  
+                          			data-show-upload="false" data-show-caption="true"  data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+                          		</div>
+								<div>
+									<div class="col-sm-2"></div>
+									<div class="col-sm-8"><p style="color:gray;">推荐尺寸：345px*345px</p></div>
+								</div>
+                       		</div>
+                       		
+                       		<div class="form-group">
+                       			<label class="col-sm-2 control-label no-padding-right">分享图</label>
+                        		<div class="col-sm-10" > 
+                          			<input id="addImg2" type="file" class="file" name="addImg2"  
+                          			data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+                          		</div>
+								<div>
+									<div class="col-sm-2"></div>
+									<div class="col-sm-8"><p style="color:gray;">推荐尺寸：345px*345px</p></div>
+								</div>
+                       		</div>
+                       		
+                       		<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">五维图(多选)</label>
+			    				<div class="col-sm-10">
+									     <input id="addMainImg" type="file" class="file" multiple="multiple" name="addMainImg" 
+                          					data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+	                        	</div>
+								<div>
+									<div class="col-sm-2"></div>
+									<div class="col-sm-8"><p style="color:gray;">推荐尺寸：750px*750px</p></div>
+								</div>
+			    			</div>	
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">详情图(多选)</label>
+			    				<div class="col-sm-10">
+									     <input id="addDetailImg" type="file" class="file" multiple="multiple" name="addDetailImg" 
+                          					data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+	                        	</div>
+								<div>
+									<div class="col-sm-2"></div>
+									<div class="col-sm-8"><p style="color:gray;">推荐尺寸：75px*750px</p></div>
+								</div>
+			    			</div>
+                       		                      	
+                       		
+                       		</form>
+                       		
+		    			</div>
+		    		</div>  
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeAddMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitAdd()">保存</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>               
+    
+    
+    <!-- 产品编辑框 -->
+    <div class="modal-backdrop fade in" ng-if="common.showEdit"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showEdit">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeEditMsg()">×</button>
+	    			<h4 class="modal-title">编辑产品</h4>
+	    		</div>
+	    		
+	    		<!-- 隐藏域 -->
+	    		<input type="text" name="someData" ng-model="productEdit.id" style="display: none;"/>
+	    		
+	    		<div class="modal-body" style="height:400px;overflow-y:scroll">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">产品名称</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='productEdit.name'>
+	                        	</div>	                                     	
+			    			</div>
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">产品分类</label>
+			    				<div class="col-sm-10">                            	
+									<select class="form-control" ng-model='productEdit.categoryId' ng-options="item.id as item.name for item in categories">
+										<option value="" disabled>--请选择--</option>
+									</select>									
+	                        	</div>
+			    			</div>
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">产品代号</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='productEdit.goodsSn'>
+	                        	</div>
+			    			</div>
+			    				
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">简介</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='productEdit.brief'>
+	                        	</div>	              
+			    			</div>			    			
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">单位</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='productEdit.unit'>
+	                        	</div>
+			    			</div>
+<!--			    			<div class="form-group">-->
+<!--			    				<label  class="col-sm-2 control-label no-padding-right">展示价格</label>-->
+<!--			    				<div class="col-sm-10">-->
+<!--	                            	<input type="text" class="form-control" ng-model='productEdit.showPrice'>-->
+<!--	                        	</div>-->
+<!--			    			</div>	-->
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">积分</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='productEdit.point'>
+	                        	</div>
+			    			</div>	
+			    			
+			    			
+			    			  <div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">属性</label>
+			    				<div class="col-sm-4 ">
+			    					<div class="checkbox">
+                                        <label>
+                                        	<input type="checkbox" ng-model="productEdit.isNew">
+                                            <span class="text">是否新品</span>
+                                        </label>
+                                    </div>
+			    				</div>
+			    				<div class="col-sm-4 ">
+			    					<div class="checkbox">
+                                        <label>
+                                        	<input type="checkbox" ng-model="productEdit.isHot">
+                                            <span class="text">是否人气</span>
+                                        </label>
+                                    </div>
+			    				</div>
+			    			</div>				    			
+	    					 
+
+                       		<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">排序</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='productEdit.sortOrder'>
+	                        	</div>
+	                        </div>
+                       		 
+                         	<div class="form-group">
+                       			<label class="col-sm-2 control-label no-padding-right">封面图</label>
+                        		<div class="col-sm-10" >
+                          			<input id="editImg" type="file" class="file" name="editImg"  
+                          			data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+                          		</div>
+								<div>
+									<div class="col-sm-2"></div>
+									<div class="col-sm-8"><p style="color:gray;">推荐尺寸：345px*345px</p></div>
+								</div>
+                       		</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">封面图(旧)</label>
+								<div class="col-sm-10">
+									<img ng-src="{{picurl+productEdit.shareUrl}}" style="width:100px;height:100px;">
+								</div>
+							</div>
+                       		
+                       		<div class="form-group">
+                       			<label class="col-sm-2 control-label no-padding-right">分享图</label>
+                        		<div class="col-sm-10" > 
+                          			<input id="editImg2" type="file" class="file" name="editImg2"  
+                          			data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+                          		</div>
+								<div>
+									<div class="col-sm-2"></div>
+									<div class="col-sm-8"><p style="color:gray;">推荐尺寸：345px*345px</p></div>
+								</div>
+                       		</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">分享图(旧)</label>
+								<div class="col-sm-10">
+									<img ng-src="{{picurl+productEdit.shareUrl}}" style="width:100px;height:100px;">
+								</div>
+							</div>
+
+                       		
+                       		<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">五维图(多选)</label>
+			    				<div class="col-sm-10">
+									     <input id="editMainImg" type="file" class="file" multiple="multiple" name="editMainImg" 
+                          					data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+	                        	</div>
+								<div>
+									<div class="col-sm-2"></div>
+									<div class="col-sm-8"><p style="color:gray;">推荐尺寸：750px*750px</p></div>
+								</div>
+			    			</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">五维图(旧)</label>
+								<div class="col-sm-10">
+									<div ng-repeat="productImg in productEdit.mainPicList" style="float:left;margin-right:10px;margin-bottom:10px;">
+									<img ng-src="{{picurl+productImg.picUrl}}" style="width:100px;height:100px;">
+									</div>
+								</div>
+							</div>
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">详情图(多选)</label>
+			    				<div class="col-sm-10">
+									     <input id="editDetailImg" type="file" class="file" multiple="multiple" name="editDetailImg" 
+                          					data-show-upload="false" data-show-caption="true" data-msg-placeholder="请限制图片大小在400K以内" accept="image/png,image/jpeg">
+	                        	</div>
+								<div>
+									<div class="col-sm-2"></div>
+									<div class="col-sm-8"><p style="color:gray;">推荐尺寸：750px*750px</p></div>
+								</div>
+			    			</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right">详情图(旧)</label>
+								<div class="col-sm-10">
+									<div ng-repeat="productImg in productEdit.detailPicList" style="float:left;margin-right:10px;margin-bottom:10px;">
+										<img ng-src="{{picurl+productImg.picUrl}}" style="width:100px;height:100px;">
+									</div>
+								</div>
+							</div>
+                       		
+                       		
+                       		
+		    			</div>
+		    		</div>  
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeEditMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitEdit(productEdit.id)">保存</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+    
+    
+</body>
+
+</html>

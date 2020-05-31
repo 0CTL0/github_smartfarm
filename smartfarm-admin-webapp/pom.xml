@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.smartfarm-project</groupId>
+        <artifactId>smartfarm</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.smartfarm-project</groupId>
+    <artifactId>smartfarm-admin-webapp</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>smartfarm-admin-webapp</name>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+<!--            <scope>runtime</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.smartfarm-project</groupId>
+            <artifactId>smartfarm-admin-core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.caucho</groupId>
+            <artifactId>hessian</artifactId>
+            <version>4.0.38</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+
+
+<!--        <resources>-->
+<!--                    &lt;!&ndash;        作用是让src/main/webapp下的文件在编译时生成到target的META-INF/resources的目录下&ndash;&gt;-->
+<!--                    <resource>-->
+<!--                        <directory>src/main/webapp</directory>-->
+<!--                        &lt;!&ndash;                <targetPath>META-INF/resources</targetPath>&ndash;&gt;-->
+<!--                        <targetPath>/templates/</targetPath>-->
+<!--                        <includes>-->
+<!--                            <include>**/**</include>-->
+<!--                        </includes>-->
+<!--                    </resource>-->
+
+<!--                    <resource>-->
+<!--                        <directory>src/main/resources</directory>-->
+<!--                        <filtering>true</filtering>-->
+<!--                        <includes>-->
+<!--                            <include>**/*</include>-->
+<!--                        </includes>-->
+<!--                    </resource>-->
+<!--        </resources>-->
+    </build>
+
+</project>

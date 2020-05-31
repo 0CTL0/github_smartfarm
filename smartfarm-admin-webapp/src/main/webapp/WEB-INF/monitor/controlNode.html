@@ -1,0 +1,457 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="description" content="login page" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>控制设备管理</title>
+
+<link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+<link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+<link href="/r/css/demo.min.css" rel="stylesheet" />
+<link href="/r/css/animate.min.css" rel="stylesheet" />
+<link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+<link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+<link href="/r/css/fileinput.min.css" rel="stylesheet" />
+<link href="/r/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+<script src="/r/js/skins.min.js"></script>
+<script src="/r/js/jquery-2.1.1.js"></script>
+<script src="/r/js/bootstrap.min.js"></script>
+<script src="/r/js/angular.min.js"></script>
+<script src="/r/js/toastr.js"></script>
+<script src="/r/js/ui-bootstrap-tpls.js"></script>
+<script src="/r/js/fileinput.min.js"></script>
+<script src="/r/js/distpicker.data.js"></script>
+<script src="/r/js/distpicker.js"></script>
+<script src="/r/js/bootstrap-datetimepicker.js"></script>
+<script src="/r/js/core.js"></script>
+<script src="/r/js/beyond.min.js"></script>
+<script src="/r/core/controller/monitor/controlNode.js"></script>
+<script src="/r/core/controller/base/menu.js"></script>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+	<!-- 头部 -->
+
+	<div class="main-container container-fluid">
+		<div class="page-container">
+
+			<!-- 菜单 -->
+			<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+			<!-- 菜单 -->
+
+			<!-- 右半页 -->
+			<div class="page-content">
+				<div class="page-breadcrumbs">
+					<ul class="breadcrumb">
+						<li><i class="fa fa-comments"></i> <a href="/admin/main.htm">首页</a>
+						</li>
+						<li class="active">控制设备列表</li>
+					</ul>
+				</div>
+
+				<div class="page-body">
+					<div class="row">
+						<div class="col-xs-12 col-md-12">
+							<div class="widget">
+								<div class="widget-header ">
+									<span class="widget-caption">设备列表</span>
+								</div>
+
+								<div class="widget-body">
+
+									<!-- 搜索框 -->
+									<div class="table table-striped table-bordered table-hover"
+										style="margin-bottom: 20px; padding: 10px; overflow: hidden;">
+										<div class="row" style="height:30px;">
+
+											<div class="col-sm-1" style="float: right;margin-right:20px;">
+												<button class="btn btn-default" ng-click="showAddWindow()">添加设备</button>
+											</div>
+
+										</div>
+									</div>
+									<!-- 搜索框 -->
+									
+									<!-- 主列表 -->
+									<table class="table table-striped table-hover"
+										id="simpledatatable">
+										<thead>
+											<tr>
+												<th>控制节点名称</th>
+												<th>节点编码</th>
+												<th>节点状态</th>
+												<th>操作状态</th>
+												<th>控制设备类型</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="controlNode in controlNodesList">
+												<td>{{controlNode.name}}</td>
+												<td>{{controlNode.productCode}}</td>
+												<td>
+													<div style="display: flex;">
+														<h3 style="margin: 0px;"><span class="label label-default" ng-show="{{controlNode.nodeStatus==1}}">离线</span></h3>
+														<h3 style="margin: 0px;"><span class="label label-success" ng-show="{{controlNode.nodeStatus==2}}">联机</span></h3>
+													</div>
+												</td>
+												<td>
+													<button type="button" class="btn btn-success" ng-show="{{controlNode.operateStatus==1}}" ng-click="showNodeWindow(controlNode.id)" ng-disabled="controlNode.nodeStatus==1">已开启</button>
+													<button type="button" class="btn btn-default" ng-show="{{controlNode.operateStatus==2}}" ng-click="showNodeWindow(controlNode.id)" ng-disabled="controlNode.nodeStatus==1">已关闭</button>
+													<button type="button" class="btn btn-warning" ng-show="{{controlNode.operateStatus==3}}" ng-click="showNodeWindow(controlNode.id)" ng-disabled="controlNode.nodeStatus==1">已暂停</button>
+												</td>
+												<td>
+													<!--
+													<span ng-show="{{controlNode.sersorType==1}}">电磁阀</span>
+													<span ng-show="{{controlNode.type!=1}}">其它</span>
+													-->
+													{{controlNode.sersorTypeName}}
+												</td>
+												<td>
+													<button type="button" class="btn btn-warning" ng-click="showEditWindow(controlNode.id)">修改</button>
+													<button type="button" class="btn btn-danger" ng-click="deleteNode(controlNode)">删除</button>
+												</td>
+											</tr>
+										</tbody>
+
+									</table>
+									<div class="row DTTTFooter">
+										<pagination style="float:right" ng-change="pageChanged()"
+											total-items="formData.total"
+											items-per-page="formData.pageSize"
+											ng-model="formData.pageNumber" max-size="5"
+											class="pagination m-t m-b" boundary-links="true"></pagination>
+									</div>
+									<div style="clear: both"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 节点信息弹窗 -->
+	<div class="modal-backdrop fade in" ng-if="common.showNodeInfo"></div>
+	<div id="nodeModal" class="modal fade in" style="display: block" ng-show="common.showNodeInfo">
+		
+		<div class="modal-dialog" style="height:300px;width:500px;margin-top:100px;">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<button type="button" class="bootbox-close-button close"
+						ng-click="closeNodeWindow()">×</button>
+					<h2 class="modal-title"><strong>{{controlNodeEdit.name}}</strong></h2>
+				</div>
+
+				<div class="modal-body" style="height:220px;width:490px;margin:5px;padding-top:10px;border-radius:10px;background-color:#fafbfe;">
+					<div class="row" style="height:200px;padding-top:10px;margin:2px 1px;border-radius:10px;background-color:white;">
+					  <!-- 左半部分 -->	
+					  <div class="col-md-6" style="margin-left:30px;display: inline-block;">
+					  	<div class="row" style="height:60px;">
+						  <div class="col-md-12">
+						  	<h2>{{controlNodeEdit.name}}</h2>
+						  </div>
+						</div>
+						<div class="row" style="height:60px;padding-top:10px;">
+						  <div class="col-md-12">
+						  	<span style="font-size:16px;color:#8a8a8a;">
+						  		 状态：{{numToWord(controlNodeEdit.operateStatus)}}
+						  	</span>
+						  	<hr style="margin-top: 10px;margin-bottom: 10px;">
+						 </div>
+						</div>
+						<div class="row" style="height:60px;">
+						  <div class="col-md-12">
+						  	<button type="button" class="btn" ng-click="showCtrlRecordWindow(controlNodeEdit.id)" data-toggle="modal" data-target="#recordModal" style="font-size:20px;background-color:#84e5b6;color:white;border-radius:15px;">设备控制记录</button>
+						  </div>
+						</div>
+					  </div>
+					  <!-- 左半部分 -->
+					  
+					  <!-- 右半部分按钮 -->
+					  <div class="col-md-4" style="margin-top:30px;margin-right:10px;float:right;">
+					  	<div class="row" style="height:60px;margin:auto;">
+						  <div class="col-md-12" style="padding-top:10px;">
+						  	<button type="button" id="open" class="btn btn-default btn-lg" ng-click="changeNodeStatus(1)" style="padding-top:5px;height:40px;border-radius:30px;">
+								<div style="height:30px;line-height:30px;display: flex;align-items: center;">
+									<img src="/r/image/start.png" style="height:30px;width:30px;"><span style="font-size:18px;margin-left:5px;">开启</span>
+								</div>
+							</button>
+						  </div>
+						</div>
+						<!-- <div class="row" style="height:60px;margin:auto;">
+						  <div class="col-md-12" style="padding-top:10px;">
+						  	<button type="button" id="pause" class="btn btn-default btn-lg" ng-show="isShow" ng-click="changeNodeStatus(3)" style="padding-top:5px;height:40px;border-radius:30px;">
+								<div style="height:30px;line-height:30px;display: flex;align-items: center;">
+									<img src="/r/image/pause.png" style="height:30px;width:30px;"><span style="font-size:18px;margin-left:5px;">暂停</span>
+								</div>
+							</button>
+						  </div>
+						</div> -->
+						<div class="row" style="height:60px;margin:auto;">
+						  <div class="col-md-12" style="padding-top:10px;">
+						  	<button type="button" id="close" class="btn btn-default btn-lg" ng-click="changeNodeStatus(2)" style="padding-top:5px;height:40px;border-radius:30px;">
+								<div style="height:30px;line-height:30px;display: flex;align-items: center;">
+									<img src="/r/image/close.png" style="height:30px;width:30px;"><span style="font-size:18px;margin-left:5px;">关闭</span>
+								</div>
+							</button>
+						  </div>
+						</div>
+					  </div>
+					  <!-- 右半部分按钮 -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 节点信息弹窗 -->
+
+	<!-- 控制记录弹窗 -->
+	
+	<!-- 模态框（Modal） -->
+	<div id="recordModal" class="modal fade" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" role="document" style="margin-left:100px;">
+	    <div class="modal-content" style="height: 560px;width: 1200px;border-radius:50px">
+	      <div class="modal-header" style="background-color: #3ee2ac;color: white;">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">控制记录</h4>
+	      </div>
+	      <div class="modal-body">
+	        <table class="table table-striped">
+			  <thead>
+			  	<tr>
+			  		<th>序号</th>
+			  		<th>启动时间</th>
+			  		<th>控制类型</th>
+			  		<th>开关类型</th>
+			  		<th>结束时间</th>
+			  		<th>时长</th>
+			  		<th>操作人</th>
+			  	</tr>
+			  </thead>
+			  <tbody>
+			  	<tr ng-repeat="controlRecord in controlRecords">
+			  		<td>{{$index+1+(formData.pageNumber-1)*10}}</td>
+			  		<td>{{controlRecord.startTime}}</td>
+			  		<td>{{{1:'普通控制',2:'其它控制'}[controlRecord.operateType]}}</td>
+			  		<td>{{{1:'开启',2:'关闭',3:'暂停'}[controlRecord.switchType]}}</td>
+			  		<td>{{controlRecord.endTime}}</td>
+			  		<td>{{controlRecord.duration}}</td>
+			  		<td>{{controlRecord.operator}}</td>
+			  	</tr>
+			  </tbody>
+			</table>
+	      </div>
+	      <div class="modal-footer">
+	        <pagination style="align:center;" ng-change="showCtrlRecordWindow(formData.id)"
+					total-items="formData.total"
+					items-per-page="formData.pageSize"
+					ng-model="formData.pageNumber" max-size="5"
+					class="pagination m-t m-b" boundary-links="true"></pagination>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<!-- 控制记录弹窗 -->
+	
+	<!-- 添加设备弹窗 -->
+    <div class="modal-backdrop fade in" ng-if="common.showAdd"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showAdd">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    	
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeAddWindow()">×</button>
+	    			<h4 class="modal-title">新增设备</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:300px;overflow-y:scroll;overflow-x:hidden">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">设备名称</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='controlNodeAdd.name'>
+	                        	</div>
+			    			</div>
+
+							<!--
+			    			<div class="form-group">
+								<label
+									class="col-sm-2 control-label no-padding-right">设备类型</label>
+								<div class="col-sm-4">
+									<select class="form-control" ng-model="controlNodeAdd.controlType">
+									  <option value="" disabled>--请选择--</option>
+									  <option value="1">电磁阀</option>
+								    </select>
+								</div>
+							</div>
+							-->
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">设备类型</label>
+								<div class="col-sm-5">
+									<select class="form-control" ng-model='controlNodeAdd.sersorType' ng-options="item.id as item.name for item in sensorInfoList">
+										<option value="" disabled>----请指定传感器类型----</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">网关节点</label>
+								<div class="col-sm-5">
+									<select class="form-control" ng-model='controlNodeAdd.gatewayId' ng-options="item.id as item.nodeName for item in gatewayList">
+										<option value="" disabled>----请指定网关节点----</option>
+									</select>
+								</div>
+							</div>
+							
+							<!-- <div class="form-group">
+								<label for="inputEmail3"
+									class="col-sm-2 control-label no-padding-right">网关--传感器</label>
+								<div class="col-sm-4" distpicker>
+									<select class="form-control" ng-model="controlNodeAdd.gatewayId" ng-options="gatewayNode.id as gatewayNode.id for prize in prizeList">
+									  <option value="" disabled>--请选择--</option>
+								    </select>
+								    <select class="form-control" ng-model="controlNodeAdd.gatewayId">
+									  <option value="" disabled>--请选择--</option>
+								    </select>
+								</div>
+							</div> -->
+							<!--
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">网关编号</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='controlNodeAdd.gatewayId'>
+	                        	</div>
+			    			</div>
+			    			-->
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">控制器编号</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='controlNodeAdd.sensorCode'>
+	                        	</div>
+			    			</div>
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">传感器编号</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='controlNodeAdd.number'>
+	                        	</div>
+			    			</div>
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-primary" ng-click="closeAddWindow()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitAdd()">提交</button>
+		    	</div>
+	    	</div>
+	    </div>
+	</div> 
+	<!-- 添加设备弹窗 -->
+	
+	<!-- 修改设备弹窗 -->
+    <div class="modal-backdrop fade in" ng-if="common.showEdit"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showEdit">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    	
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeEditWindow()">×</button>
+	    			<h4 class="modal-title">修改设备信息</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:300px;overflow-y:scroll;overflow-x:hidden">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">设备名称</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='controlNodeEdit.name'>
+	                        	</div>
+			    			</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">设备类型</label>
+								<div class="col-sm-5">
+									<select class="form-control" ng-model='controlNodeAdd.sersorType' ng-options="item.id as item.name for item in sensorInfoList">
+										<option value="" disabled>----请指定传感器类型----</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">网关节点</label>
+								<div class="col-sm-5">
+									<select class="form-control" ng-model='controlNodeAdd.gatewayId' ng-options="item.id as item.nodeName for item in gatewayList">
+										<option value="" disabled>----请指定网关节点----</option>
+									</select>
+								</div>
+							</div>
+							
+							<!-- <div class="form-group">
+								<label for="inputEmail3"
+									class="col-sm-2 control-label no-padding-right">网关--传感器</label>
+								<div class="col-sm-4" distpicker>
+									<select class="form-control" ng-model="controlNodeAdd.gatewayId" ng-options="gatewayNode.id as gatewayNode.id for prize in prizeList">
+									  <option value="" disabled>--请选择--</option>
+								    </select>
+								    <select class="form-control" ng-model="controlNodeAdd.gatewayId">
+									  <option value="" disabled>--请选择--</option>
+								    </select>
+								</div>
+							</div> -->
+
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">控制器编号</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='sensorCodeEdit'>
+	                        	</div>
+			    			</div>
+			    			
+			    			<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">传感器编号</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='numberEdit'>
+	                        	</div>
+			    			</div>
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-primary" ng-click="closeEditWindow()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitEdit()">提交</button>
+		    	</div>
+	    	</div>
+	    </div>
+	</div> 
+</body>
+<style type="text/css">
+	.table>thead>tr>th,
+	.table>tbody>tr>th,
+	.table>tfoot>tr>th,
+	.table>thead>tr>td,
+	.table>tbody>tr>td,
+	.table>tfoot>tr>td{
+		vertical-align: middle;
+	}
+	.modal-footer {
+	    text-align: center;
+	}
+</style>
+
+</html>

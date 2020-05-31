@@ -1,0 +1,284 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="/r/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+    <script src="/r/js/skins.min.js"></script>
+    <script src="/r/js/jquery-2.1.1.js"></script>
+    <script src="/r/js/bootstrap.min.js"></script>
+    <script src="/r/js/angular.min.js"></script>
+    <script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>
+	<script src="/r/js/bootstrap-datetimepicker.js"></script>
+	<script src="/r/js/core.js"></script>
+	<script src="/r/js/beyond.min.js"></script>
+	<script src="/r/core/controller/shop/couponSendList.js"></script>
+	<script src="/r/core/controller/base/menu.js"></script>
+	<script src="/r/js/checkUtil.js"></script>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+
+    <div class="main-container container-fluid">
+        <div class="page-container">
+        
+			<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+            
+            <!-- 右半页 -->
+            <div class="page-content">
+                 <div class="page-breadcrumbs">
+							<ul class="breadcrumb">
+								<li><i class="fa fa-comments"></i> <a href="/admin/main.html">首页</a>
+								</li>
+								<li class="active">优惠券赠送活动</li>
+							</ul>
+						</div>
+                <!-- Page Header -->
+                <!-- 列表 -->
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="widget">
+                                <div class="widget-header ">
+                                    <span class="widget-caption">活动列表</span>
+                                </div>
+                                <div class="widget-body">
+                                
+                                <div class="table table-striped table-bordered table-hover" style="height:55px;margin-bottom:20px;padding:10px;">
+										<div class="DTTT btn-group" style="left:35px;top:60px">
+											<button class="btn btn-sky" ng-click="showAddMsg()"><span style="color:white;">新增</span></button>
+										</div>
+										
+									</div>
+
+									
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                   	 优惠券名称
+                                                </th>
+                                                <th>
+                                                   	  优惠类型
+                                                </th>
+                                                <th>
+                                                   	  过期时间
+                                                </th>
+                                                <th>
+                                                   	  有效天数
+                                                </th>
+                                                <th>
+                                                   	  起用价格
+                                                </th>
+                                                <th>
+                                                   	  抵用金额
+                                                </th>
+                                                <th>
+                                                   	  折扣
+                                                </th>
+												<th>
+													用户领取次数
+												</th>
+												<th>
+													剩余领取数目
+												</th>
+												<th>
+													活动状态
+												</th>
+												<th>
+													活动时间
+												</th>
+                                                <th>
+                                                   	  操作
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="cou in couponSendList">
+                                                <td>
+                                                    {{cou.displayName}}
+                                                </td>
+                                                <td>
+                                                    {{{'1':'满减优惠券','2':'折扣优惠券'}[cou.type]}}
+                                                </td>
+                                                <td>
+                                                    <span ng-if="(cou.deadline)">{{formatDate(cou.deadline)}}</span>
+                                                </td>
+                                                <td>
+                                                    {{cou.dayCount}}
+                                                </td>
+                                                <td>
+                                                    {{cou.reductPrice}}
+                                                </td>
+                                                <td>
+                                                    {{cou.amount}}
+                                                </td>
+                                                <td>
+                                                    <span ng-if="(cou.discount)">{{cou.discount}}折</span>
+                                                </td>
+												<td>
+													{{cou.timeForUser}}
+												</td>
+												<td>
+													{{cou.remainNum}}
+												</td>
+												<td>
+													{{{'1':'失效','2':'启用中'}[cou.status]}}
+												</td>
+												<td>
+													{{formatDateTime(cou.startTime)}}-{{formatDateTime(cou.endTime)}}
+												</td>
+                                                <td>
+                                                    <button class="btn btn-sky" ng-if="cou.status == 1" ng-click="reviseStatus(cou.id,2)">启用</button>
+                                                    <button class="btn btn-sky" ng-if="cou.status == 2" ng-click="reviseStatus(cou.id,1)">禁用</button>
+                                                    <button class="btn btn-sky" ng-click="showEdit(cou)">编辑</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        
+                                    </table>
+                                    <div class="row DTTTFooter">
+                                    	<pagination style="float:right" ng-change="pageChanged()" total-items="formData.total" items-per-page="formData.pageSize" ng-model="formData.pageNumber" max-size="5" class="pagination m-t m-b" boundary-links="true"></pagination>
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--添加批次  -->
+    <div class="modal-backdrop fade in" ng-if="common.showAdd"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showAdd">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    	
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeAddMsg()">×</button>
+	    			<h4 class="modal-title">新增活动</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">优惠券批次</label>
+								<div class="col-sm-10">
+									<select class="form-control" ng-model='batchAdd.couponBatchId' ng-options="item.id as item.displayName for item in batchList">
+										<option value="" disabled>--请选择--</option>
+									</select>
+								</div>
+			    			</div>
+							<div class="form-group" >
+								<label  class="col-sm-2 control-label no-padding-right">开始日期</label>
+								<div class="col-sm-10">
+									<input name="myDates" ng-model="batchAdd.startTimeStr" class="form-control date-picker" placeholder="请输入优惠券最后期限"  data-date-format="yyyy-mm-dd"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">结束日期</label>
+								<div class="col-sm-10">
+									<input name="myDates" ng-model="batchAdd.endTimeStr" class="form-control date-picker" placeholder="请输入优惠券最后期限"  data-date-format="yyyy-mm-dd"/>
+								</div>
+							</div>
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">用户领取次数</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='batchAdd.timeForUser'>
+	                        	</div>
+			    			</div>
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">优惠券总数</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" ng-model='batchAdd.totalNum'>
+								</div>
+							</div>
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeAddMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitAdd()">保存</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+	
+	
+	<!--修改批次  -->
+    <div class="modal-backdrop fade in" ng-if="common.showEdit"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showEdit">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    	
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeEditMsg()">×</button>
+	    			<h4 class="modal-title">修改活动</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+
+							<div class="form-group" >
+								<label  class="col-sm-2 control-label no-padding-right">开始日期</label>
+								<div class="col-sm-10">
+									<input name="myDates" ng-model="editSend.startTimeStr" class="form-control date-picker" placeholder="请输入优惠券最后期限"  data-date-format="yyyy-mm-dd"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">结束日期</label>
+								<div class="col-sm-10">
+									<input name="myDates" ng-model="editSend.endTimeStr" class="form-control date-picker" placeholder="请输入优惠券最后期限"  data-date-format="yyyy-mm-dd"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">用户领取次数</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" ng-model='editSend.timeForUser'>
+								</div>
+							</div>
+							<div class="form-group">
+								<label  class="col-sm-2 control-label no-padding-right">优惠券总数</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" ng-model='editSend.totalNum'>
+								</div>
+							</div>
+
+
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-warning" ng-click="closeEditMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitEdit()">保存</button>
+		    	</div>
+		    	
+	    	</div>
+	    </div>
+    </div>
+
+
+</body>
+</html>

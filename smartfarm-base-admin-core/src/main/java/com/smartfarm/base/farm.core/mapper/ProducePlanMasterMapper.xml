@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.ProducePlanMasterDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.ProducePlanMaster" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="batch_id" property="batchId" jdbcType="BIGINT" />
+    <result column="plant_area" property="plantArea" jdbcType="INTEGER" />
+    <result column="tunnel_id" property="tunnelId" jdbcType="BIGINT" />
+    <result column="start_date" property="startDate" jdbcType="VARCHAR" />
+    <result column="end_date" property="endDate" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <select id="getMasterIdByBatchId" resultType="Long" parameterType="java.lang.Long" >
+    select id from produce_plan_master where batch_id=#{batchId,jdbcType=BIGINT}
+  </select>
+  
+  
+  
+  <sql id="Base_Column_List" >
+    id, batch_id, plant_area, tunnel_id, start_date, end_date, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from produce_plan_master
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from produce_plan_master
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert2" parameterType="com.smartfarm.base.farm.core.entity.ProducePlanMaster" >
+    insert into produce_plan_master (id, batch_id, plant_area, 
+      tunnel_id, start_date, end_date, 
+      create_time)
+    values (#{id,jdbcType=BIGINT}, #{batchId,jdbcType=BIGINT}, #{plantArea,jdbcType=INTEGER}, 
+      #{tunnelId,jdbcType=BIGINT}, #{startDate,jdbcType=VARCHAR}, #{endDate,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.ProducePlanMaster" >
+    insert into produce_plan_master
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="batchId != null" >
+        batch_id,
+      </if>
+      <if test="plantArea != null" >
+        plant_area,
+      </if>
+      <if test="tunnelId != null" >
+        tunnel_id,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="batchId != null" >
+        #{batchId,jdbcType=BIGINT},
+      </if>
+      <if test="plantArea != null" >
+        #{plantArea,jdbcType=INTEGER},
+      </if>
+      <if test="tunnelId != null" >
+        #{tunnelId,jdbcType=BIGINT},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.ProducePlanMaster" >
+    update produce_plan_master
+    <set >
+      <if test="batchId != null" >
+        batch_id = #{batchId,jdbcType=BIGINT},
+      </if>
+      <if test="plantArea != null" >
+        plant_area = #{plantArea,jdbcType=INTEGER},
+      </if>
+      <if test="tunnelId != null" >
+        tunnel_id = #{tunnelId,jdbcType=BIGINT},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartfarm.base.farm.core.entity.ProducePlanMaster" >
+    update produce_plan_master
+    set batch_id = #{batchId,jdbcType=BIGINT},
+      plant_area = #{plantArea,jdbcType=INTEGER},
+      tunnel_id = #{tunnelId,jdbcType=BIGINT},
+      start_date = #{startDate,jdbcType=VARCHAR},
+      end_date = #{endDate,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartfarm.base.shop.core.dao.ProductTemplateDetailDao">
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.ProductTemplateDetail">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="logistics_template_id" jdbcType="BIGINT" property="logisticsTemplateId" />
+    <result column="ship_area" jdbcType="VARCHAR" property="shipArea" />
+    <result column="first_heavy" jdbcType="DECIMAL" property="firstHeavy" />
+    <result column="first_piece" jdbcType="INTEGER" property="firstPiece" />
+    <result column="first_freight" jdbcType="DECIMAL" property="firstFreight" />
+    <result column="continue_heavy" jdbcType="DECIMAL" property="continueHeavy" />
+    <result column="continue_piece" jdbcType="INTEGER" property="continuePiece" />
+    <result column="continue_freight" jdbcType="DECIMAL" property="continueFreight" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, logistics_template_id, ship_area, first_heavy, first_piece, first_freight, continue_heavy, 
+    continue_piece, continue_freight
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from product_template_detail
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from product_template_detail
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.smartfarm.base.shop.core.entity.ProductTemplateDetail">
+    insert into product_template_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="logisticsTemplateId != null">
+        logistics_template_id,
+      </if>
+      <if test="shipArea != null">
+        ship_area,
+      </if>
+      <if test="firstHeavy != null">
+        first_heavy,
+      </if>
+      <if test="firstPiece != null">
+        first_piece,
+      </if>
+      <if test="firstFreight != null">
+        first_freight,
+      </if>
+      <if test="continueHeavy != null">
+        continue_heavy,
+      </if>
+      <if test="continuePiece != null">
+        continue_piece,
+      </if>
+      <if test="continueFreight != null">
+        continue_freight,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="logisticsTemplateId != null">
+        #{logisticsTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="shipArea != null">
+        #{shipArea,jdbcType=VARCHAR},
+      </if>
+      <if test="firstHeavy != null">
+        #{firstHeavy,jdbcType=DECIMAL},
+      </if>
+      <if test="firstPiece != null">
+        #{firstPiece,jdbcType=INTEGER},
+      </if>
+      <if test="firstFreight != null">
+        #{firstFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="continueHeavy != null">
+        #{continueHeavy,jdbcType=DECIMAL},
+      </if>
+      <if test="continuePiece != null">
+        #{continuePiece,jdbcType=INTEGER},
+      </if>
+      <if test="continueFreight != null">
+        #{continueFreight,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartfarm.base.shop.core.entity.ProductTemplateDetail">
+    update product_template_detail
+    <set>
+      <if test="logisticsTemplateId != null">
+        logistics_template_id = #{logisticsTemplateId,jdbcType=BIGINT},
+      </if>
+      <if test="shipArea != null and shipArea != ''">
+        ship_area = #{shipArea,jdbcType=VARCHAR},
+      </if>
+      <if test="firstHeavy != null">
+        first_heavy = #{firstHeavy,jdbcType=DECIMAL},
+      </if>
+      <if test="firstPiece != null">
+        first_piece = #{firstPiece,jdbcType=INTEGER},
+      </if>
+      <if test="firstFreight != null">
+        first_freight = #{firstFreight,jdbcType=DECIMAL},
+      </if>
+      <if test="continueHeavy != null">
+        continue_heavy = #{continueHeavy,jdbcType=DECIMAL},
+      </if>
+      <if test="continuePiece != null">
+        continue_piece = #{continuePiece,jdbcType=INTEGER},
+      </if>
+      <if test="continueFreight != null">
+        continue_freight = #{continueFreight,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+    <select id="selectPageList" resultMap="BaseResultMap">
+    select * from product_template_detail ptd
+    where ptd.logistics_template_id=#{templateId}
+    order by id desc
+    limit #{start}, #{limit}
+  </select>
+
+  <select id="selectPageTotal" resultType="java.lang.Integer">
+    select COUNT(*) from product_template_detail ptd
+    where ptd.logistics_template_id=#{templateId}
+  </select>
+
+
+  <select id="selectByTemplateId" resultMap="BaseResultMap">
+    select * from product_template_detail ptd
+    where ptd.logistics_template_id=#{templateId}
+  </select>
+
+</mapper>

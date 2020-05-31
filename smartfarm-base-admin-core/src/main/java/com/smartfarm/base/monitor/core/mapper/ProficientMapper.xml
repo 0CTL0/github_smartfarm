@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.monitor.core.dao.ProficientDao">
+	<resultMap id="BaseResultMap" type="com.smartfarm.base.monitor.core.entity.Proficient">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="head_pic" property="headPic" jdbcType="VARCHAR" />
+		<result column="brief" property="brief" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<select id="getPageList" resultMap="BaseResultMap">
+		select fp.* from farm_proficient fp
+		<where>
+			<if test="mobile != null">
+				fp.mobile LIKE CONCAT('%',#{mobile},'%')
+			</if>
+		</where>
+		limit #{start}, #{limit}
+	</select>
+	
+	<select id="queryProficientList" resultMap="BaseResultMap">
+	SELECT `name`,
+	mobile,
+	head_pic
+	FROM farm_proficient
+	ORDER BY `name`
+	</select>
+
+	<select id="getPageTotal" resultType="Integer">
+		select COUNT(*) from farm_proficient fp
+		<where>
+			<if test="mobile != null">
+				fp.mobile LIKE CONCAT('%',#{mobile},'%')
+			</if>
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="com.smartfarm.base.monitor.core.entity.Proficient">
+		insert into farm_proficient
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="headPic != null">
+				head_pic,
+			</if>
+			<if test="brief != null">
+				brief,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="headPic != null">
+				#{headPic,jdbcType=VARCHAR},
+			</if>
+			<if test="brief != null">
+				#{brief,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<select id="selectById" resultMap="BaseResultMap">
+		select fp.* from farm_proficient fp where fp.id = #{id}
+	</select>
+
+	<update id="updateById" parameterType="com.smartfarm.base.monitor.core.entity.Proficient">
+		update farm_proficient
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="headPic != null">
+				head_pic = #{headPic,jdbcType=VARCHAR},
+			</if>
+			<if test="brief != null">
+				brief = #{brief,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<delete id="deleteById">
+		delete from farm_proficient where id = #{id}
+	</delete>
+</mapper>

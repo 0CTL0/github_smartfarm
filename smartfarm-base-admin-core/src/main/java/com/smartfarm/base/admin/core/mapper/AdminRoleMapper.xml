@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.admin.core.dao.AdminRoleDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.admin.core.entity.AdminRole" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="admin_id" property="adminId" jdbcType="BIGINT" />
+    <result column="role_id" property="roleId" jdbcType="BIGINT" />
+  </resultMap>
+  <insert id="insert" parameterType="com.smartfarm.base.admin.core.entity.AdminRole" >
+    insert into base_adm_admin_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="adminId != null" >
+        admin_id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="adminId != null" >
+        #{adminId,jdbcType=BIGINT},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.admin.core.entity.AdminRole" >
+    update base_adm_admin_role
+    <set >
+      <if test="adminId != null" >
+        admin_id = #{adminId,jdbcType=BIGINT},
+      </if>
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="queryRoleByAdminId" resultType="java.lang.Long">
+    select ro.role_id
+    from base_adm_admin_role ro
+    where ro.admin_id=#{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteAllRoleByAdminId">
+    delete
+    from base_adm_admin_role
+    where admin_id=#{id}
+  </delete>
+</mapper>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.ProductCategoryDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.ProductCategory" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
+    <result column="icon_url" property="iconUrl" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="business_id" property="businessId" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.shop.core.entity.vo.ProductCategoryVo" id="BaseVoResultMap" extends="BaseResultMap">
+  	<result column="parentName" property="parentName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.ProductCategory" >
+    insert into product_category
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="iconUrl != null" >
+        icon_url,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="sortOrder != null" >
+        sort_order,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="businessId != null" >
+        business_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="iconUrl != null" >
+        #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="sortOrder != null" >
+        #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="businessId != null" >
+        #{businessId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.ProductCategory" >
+    update product_category
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="iconUrl != null" >
+        icon_url = #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="sortOrder != null" >
+        sort_order = #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="businessId != null" >
+        business_id = #{businessId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryProductCategoryListPage" resultMap="BaseVoResultMap">
+	select pc1.*,pc2.name as parentName from product_category pc1 left join product_category pc2 on pc1.parent_id = pc2.id 
+	where pc1.business_id = #{businessId}
+	<if test="name != null">
+		and pc1.name like CONCAT('%',#{name},'%')
+	</if>
+	limit #{start}, #{limit}
+  </select>
+  
+  <select id="countProductCategoryList" resultType="java.lang.Integer">
+  	select count(*) from product_category pc
+  	where pc.business_id = #{businessId}
+  <if test="name != null">
+  		and pc.name like CONCAT('%',#{name},'%')
+  </if>
+  </select>
+  
+  <select id="queryAllProductCategoryList" resultMap="BaseResultMap">
+  	select * from product_category pc
+  	where business_id = #{businessId}
+  </select>
+  
+  <select id="queryProductCategoryById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  	select * from product_category pc 
+  	where id = #{categoryId}
+  </select>
+  
+  <delete id="deleteProductCategoryById" parameterType="java.lang.Long">
+  	delete * from product_categort pc 
+  	where id = #{id}
+  </delete>
+  
+  <select id="queryCategoryByLevelAndStatus" resultMap="BaseResultMap">
+  	select *
+  	from product_category
+  	where level = #{level} and status = #{status}
+  	and business_id = #{businessId}
+  	order by sort_order
+  </select>
+
+  <select id="selectByParentId" resultMap="BaseResultMap">
+    select * from product_category pc
+    where pc.parent_id=#{parentId}
+  </select>
+
+  <select id="queryCategoryVoByLevelAndStatus" resultMap="BaseVoResultMap">
+  	select *
+  	from product_category
+  	where level = #{level} and status = #{status}
+  	and business_id = #{businessId}
+  	order by sort_order
+  </select>
+
+  <delete id="delById" parameterType="Long">
+    DELETE FROM `product_category` WHERE id=#{id}
+  </delete>
+
+  <delete id="delSubclassById" parameterType="Long">
+    DELETE FROM `product_info` WHERE category_id=#{id}
+  </delete>
+</mapper>

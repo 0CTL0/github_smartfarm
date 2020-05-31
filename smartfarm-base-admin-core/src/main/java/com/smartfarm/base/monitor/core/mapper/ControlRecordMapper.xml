@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.monitor.core.dao.ControlRecordDao">
+	<resultMap id="BaseResultMap" type="com.smartfarm.base.monitor.core.entity.ControlRecord">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="node_id" property="nodeId" jdbcType="BIGINT" />
+		<result column="start_time" property="startTime" jdbcType="VARCHAR" />
+		<result column="end_time" property="endTime" jdbcType="VARCHAR" />
+		<result column="duration" property="duration" jdbcType="VARCHAR" />
+		<result column="operate_type" property="operateType" jdbcType="SMALLINT" />
+		<result column="switch_type" property="switchType" jdbcType="SMALLINT" />
+		<result column="operator" property="operator" jdbcType="BIGINT" />
+	</resultMap>
+
+	<select id="getByNodeIdPageList" resultMap="BaseResultMap">
+		select * from monitor_control_record where node_id=#{nodeId} order by id desc limit #{start}, #{limit}
+	</select>
+	
+	<select id="getByNodeIdPageTotal" resultType="Integer">
+		select count(*) from monitor_control_record where node_id=#{nodeId} order by id desc
+	</select>
+	
+	<insert id="addCtrlRecord" parameterType="com.smartfarm.base.monitor.core.entity.ControlRecord">
+		insert into monitor_control_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="nodeId != null">
+				node_id,
+			</if>
+			<if test="startTime != null">
+				start_time,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+			<if test="duration != null">
+				duration,
+			</if>
+			<if test="operateType != null">
+				operate_type,
+			</if>
+			<if test="switchType != null">
+				switch_type,
+			</if>
+			<if test="operator != null">
+				operator,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="nodeId != null">
+				#{nodeId,jdbcType=BIGINT},
+			</if>
+			<if test="startTime != null">
+				#{startTime,jdbcType=VARCHAR},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=VARCHAR},
+			</if>
+			<if test="duration != null">
+				#{duration,jdbcType=VARCHAR},
+			</if>
+			<if test="operateType != null">
+				#{operateType,jdbcType=SMALLINT},
+			</if>
+			<if test="switchType != null">
+				#{switchType,jdbcType=SMALLINT},
+			</if>
+			<if test="operator != null">
+				#{operator,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	
+	<select id="getLastByNodeId" resultMap="BaseResultMap">
+		select * from monitor_control_record where node_id = #{nodeId,jdbcType=SMALLINT} order by id desc limit 1
+	</select>
+	
+	<update id="updateCtrlRcd" parameterType="com.smartfarm.base.monitor.core.entity.ControlRecord">
+		update monitor_control_record
+		<set>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=VARCHAR},
+			</if>
+			<if test="duration != null">
+				duration = #{duration,jdbcType=VARCHAR},
+			</if>
+			<if test="switchType != null">
+				switch_type = #{switchType,jdbcType=SMALLINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

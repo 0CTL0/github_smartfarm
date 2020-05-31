@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.monitor.core.dao.MonitorControlSetNodeDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.monitor.core.entity.MonitorControlSetNode" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="control_set_id" property="controlSetId" jdbcType="BIGINT" />
+    <result column="control_node_id" property="controlNodeId" jdbcType="BIGINT" />
+  </resultMap>
+  <insert id="insert" parameterType="com.smartfarm.base.monitor.core.entity.MonitorControlSetNode" >
+    insert into monitor_control_set_node
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="controlSetId != null" >
+        control_set_id,
+      </if>
+      <if test="controlNodeId != null" >
+        control_node_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="controlSetId != null" >
+        #{controlSetId,jdbcType=BIGINT},
+      </if>
+      <if test="controlNodeId != null" >
+        #{controlNodeId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.monitor.core.entity.MonitorControlSetNode" >
+    update monitor_control_set_node
+    <set >
+      <if test="controlSetId != null" >
+        control_set_id = #{controlSetId,jdbcType=BIGINT},
+      </if>
+      <if test="controlNodeId != null" >
+        control_node_id = #{controlNodeId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryByControlSetId" resultMap="BaseResultMap">
+  	select *
+  	from monitor_control_set_node
+  	where control_set_id = #{controlSetId}
+  </select>
+</mapper>

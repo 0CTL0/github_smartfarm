@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.monitor.core.dao.GatewayNodeDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.monitor.core.entity.GatewayNode" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="business_id" property="businessId" jdbcType="BIGINT" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="node_name" property="nodeName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.monitor.core.entity.vo.GatewayNodeVo" id="BaseVoResultMap" extends="BaseResultMap">
+  </resultMap>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select  * from monitor_gateway_node
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    delete from monitor_gateway_node
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.monitor.core.entity.GatewayNode" >
+    insert into monitor_gateway_node
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="businessId != null" >
+        business_id,
+      </if>
+      <if test="productCode != null" >
+        product_code,
+      </if>
+      <if test="nodeName != null" >
+        node_name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+	  <if test="businessId != null" >
+        #{businessId,jdbcType=BIGINT},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeName != null" >
+        #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.monitor.core.entity.GatewayNode" >
+    update monitor_gateway_node
+    <set >
+     <if test="businessId != null" >
+        business_id = #{businessId,jdbcType=BIGINT},
+      </if>
+      <if test="productCode != null" >
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeName != null" >
+        node_name = #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryMonitorGatewayList" resultMap="BaseResultMap">
+  	SELECT id,
+  	product_code,
+  	node_name,
+  	`status`
+	FROM monitor_gateway_node order by id desc
+	limit #{start}, #{limit} 
+  </select>
+  
+  <select id="queryCountMonitorGatewayList" resultType="int">
+  	SELECT COUNT(*)
+	FROM monitor_gateway_node
+  </select>
+
+    <select id="queryAllGatewayNode" resultMap="BaseResultMap">
+  	SELECT id,
+  	node_name,product_code
+	FROM monitor_gateway_node 
+  </select>
+
+    <select id="queryProductCodeById" resultType="String">
+        select product_code from monitor_gateway_node where id=#{id}
+    </select>
+
+    <select id="queryFarmerMonitorGatewayList" resultMap="BaseResultMap">
+        SELECT id,
+        business_id,
+        product_code,
+        node_name,
+        `status`
+        FROM monitor_gateway_node
+        WHERE business_id=#{businessId}
+        limit #{start}, #{limit}
+    </select>
+
+    <select id="queryCountFarmerMonitorGateway" resultType="int">
+        SELECT COUNT(node_name)
+        FROM monitor_gateway_node
+        WHERE business_id=#{businessId}
+    </select>
+
+    <select id="getGatewayIdByFarmer" parameterType="Long" resultMap="BaseResultMap">
+        select id from monitor_gateway_node where business_id=#{businessId}
+    </select>
+
+    <select id="queryVoByBusinessId" resultMap="BaseVoResultMap">
+        select *
+        from monitor_gateway_node
+        where business_id=#{businessId}
+    </select>
+
+    <select id="queryGatewayNodeById" resultMap="BaseResultMap">
+        select *
+        from monitor_gateway_node
+        where id = #{id}
+    </select>
+
+    <select id="listGatewayByBusinessId" resultMap="BaseResultMap">
+        SELECT
+        id,
+        business_id,
+        product_code,
+        node_name,
+        `status`
+        FROM monitor_gateway_node
+        WHERE business_id=#{businessId} AND status=2
+    </select>
+</mapper>

@@ -1,0 +1,846 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type"  content="multipart/form-data; charset=utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+    <link href="/r/css/css.css" rel="stylesheet" />
+    <link href="/r/css/video-js.min.css" rel="stylesheet">
+    <link href="/r/css/sersor.css" rel="stylesheet" />
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="/r/css/fileinput.min.css" rel="stylesheet" />
+    <link href="/r/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="/r/css/showProgress.css" rel="stylesheet" />
+
+
+	<!--引入videoJS插件播放m3u8格式视频的HLS功能-->
+	<script src="/r/js/video/video.min.js"></script>
+	<script src="/r/js/video/videojs-contrib-hls.js"></script>
+	<script src="/r/js/video/videojs-flash.min.js"></script>
+    <script src="/r/js/skins.min.js"></script>
+    <script src="/r/js/jquery-2.1.1.js"></script>
+    <script src="/r/js/bootstrap.min.js"></script>
+    <script src="/r/js/angular.min.js"></script>
+    <script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>
+	<script src="/r/js/fileinput.min.js"></script>
+	<script src="/r/js/distpicker.data.js"></script>
+	<script src="/r/js/distpicker.js"></script>	
+	<script src="/r/js/bootstrap-datetimepicker.js"></script>
+	<style type="text/css">
+		.border1 { border:5px solid #000;}
+    	.border2 { border:5px solid #cc0000;}
+    	#dataValue {
+    		left:100px;
+    		top:0;
+		    width: 200px;
+		    height: 40px;
+		    border: 1px solid #fff;
+		    margin-right: 5px;
+		    display: none;
+		    background-color:grey;
+		    position:absolute;
+		    border-radius:5px;
+		    padding:10px;
+		}
+		
+    </style>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+	<div class="loading-container">
+        <div class="loading-progress">
+            <div class="rotator">
+                <div class="rotator">
+                    <div class="rotator colored">
+                        <div class="rotator">
+                            <div class="rotator colored">
+                                <div class="rotator colored"></div>
+                                <div class="rotator"></div>
+                            </div>
+                            <div class="rotator colored"></div>
+                        </div>
+                        <div class="rotator"></div>
+                    </div>
+                    <div class="rotator"></div>
+                </div>
+                <div class="rotator"></div>
+            </div>
+            <div class="rotator"></div>
+        </div>
+    </div>
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+	<!-- 头部 -->
+	   
+    <div class="main-container container-fluid">
+        <div class="page-container">
+        
+        	<!-- 菜单 -->
+        	<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+        	<!-- 菜单 -->
+            
+            <!-- 右半页 -->
+            <div class="page-content">
+            
+            	<div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="fa fa-comments"></i>
+                            <a href="/admin/main.htm">首页</a>
+                        </li>
+                        <li class="active">监控管理</li>
+                    </ul>
+                </div>
+                
+                <div class="feedbackwrap" id="feedbackwrap">
+       <div class="feedbackslide" id="feedbackslide">
+           <ul style="position:relative">
+               <!--五张图片-->
+               <li ng-repeat="pro in proficientList">
+               		<a href="#"><img ng-src="{{pro.headPic}}" alt="" style="width: 50px;height: 50px;"/></a>
+         		 <div class="feedbackname">
+		       	   <p class="p1">{{pro.name}}</p>
+		       	   <p class="p2" id="feedstudent">{{pro.mobile}}</p>
+      			 </div>
+               </li>
+           </ul>
+           <!--左右切换按钮-->
+           <div class="feedbackarrow" id="feedbackarrow">
+               <a href="javascript:;" class="feedbackprev"></a>
+               <a href="javascript:;" class="feedbacknext"></a>
+           </div>
+       </div>
+       <!-- <div class="feedbackname">
+       	   <p class="p1">{{$scope.proficientList[0].name}}</p>
+       	   <p class="p2" id="feedstudent">{{$scope.proficientList[0].mobile}}</p>
+       </div> -->
+
+       <!-- 环境监测 -->
+       <div class="monitor-list">
+           <!-- 气象监测 -->
+          <div class="meteorological-monitoring">
+            <div class="meteorological-monitoring-word">
+                	气象监测
+            </div>
+            <div class="meteorological-monitoring-list">
+                <ul>
+                    <li ng-repeat="mo in meteorologicalList">
+                        <div class="meteorological-monitoring-list-top">{{mo.name}}</div>
+                        <div class="meteorological-monitoring-list-bottom">{{mo.realDataList[0].realValue + mo.unit }}</div>
+                    </li>
+                </ul>
+            </div>
+          </div>
+
+          <!-- 土地监测 -->
+          <div class="land-monitoring">
+                <div class="meteorological-monitoring-word">
+                        土地监测
+                </div>
+                <div class="land-monitoring-list">
+                    <ul>
+                        <li ng-repeat="avg in avgSoilList">
+                            <div class="land-monitoring-list-top">{{avg.name}}</div>
+                            <div class="land-monitoring-list-bottom">{{avg.avgValue + avg.unit}}</div>
+                        </li>
+                    </ul>
+                </div>
+          </div>
+       
+       
+       	  <div class="control_list">
+	        <ul>
+	            <li ng-repeat="control in controlNodeList" ng-click="showNodeWindow(control.id)">
+	                <div class="controller_node_name">
+	                        {{control.name}}
+	                </div>
+	                <div class="controller_node_status">
+	                    {{{'1':'离线','2':'联机'}[control.nodeStatus]}}
+	                </div>
+	            </li>
+	        </ul>
+   		 </div>
+       </div>
+    </div>
+    
+    <div class="soil_list">
+        <ul>
+            <li ng-click="showSoilDataByCode('S.860344047999306.0',0)" id="warning_div0">
+                <div class="soil_title">
+                   	土壤墒情1
+                </div>
+                <div class="soil_status">
+                    	联机
+                </div>
+                <div class="soilData0" id="soilData">
+                	<ul class="soil_detail">
+	                    <li ng-repeat="se in sersorSoilDataList">{{se.name}}:<span>{{se.realValue + se.unit}}</span></li>
+                	</ul>
+                </div>
+            </li>
+            
+             <li ng-click="showSoilDataByCode('S.865650042797437.0',1)" id="warning_div1">
+                <div class="soil_title">
+                    	土壤墒情2
+                </div>
+                <div class="soil_status">
+                    	联机
+                </div>
+                <div class="soilData1" id="soilData">
+                	<ul class="soil_detail">
+	                    <li ng-repeat="se in sersorSoilDataList">{{se.name}}:<span>{{se.realValue + se.unit}}</span></li>
+                	</ul>
+                </div>
+            </li>
+            
+            
+             <li ng-click="showSoilDataByCode('S.865650044627384.0',2)" id="warning_div2">
+                <div class="soil_title">
+                    	土壤墒情3
+                </div>
+                <div class="soil_status">
+                    	联机
+                </div>
+                <div class="soilData2" id="soilData">
+                	<ul class="soil_detail">
+	                    <li ng-repeat="se in sersorSoilDataList">{{se.name}}:<span>{{se.realValue + se.unit}}</span></li>
+                	</ul>
+                </div>
+            </li>
+            
+            
+             <li ng-click="showSoilDataByCode('S.865650042738845.1,2,3',3)" id="warning_div3">
+                <div class="soil_title">
+                    	气象1号
+                </div>
+                <div class="soil_status">
+                    	联机
+                </div>
+                <div class="soilData3" id="soilData">
+                	<ul class="soil_detail">
+	                    <li ng-repeat="se in sersorSoilDataList">{{se.name}}:<span>{{se.realValue + se.unit}}</span></li>
+                	</ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+    
+    
+    <!-- http://hls01open.ys7.com/openlive/e5604589a972433da8277fa756a44bee.m3u8 -->
+   <div style="position:absolute;left:700px;top:250px;display:none" id="vedioPlay">
+    	<video id="my-player" ng-src="{{videoUrl(liveAddress)}}" controls="controls" autoplay style="width:400px;height:250px;overflow: hidden"></video>
+    	<button style="height:40px;width:100px;" class="btn btn-primary" ng-click="snapPhoto(snap.id)">抓拍</button>
+	</div>
+	
+	<div class="cameraList" style="position:absolute;right:400px;top:250px;">
+      <button class="btn btn-primary" ng-repeat="camera in cameraList" ng-click="queryCameraLiveAddressById(camera.id)">{{camera.cameraName}}</button>
+  	</div>
+	                
+                
+           <div class="page-body">
+            	 <div id="div{{$index}}" class="div" style="cursor:pointer;position:relative;line-height:25px;" ng-repeat="real in list">
+            	 	<span style="color:white;text-align:center;line-height:80px;display:block" ng-click="showRealDataDetail(real.realDataList[0].id,$index)">{{real.name}}</span>
+            	 	<div class="myDataDiv{{$index}}" id="dataValue">
+            	 	数据值为：{{myText}}
+            	 	</div>
+            	 </div>
+           </div>
+          </div>
+    </div>
+    </div>
+    
+    <!-- 节点信息弹窗 -->
+	<div class="modal-backdrop fade in" ng-if="common.showNodeInfo"></div>
+	<div id="nodeModal" class="modal fade in" style="display: block" ng-show="common.showNodeInfo">
+		
+		<div class="modal-dialog" style="height:300px;width:500px;margin-top:100px;">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<button type="button" class="bootbox-close-button close"
+						ng-click="closeNodeWindow()">×</button>
+					<h2 class="modal-title"><strong>{{controlNodeEdit.name}}</strong></h2>
+				</div>
+
+				<div class="modal-body" style="height:220px;width:490px;margin:5px;padding-top:10px;border-radius:10px;background-color:#fafbfe;">
+					<div class="row" style="height:200px;padding-top:10px;margin:2px 1px;border-radius:10px;background-color:white;">
+					  <!-- 左半部分 -->
+					  <div class="col-md-6" style="margin-left:30px;">
+					  	<div class="row" style="height:60px;">
+						  <div class="col-md-12">
+						  	<h2>{{controlNodeEdit.name}}</h2>
+						  </div>
+						</div>
+						<div class="row" style="height:60px;padding-top:10px;">
+						  <div class="col-md-12">
+						  	<span style="font-size:16px;color:#8a8a8a;">
+						  		 状态：{{numToWord(controlNodeEdit.operateStatus)}}
+						  	</span>
+						  	<hr style="margin-top: 10px;margin-bottom: 10px;">
+						 </div>
+						</div>
+						<!-- <div class="row" style="height:60px;">
+						  <div class="col-md-12">
+						  	<button type="button" class="btn" ng-click="showCtrlRecordWindow(controlNodeEdit.id)" data-toggle="modal" data-target="#recordModal" style="font-size:20px;background-color:#84e5b6;color:white;border-radius:15px;">设备控制记录</button>
+						  </div>
+						</div> -->
+					  </div>
+					  <!-- 左半部分 -->
+					  
+					  <!-- 右半部分按钮 -->
+					  <div class="col-md-4" style="margin-right:10px;float:right;">
+					  	<div class="row" style="height:60px;margin:auto;">
+						  <div class="col-md-12" style="padding-top:10px;">
+						  	<button type="button" id="open" class="btn btn-default btn-lg" ng-click="changeNodeStatus(1)" style="padding-top:5px;height:40px;border-radius:30px;">
+								<div style="height:30px;line-height:30px;display: flex;align-items: center;">
+									<img src="/r/image/start.png" style="height:30px;width:30px;"><span style="font-size:18px;margin-left:5px;">开启</span>
+								</div>
+							</button>
+						  </div>
+						</div>
+						<div class="row" style="height:60px;margin:auto;">
+						  <div class="col-md-12" style="padding-top:10px;">
+						  	<button type="button" id="pause" class="btn btn-default btn-lg" ng-show="isShow" ng-click="changeNodeStatus(3)" style="padding-top:5px;height:40px;border-radius:30px;">
+								<div style="height:30px;line-height:30px;display: flex;align-items: center;">
+									<img src="/r/image/pause.png" style="height:30px;width:30px;"><span style="font-size:18px;margin-left:5px;">暂停</span>
+								</div>
+							</button>
+						  </div>
+						</div>
+						<div class="row" style="height:60px;margin:auto;">
+						  <div class="col-md-12" style="padding-top:10px;">
+						  	<button type="button" id="close" class="btn btn-default btn-lg" ng-click="changeNodeStatus(2)" style="padding-top:5px;height:40px;border-radius:30px;">
+								<div style="height:30px;line-height:30px;display: flex;align-items: center;">
+									<img src="/r/image/close.png" style="height:30px;width:30px;"><span style="font-size:18px;margin-left:5px;">关闭</span>
+								</div>
+							</button>
+						  </div>
+						</div>
+					  </div>
+					  <!-- 右半部分按钮 -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    
+    <script src="/r/js/beyond.min.js"></script>
+    
+</body>
+
+<script type="text/javascript">
+var app = angular.module("myApp", ["ui.bootstrap"]);
+var submitNow = false;
+var flag = true;
+app.controller("myCtrl", function($scope,$http,$timeout,$interval,$sce) {
+	//图片路径前缀
+	$scope.picUrl="https://wx.changxianshequ.com/r";
+	
+	$scope.borderList = [];
+	
+	$scope.warning_index=[];
+	
+	$scope.proList = [];
+	$scope.formData = {
+			id:''
+	}
+	
+	$scope.common = {
+		showNodeInfo:false
+	}
+	
+	$scope.snap = {
+		id:''
+	}
+	
+	
+	//初始化列表
+	$scope.pageChanged = function() {
+		$http({
+	        method  : 'GET',
+	        url     : '/realData/queryRealDataShowList.htm',
+	        headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+	    }).then(function(response) {
+	    	$scope.warning_list = response.data.warning_list;
+	    	$scope.meteorologicalList = response.data.meteorologicalList;
+	    	
+	    	$timeout(function(){
+	    		$scope.list = response.data.realValueList;
+	    	},500)
+	    	
+	    	$scope.avgSoilList = response.data.avgSoilList;
+    		$scope.soilList = response.data.soilList;
+    		
+    		$scope.controlNodeList = response.data.controlNodeList;
+    		$timeout(function(){
+    			$scope.soilWarnList = response.data.soilWarnList;
+    		},500);
+	    });
+	}
+	
+	$scope.pageChanged();
+	
+	//初始化专家列表
+	$scope.pageProficientList = function() {
+		$http({
+	        method  : 'GET',
+	        url     : '/proficient/queryProficientList.htm',
+	        headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+	    }).then(function(response) {
+    		$scope.proficientList = response.data.proficientList;
+	    });
+	}
+	
+	$scope.pageProficientList();
+	
+	//初始化摄像头列表
+	$scope.pageCameraMessageList = function() {
+		$http({
+	        method  : 'GET',
+	        url     : '/monitor/queryCameraMessageList.htm',
+	        headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+	    }).then(function(response) {
+    		$scope.cameraList = response.data.cameraList;
+	    });
+	}
+	
+	$scope.pageCameraMessageList();
+	
+	//根据id来展示数据
+	$scope.showRealDataDetail = function(id,index){
+		if($scope.myText !== '' && $scope.lastIndex !== index){
+			$(".myDataDiv" + $scope.lastIndex).hide();
+		}
+		$scope.queryRealDataById(id);
+		$timeout(function(){ 
+			if(!$(".myDataDiv" + index).is(":visible")){
+				$scope.myText = $scope.realInfo.realValue
+		         $(".myDataDiv" + index).show();
+		         }else{ 
+		          $(".myDataDiv" + index).hide();
+		       }
+		},500)
+		$scope.lastIndex = index;
+		
+	}
+	
+	//打开节点窗口
+	$scope.showNodeWindow = function(id){
+		$scope.formData.id = id;
+		$http({
+				method : 'POST',
+				url : '/controlNode/getSingleControlNode.htm',
+				params : {
+					'id' : id
+				},
+				headers : {'Content-Type' : 'application/x-www-form-urlencoded'}//angularjs设置文件上传的content-type修改方式		
+			}).then(function(response) {
+				if (!response.data.success) {
+					Notify("操作失败！",'top-right','4000', 'danger','fa-bolt', true);
+					return;
+				}
+			$scope.controlNodeEdit = response.data.controlNode;
+			//设备类型为1（电磁阀），不显示暂停按钮
+			if($scope.controlNodeEdit.type==1){
+				$scope.isShow = false;
+			}else{
+				$scope.isShow = true;
+			}
+			$scope.isClickable($scope.controlNodeEdit.operateStatus);
+		});
+		
+		$scope.common.showNodeInfo = true;
+	}
+	
+	$scope.closeNodeWindow = function() {
+		$scope.common.showNodeInfo = false;
+	}
+	
+	//根据状态值返回状态
+	$scope.numToWord = function(num){
+		if(num==1){
+			return "开启";
+		}
+		if(num==2){
+			return "关闭";
+		}
+		if(num==3){
+			return "暂停";
+		}
+	}
+	
+	//根据节点当前状态，设置按钮是否可用
+	$scope.isClickable = function(state){
+		if(state==1){//开启状态
+			$("#open").attr("disabled",true);
+			$("#pause").attr("disabled",false);
+			$("#close").attr("disabled",false);
+		}
+		if(state==2){//关闭状态
+			$("#open").attr("disabled",false);
+			$("#pause").attr("disabled",true);
+			$("#close").attr("disabled",true);
+		}
+		if(state==3){//暂停状态
+			$("#open").attr("disabled",false);
+			$("#pause").attr("disabled",true);
+			$("#close").attr("disabled",false);
+		}
+	}
+	
+	//更改节点的状态
+	$scope.changeNodeStatus = function(num){
+		var fd = new FormData();
+		fd.append("id", $scope.formData.id);
+		fd.append("name", $scope.controlNodeEdit.name);
+		fd.append("code", $scope.controlNodeEdit.code);
+		fd.append("nodeStatus", $scope.controlNodeEdit.nodeStatus);
+		fd.append("operateStatus", num);
+		fd.append("type", $scope.controlNodeEdit.type);
+		
+		//控制记录，参数
+		fd.append("nodeId", $scope.formData.id);
+		fd.append("operateType", 1);
+		fd.append("switchType", num);
+
+		var id = $scope.formData.id;
+		submitNow = true;
+		$http({
+			method : 'POST',
+			url : '/controlNode/updateControlNode.htm',
+			data : fd,
+			transformRequest : angular.identity,
+			headers : {'Content-Type' : undefined}//angularjs设置文件上传的content-type修改方式
+		}).then(function(response) {
+			if (!response.data.success) {
+				Notify("操作失败！", 'top-right','4000', 'danger','fa-bolt', true);
+				return;
+			}
+
+			$scope.controlNodeEdit.operateStatus = num;//点击状态按钮后，更改弹窗中的状态为新的值
+			Notify('操作成功', 'top-right', '5000','success', 'fa-check', true);
+			/* if(num!=2){
+				$scope.addCtrlRecord(id,num);
+			}else{
+				$scope.updateCtrlRecord(id);
+			} */
+			
+			$scope.isClickable(num);
+			
+		});
+	}
+	
+	
+	//根据id展示土壤数据
+	$scope.showSoilDataByCode = function(codeFlag,index){
+		if($scope.sersorSoilDataList !== '' && $scope.lastSoidIndex !== index){
+			$(".soilData" + $scope.lastSoidIndex).hide();
+		}
+		if($scope.lastSoidIndex !== index){
+			$scope.querySersorNodeByCode(codeFlag);
+		}
+		$timeout(function(){ 
+			if(!$(".soilData" + index).is(":visible")){
+		         $(".soilData" + index).show();
+		         }else{ 
+		          $(".soilData" + index).hide();
+		       }
+		},500)
+		$scope.lastSoidIndex = index;
+	}
+	
+	$scope.querySersorNodeByCode = function(codeFlag){
+		$http({
+	        method  : 'GET',
+	        url     : '/realData/querySersorNodeByCode.htm',
+	        params:{
+	            'codeFlag':codeFlag
+	        },
+	        headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+	    }).then(function(response) {
+	    	$scope.sersorSoilDataList = response.data.sersorSoilDataList;
+	    });
+	}
+	
+	//根据id得到信息
+	$scope.queryRealDataById = function(id){
+		$http({
+	        method  : 'GET',
+	        url     : '/realData/queryRealDataById.htm',
+	        params:{
+	            'id':id
+	        },
+	        headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+	    }).then(function(response) {
+	    	$scope.realInfo = response.data.realValue;
+	    	/* console.log($scope.crowdFundingInfo.startTime) */
+	    });
+	}
+	
+	//根据id获取直播地址
+	$scope.queryCameraLiveAddressById = function(id){
+		$scope.snap.id = id;
+		$http({
+	        method  : 'GET',
+	        url     : '/monitor/queryCameraLiveAddressById.htm',
+	        params:{
+	            'id':id
+	        },
+	        headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+	    }).then(function(response) {
+	    		$scope.liveAddress = response.data.liveAddress;
+	    });
+		$scope.controlCameraStatus();
+	}
+	
+	//$scope.queryCameraLiveAddressById(1);
+	
+	 $scope.videoUrl = function (url) {
+         return $sce.trustAsResourceUrl(url);
+     }
+	 
+	 //控制摄像机的显示或隐藏
+	 $scope.controlCameraStatus = function(){
+		 var oDiv = document.getElementById("vedioPlay");
+         //if (oDiv.style.display == "none"){
+           oDiv.style.display = "block";
+        /*  }else {
+           oDiv.style.display = "none";
+         } */
+        /*  if(!$("vedioPlay").is(":visible")){
+	         $("vedioPlay").show();
+	         }else{ 
+	          $("vedioPlay").hide();
+	       } */
+	 }
+    
+	
+	
+	//抓拍
+	$scope.snapPhoto = function(id){
+		$http({
+			method : 'GET',
+			url : '/monitor/snapPhoto.htm',
+			params:{
+	            'id':id
+	        },
+			transformRequest : angular.identity,
+			headers : {'Content-Type' : undefined}//angularjs设置文件上传的content-type修改方式
+		}).then(function(response) {
+			if (!response.data.success) {
+				Notify("抓拍失败！", 'top-right','4000', 'danger','fa-bolt', true);
+				return;
+			}
+
+			Notify('抓拍成功', 'top-right', '5000','success', 'fa-check', true);
+		});
+	}
+	
+	 window.onload = function(){
+		 //初始化视频
+		 var player = videojs('my-player',{
+	    	  width:400,
+	    	  height:250
+	      });
+		 
+		 /* $timeout(function(){
+			 var divPlayer = $("#vedioPlay").show();
+		 },5000) */
+		 
+		 
+		 /*  */
+		 $timeout(function(){
+			 for(var i = 0;i<$scope.proficientList.length;i++){
+				 $scope.proList.push({
+					 width : 100,
+					 top : 11,
+					 left : 31 + (95 * i),
+					 opacity : 80,
+			         zIndex : 10
+				 })
+			 }
+		 },500)
+		 
+			 var arr = $scope.proList;
+		    
+
+		    //0.获取元素
+		    var feedbackslide = document.getElementById("feedbackslide");
+		    var feedbackliArr = feedbackslide.getElementsByTagName("li");
+		    var feedbackarrow = feedbackslide.children[1];
+		    var arrowChildren = feedbackarrow.children;
+		    var arrowleft=5;
+		    //设置一个开闭原则变量，点击以后修改这个值。
+		    var flag = true;
+		    move();
+		    //3.把两侧按钮绑定事件。(调用同一个方法，只有一个参数，true为正向旋转，false为反向旋转) 
+
+		    arrowChildren[0].onclick = function () {
+		        if(flag){
+		            flag = false;
+		            move( );
+		        }
+		        /* arrowleft++;
+
+		    	if(arrowleft==1){
+		    		document.getElementById("feedstudent").innerText="小岳岳2";
+		    	}else if(arrowleft==2){
+		    		document.getElementById("feedstudent").innerText="张三峰1";
+		    	}else if(arrowleft==3){
+		    		document.getElementById("feedstudent").innerText="林动5";
+		    	}else if(arrowleft==4){
+		    		document.getElementById("feedstudent").innerText="令狐冲4";
+		    	}else if(arrowleft==5){
+		    		document.getElementById("feedstudent").innerText="欧阳常斌3";
+		    		arrowleft=0;
+		    	}else{
+		    		document.getElementById("feedstudent").innerText="小岳岳2";
+		    		arrowleft=1;
+		    	} */
+		    	
+		    }
+
+		    arrowChildren[1].onclick = function () {
+		        if(flag){
+		            flag = false;
+		            move(true);
+		        }
+		       /*  arrowleft--;
+		    	console.log("right---",arrowleft)
+
+		    	if(arrowleft==1){
+		    		document.getElementById("feedstudent").innerText="小岳岳2";
+		    	}else if(arrowleft==2){
+		    		document.getElementById("feedstudent").innerText="张三峰1";
+		    	}else if(arrowleft==3){
+		    		document.getElementById("feedstudent").innerText="林动5";
+		    	}else if(arrowleft==4){
+		    		document.getElementById("feedstudent").innerText="令狐冲4";
+		    	}else{
+		    		document.getElementById("feedstudent").innerText="欧阳常斌3";
+		    		arrowleft=5;
+		    	} */
+		        
+		    }
+
+		    //4.书写函数。
+		    function move(bool){
+		        //判断：如果等于undefined,那么就不执行这两个if语句
+		        if(bool === true || bool === false){
+		            if(bool){
+		                arr.unshift(arr.pop());
+		            }else{
+		                arr.push(arr.shift());
+		            }
+		        }
+		        //在次为页面上的所有li赋值属性，利用缓动框架
+		        for(var i=0;i<feedbackliArr.length;i++){
+		        	animate(feedbackliArr[i],arr[i], function () {
+		                flag = true;
+		            });
+		        }
+		    }
+		 /*  */
+		 $timeout(function(){
+			 init();
+		 },1500)
+		 
+	        function init() {
+	            /*div0.放在前面就是点div块的时候变化 替换document*/
+	            //不点不执行 所以执行了 不影响
+	            //就是随机一次
+	            $timeout(divRandom(),1000);
+
+	            	$interval(function(){
+	            		for(var i = 0;i<$scope.borderList.length;i++){
+	                		var divBorder=document.getElementById("div"+$scope.borderList[i].value);
+	                		divBorder.style.border = "2px solid "+divColor();
+	                	}
+	            	},500)
+	            	
+	            	$timeout(function(){
+	            		for(var i = 0;i<$scope.soilList.length;i++){
+		            		for(var j=0;j<$scope.soilWarnList.length;j++){
+		            			if($scope.warning_list[j] == $scope.soilList[i].gatewayId){
+		            				$scope.warning_index.push({
+		            					value:i
+		            				})
+		            			}
+		            		}
+		            	}
+	            	},1500)
+	            	
+	            	$timeout(function(){
+		            	$interval(function(){
+		            		for(var i = 0;i<$scope.warning_list.length;i++){
+		                		var divBorder=document.getElementById("warning_div"+$scope.warning_index[i].value);
+		                		divBorder.style.border = "2px solid "+divColor();
+		                	}
+		            	},500)
+	            	},2000)
+	        }
+		 
+	        //div大小&位置 随机的变化函数
+	        function divPositionSize() {
+	            var x=parseInt(Math.random()*(1000));
+	            var y=parseInt(Math.random()*(500));
+	 
+	            return {left:x,top:y};
+	        }
+	 
+	        //背景颜色随机
+	        function divColor() {
+	            /* var col="#";//这个字符串第一位为# 颜色的格式
+	            for(var i=0;i<6;i++){
+	                col+=parseInt(Math.random()*16).toString(16);
+	                //rondom*16后的随机值即为0-1*16==0-16;   toString(16)为转化为16进制
+	            } */
+	            var colors = ["rgb(255,192,203)","rgb(220,20,60)"]; 
+	            var c = Math.floor(Math.random() * colors.length + 1)-1;
+	            return colors[c];//最后返回一个七位的值 格式即为#nnnnnn 颜色的格式
+	        }
+	 
+	        function divRandom() {
+	        	$timeout(function(){
+	        		for(var i = 0;i<$scope.list.length;i++){
+		            	var divs=document.getElementById("div"+i);
+		            	if($scope.list[i].maxThreshold <= $scope.list[i].realDataList[0].realValue || $scope.list[i].minThreshold >= $scope.list[i].realDataList[0].realValue){
+		            		/* console.log(i)
+		            		var div=document.getElementById("div"+i);
+		            		console.log(div)
+		            		$interval(function(){
+		            			divBorder.style.border = "2px solid "+divColor();
+		        	        },500); */
+		        	        $scope.borderList.push({
+		        	        	value:i
+		        	        })
+		        	        /*  */
+		        	        
+		        	        /*  */
+		            	}
+		            	var X_div=divPositionSize();
+		            	divs.style.left = X_div.left+"px";
+		            	divs.style.top = X_div.top+"px";
+		            	divs.style.height = "90px";
+		            	divs.style.width = "90px";
+		            	divs.style.borderRadius = "50%";
+		            	divs.style.backgroundColor = "skyBlue";
+		            }
+	        	},1500)
+	        }
+	 }
+});
+
+</script>
+<script src="/r/js/jquery1.0.0.1.js"></script>
+</html>

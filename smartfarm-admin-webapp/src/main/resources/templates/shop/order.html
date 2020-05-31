@@ -1,0 +1,279 @@
+﻿ <!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="description" content="login page" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+	<link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+	<link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" type="text/css"/>
+	<link href="/r/css/demo.min.css" rel="stylesheet" />
+	<link href="/r/css/animate.min.css" rel="stylesheet" />
+	<link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+	<link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+	<link href="/r/css/fileinput.min.css" rel="stylesheet" />
+	<link href="/r/css/typicons.min.css" rel="stylesheet" />
+	<link href="/r/css/weather-icons.min.css" rel="stylesheet" />
+	<link href="/r/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+	<script src="/r/js/jquery-2.1.1.js"></script>
+	<script src="/r/js/skins.min.js"></script>
+	<script src="/r/js/bootstrap.min.js"></script>
+	<script src="/r/js/angular.min.js"></script>
+	<script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>
+	<script src="/r/js/fileinput.min.js"></script>
+	<script src="/r/js/distpicker.data.js"></script>
+	<script src="/r/js/distpicker.js"></script>
+	<script src="/r/js/bootstrap-datetimepicker.js"></script>
+	<script src="/r/js/core.js"></script>
+	<script src="/r/js/beyond.min.js"></script>
+	<script src="/r/core/controller/shop/order.js"></script>
+	<script src="/r/core/controller/base/menu.js"></script>
+	<script src="/r/js/checkUtil.js"></script>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+	<!-- 头部 -->
+
+	<div class="main-container container-fluid">
+		<div class="page-container">
+
+			<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+			
+			<!-- 右半页 -->
+			<div class="page-content">
+			 <div class="page-breadcrumbs">
+							<ul class="breadcrumb">
+								<li><i class="fa fa-comments"></i> <a href="/admin/main.htm">首页</a>
+								</li>
+								<li class="active">订单管理</li>
+							</ul>
+						</div>
+				<!-- Page Header -->
+
+				<div class="page-body">
+					<div class="row">
+						<div class="col-xs-12 col-md-12">
+
+							<div class="widget">
+								<div class="widget-header ">
+									<span class="widget-caption">订单列表</span>
+								</div>
+								<div class="widget-body">
+
+									<div class="table table-striped table-bordered table-hover" style="height:55px;margin-bottom:20px;padding:10px;">
+										订单状态： <label>
+										<select ng-model="formData.status">
+											<option value="">---选择---</option>
+											<option value="-6">拒绝退款</option>
+											<option value="-5">已退款</option>
+											<option value="-4">退款中</option>
+											<option value="-3">申请退款</option>
+											<option value="-2">超时</option>
+											<option value="-1">取消</option>
+											<option value="0">未支付</option>
+											<option value="1">订单已付款</option>
+										</select>
+										</label>
+										 订单号： <label> <input class="form-control input-sm" placeholder="请输入订单号"
+															 ng-model="formData.order_no"/>
+										</label>
+										开始日期： <label> <input id="startDate" name="myDates" ng-model="formData.startDate" class="form-control date-picker" placeholder="请选择订单日期"  data-date-format="yyyy-mm-dd" style="width:140px;"/>
+									</label>
+										截止日期： <label> <input id="endDate" name="myDates" ng-model="formData.endDate" class="form-control date-picker" placeholder="请选择订单日期"  data-date-format="yyyy-mm-dd" style="width:140px;"/>
+									</label>
+										<div class="DTTT btn-group" style="right:35px;top:60px">
+
+											<a class="btn btn-default DTTT_button_copy"
+												ng-click="pageChanged()"><span>查询</span></a>
+										</div>
+									</div>
+
+									<table class="table table-striped table-bordered table-hover"
+										id="simpledatatable">
+										<thead>
+											<tr>
+												<th>ID</th>
+												<th>订单号</th>
+												<th>联系人</th>
+												<th>订单状态</th>
+												<th>订单金额</th>
+												<th>运费</th>
+												<th>实付金额</th>
+												<th>创建时间</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+
+										<tbody>
+											<tr ng-repeat="order in orderList">
+<!--												<td>{{$index+1}}</td>-->
+												<td>{{order.id}}</td>
+												<td>{{order.orderNo}}</td>
+												<td>{{order.nick_name}}</td>
+												<td>{{{'-3':'申请退款','-4':'退款中','-5':'已退款','-6':'拒绝退款','-2':'超时','-1':'取消','0':'未支付','1':'已付款'}[order.status]}}</td>
+												<td>{{order.orderPrice}}</td>
+												<td>{{order.freightPrice}}</td>
+												<td>{{order.realPrice}}</td>
+												<td>{{formatDateTime(order.createTime)}}</td>
+												<td>
+													<button class="btn btn-default" ng-click="showDetail(order)">查看</button>
+												</td>
+											</tr>
+										</tbody>
+
+									</table>
+									<div class="row DTTTFooter">
+										<pagination style="float:right" ng-change="pageChanged()"
+											total-items="formData.total"
+											items-per-page="formData.pageSize"
+											ng-model="formData.pageNumber" max-size="5"
+											class="pagination m-t m-b" boundary-links="true"></pagination>
+									</div>
+									<div style="clear: both"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 订单查看 -->
+	<div class="modal-backdrop fade in" ng-if="common.showDetail"></div>
+	<div class="bootbox modal fade modal-darkorange in"
+		style="display: block" ng-show="common.showDetail">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="bootbox-close-button close"
+						ng-click="closeDetail()">×</button>
+					<h4 class="modal-title">查看订单</h4>
+				</div>
+
+				<div class="modal-body" style="height:600px; overflow-y:scroll;">
+					<div class="bootbox-body">
+						<div class="form-horizontal">
+
+							<div class="form-group">
+								<div class="col-sm-4">订单号：{{orderInfo.orderNo}}</div>
+								<div class="col-sm-5">订单时间：{{formatDateTime(orderInfo.createTime)}}</div>
+								<div class="col-sm-3">支付状态：{{{0:'未付款',1:'付款中',2:'已付款',3:'退款'}[orderInfo.payStatus]}}</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-sm-4">订单状态：{{{'-6':'拒绝退款','-5':'已退款','-4':'退款中','-3':'申请退款','-2':'超时','-1':'取消','0':'未支付','1':'订单已付款'}[orderInfo.status]}}</div>
+								<div class="col-sm-4">总金额：{{orderInfo.totalPrice}}</div>
+								<div class="col-sm-4">实付金额：{{orderInfo.realPrice}}</div>
+							</div>
+
+							<div class="orderDetailList" ng-repeat="info in orderInfo.orderDetailVoList">
+							<hr />
+								<div class="form-group">
+									<div class="col-sm-5">地址：{{info.address}}</div>
+									<div class="col-sm-4">电话：{{info.receiveMobile}}</div>
+									<div class="col-sm-3">联系人：{{info.receiveName}}</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-6">订单编号：{{info.orderNo}}</div>
+									<div class="col-sm-6" ng-show="info.status == '2' || info.status == '3' || info.status == '1'">
+										<div class="col-sm-6" style="font-size: 20px;">物流状态：</div>
+										<div class="col-sm-6">
+											<button class="btn btn-success" ng-click="showShipMsg(info)">查看物流</button>
+										</div>
+									</div>
+								</div>
+								<div class="form-group" ng-hide="info.message == null">
+									<div class="col-sm-2" style="color:red;">备注信息：</div>
+									<div class="col-sm-9">
+										{{info.message}}
+									</div>
+								</div>
+								<div class="form-group" style="text-align: center;">
+									<table class="table table-striped table-bordered table-hover"
+										id="simpledatatable">
+										<thead>
+											<tr>
+												<th style="text-align: center;">序号</th>
+												<th style="text-align: center;">商品名称</th>
+												<th style="text-align: center;">商品规格</th>
+												<th style="text-align: center;">商品数量</th>
+											</tr>
+										</thead>
+
+										<tbody>
+											<tr ng-repeat="p in info.productList">
+												<td>{{$index+1}}</td>
+												<td>{{p.productName}}</td>
+												<td>{{p.productNorm}}</td>
+												<td>{{p.quantity}}个</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- 快递进度查看 -->
+	<div class="modal-backdrop fade in" ng-if="common.showShip"></div>
+	<div class="bootbox modal fade modal-darkorange in"
+		style="display: block" ng-show="common.showShip">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="bootbox-close-button close"
+						ng-click="closeShip()">×</button>
+					<h4 class="modal-title">物流信息跟踪</h4>
+				</div>
+
+				<div class="modal-body" style="overflow:scroll;">
+					<div class="bootbox-body">
+						<div class="form-horizontal">
+							<div class="box-main">
+							  <div class="package-box">
+							    <ul class="package-detail">
+							      <li class="latest" ng-repeat="ship in ShipMsg.Traces"><span class="date">{{ship.AcceptTime}}</span> <span class="text">{{ship.AcceptStation}}</span></li>
+							    </ul>
+							  </div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</body>
+
+<style>
+ul,li{ padding:0; margin:0; list-style:none; font-family:tahoma,arial,'Hiragino Sans GB','\5b8b\4f53',sans-serif}
+.box-main{ margin:0 auto; width:800px; padding:10px;border:1px solid #e8e8e8}
+.box-main h3.title{ height:40px; font-size:18px; line-height:40px; text-indent:18px; color:#1c81e5; text-align:left; background:#F7F7F7; margin-bottom:18px}
+.package-box{overflow:hidden; margin:0 auto;width:780px;}
+.package-box:before{content:" ";background-color:#fff;display:block;position:absolute;top:-4px;left:20px;width:10px;height:4px}
+.package-box .supply{margin-top:20px;padding-right:10px;border-top:1px solid #e8e8e8;line-height:28px;color:#959595;text-align:right}
+.package-detail{margin:-9px 0 0 12px;padding:0 0 0 10px;list-style:none;line-height:30px;font-size:12px;  overflow:hidden}
+.package-detail li{border-left:1px solid #d9d9d9}
+.package-detail li:before{content:'';border:3px solid #fff;background:#d9d9d9;display:inline-block;width:5px;height:5px;border-radius:5px;margin-left:-6px;margin-right:10px}
+.package-detail .date{font-weight:700;margin-right:8px;font-family:arial;display:inline-block}
+.package-detail .text{width:580px;display:inline-block;vertical-align:text-top;line-height:1.3em}
+.package-detail .latest:before{background:#fe4300;border-color:#f8e9e4}
+</style>
+
+</html>

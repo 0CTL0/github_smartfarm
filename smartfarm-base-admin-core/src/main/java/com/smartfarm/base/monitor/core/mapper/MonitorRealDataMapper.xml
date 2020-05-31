@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.monitor.core.dao.MonitorRealDataDao">
+    <resultMap id="BaseResultMap" type="com.smartfarm.base.monitor.core.entity.MonitorRealData">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="sersor_node_id" property="sersorNodeId" jdbcType="BIGINT"/>
+        <result column="transfer_date" property="transferDate" jdbcType="VARCHAR"/>
+        <result column="transfer_time" property="transferTime" jdbcType="VARCHAR"/>
+        <result column="real_value" property="realValue" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <resultMap type="com.smartfarm.base.monitor.core.entity.vo.MonitorRealDataVo" id="BaseVoResultMap">
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="node_name" property="nodeName" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="SMALLINT"/>
+        <result column="max_threshold" property="maxThreshold" jdbcType="INTEGER"/>
+        <result column="min_threshold" property="minThreshold" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <collection property="realDataList" ofType="com.smartfarm.base.monitor.core.entity.vo.MonitorSoilRealDataVo"
+                    column="sersor_node_id">
+            <id column="id" property="id" jdbcType="BIGINT"/>
+            <result column="sersor_node_id" property="sersorNodeId" jdbcType="BIGINT"/>
+            <result column="transfer_date" property="transferDate" jdbcType="VARCHAR"/>
+            <result column="transfer_time" property="transferTime" jdbcType="VARCHAR"/>
+            <result column="real_value" property="realValue" jdbcType="DOUBLE"/>
+            <result column="unit" property="unit" jdbcType="VARCHAR"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <resultMap type="com.smartfarm.base.monitor.core.entity.vo.MonitorSoilDataVo" id="SoilDataBaseResultMap">
+        <result column="node_name" property="nodeName" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="SMALLINT"/>
+        <result column="max_threshold" property="maxThreshold" jdbcType="INTEGER"/>
+        <result column="min_threshold" property="minThreshold" jdbcType="INTEGER"/>
+        <result column="sersor_type" property="sersorType" jdbcType="BIGINT"/>
+        <collection property="soilDataList" ofType="com.smartfarm.base.monitor.core.entity.vo.MonitorSoilRealDataVo"
+                    column="sersor_type">
+            <id column="id" property="id" jdbcType="BIGINT"/>
+            <result column="sersor_node_id" property="sersorNodeId" jdbcType="BIGINT"/>
+            <result column="transfer_date" property="transferDate" jdbcType="VARCHAR"/>
+            <result column="transfer_time" property="transferTime" jdbcType="VARCHAR"/>
+            <result column="real_value" property="realValue" jdbcType="DOUBLE"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+            <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="weChatTemperatureResultMap" type="com.smartfarm.base.monitor.core.entity.vo.WeChatTemperatureVo">
+        <result column="sensor_node_name" property="sensorNodeName" jdbcType="VARCHAR"/>
+        <result column="max_threshold" property="maxThreshold" jdbcType="DOUBLE"/>
+        <result column="min_threshold" property="minThreshold" jdbcType="DOUBLE"/>
+        <result column="hour" property="hour" jdbcType="VARCHAR"/>
+        <result column="real_value" property="avgRealValue" jdbcType="DOUBLE"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into monitor_real_data(
+        sersor_node_id,
+        transfer_date,
+        transfer_time,
+        real_value)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.sersorNodeId,jdbcType=VARCHAR},
+            #{item.transferDate,jdbcType=VARCHAR},
+            #{item.transferTime,jdbcType=VARCHAR},
+            #{item.realValue,jdbcType=DOUBLE})
+        </foreach>
+    </insert>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select * from monitor_real_data
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from monitor_real_data
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="com.smartfarm.base.monitor.core.entity.MonitorRealData">
+        insert into monitor_real_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="sersorNodeId != null">
+                sersor_node_id,
+            </if>
+            <if test="transferDate != null">
+                transfer_date,
+            </if>
+            <if test="transferTime != null">
+                transfer_time,
+            </if>
+            <if test="realValue != null">
+                real_value,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="sersorNodeId != null">
+                #{sersorNodeId,jdbcType=VARCHAR},
+            </if>
+            <if test="transferDate != null">
+                #{transferDate,jdbcType=VARCHAR},
+            </if>
+            <if test="transferTime != null">
+                #{transferTime,jdbcType=VARCHAR},
+            </if>
+            <if test="realValue != null">
+                #{realValue,jdbcType=DOUBLE},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.smartfarm.base.monitor.core.entity.MonitorRealData">
+        update monitor_real_data
+        <set>
+            <if test="sersorNodeId != null">
+                sersor_node_id = #{sersorNodeId,jdbcType=VARCHAR},
+            </if>
+            <if test="transferDate != null">
+                transfer_date = #{transferDate,jdbcType=VARCHAR},
+            </if>
+            <if test="transferTime != null">
+                transfer_time = #{transferTime,jdbcType=VARCHAR},
+            </if>
+            <if test="realValue != null">
+                real_value = #{realValue,jdbcType=DOUBLE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryRealDataList" resultMap="BaseVoResultMap">
+        SELECT rd.id,
+        rd.sersor_node_id,
+        rd.transfer_date,
+        rd.transfer_time,
+        rd.real_value,
+        si.`name`,
+        si.unit
+        FROM monitor_real_data rd
+        LEFT JOIN monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        LEFT JOIN monitor_sensor_info si on si.id = sn.sersor_type
+        WHERE sn.product_code NOT IN
+        <foreach collection="codes" item="item" index="index"
+                 open="(" separator="," close=")">#{item}
+        </foreach>
+        AND DATE_SUB(CURDATE(),INTERVAL 7 DAY) &lt;= transfer_date
+        ORDER BY transfer_date
+    </select>
+
+    <select id="queryRealDataListWithToday" resultMap="BaseVoResultMap">
+        SELECT sn.id sersor_node_id,
+        si.`name`,
+        SUBSTR(rd.transfer_time,1,2) transfer_date,
+        AVG(rd.real_value) real_value
+        FROM monitor_real_data rd
+        LEFT JOIN monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        LEFT JOIN monitor_sensor_info si on si.id = sn.sersor_type
+        WHERE transfer_date = #{today}
+        AND sn.gateway_id IN
+        <foreach collection="gatewayIds" item="item" index="index"
+                 open="(" separator="," close=")">#{item}
+        </foreach>
+        GROUP BY sn.id, si.`name`, SUBSTR(rd.transfer_time,1,2)
+        order by sn.id, SUBSTR(rd.transfer_time,1,2)
+    </select>
+
+    <select id="queryRealDataListWithWeek" resultMap="BaseVoResultMap">
+        SELECT sn.id sersor_node_id,
+        si.`name`,
+        SUBSTR(rd.transfer_date,7,2) transfer_date,
+        ROUND(AVG(rd.real_value),2) real_value
+        FROM monitor_real_data rd
+        LEFT JOIN monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        LEFT JOIN monitor_sensor_info si on si.id = sn.sersor_type
+        WHERE transfer_date BETWEEN (SELECT DATE_ADD(now(),INTERVAL -1 WEEK)) and now()
+        AND sn.gateway_id IN
+        <foreach collection="gatewayIds" item="item" index="index"
+                 open="(" separator="," close=")">#{item}
+        </foreach>
+        GROUP BY sn.id, si.`name`, rd.transfer_date
+        order by sn.id, transfer_date
+    </select>
+
+    <select id="queryRealDataListWithMonth" resultMap="BaseVoResultMap">
+        SELECT sn.id sersor_node_id,
+        si.`name`,
+        SUBSTR(rd.transfer_date,7,2) transfer_date,
+        ROUND(AVG(rd.real_value),2) real_value
+        FROM monitor_real_data rd
+        LEFT JOIN monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        LEFT JOIN monitor_sensor_info si on si.id = sn.sersor_type
+        WHERE rd.transfer_date BETWEEN (SELECT DATE_ADD(now(),INTERVAL -1 MONTH)) and now()
+        AND sn.gateway_id IN
+        <foreach collection="gatewayIds" item="item" index="index"
+                 open="(" separator="," close=")">#{item}
+        </foreach>
+        GROUP BY sn.id, si.`name`, SUBSTR(rd.transfer_date,7,2)
+        order by sn.id, SUBSTR(rd.transfer_date,7,2)
+    </select>
+
+
+    <select id="queryFarmerRealDataListWithToday" resultMap="BaseVoResultMap">
+        SELECT sn.id sersor_node_id,
+        si.`name`,
+        SUBSTR(rd.transfer_time,1,2) transfer_date,
+        ROUND(AVG(rd.real_value),2) real_value
+        FROM monitor_real_data rd
+        LEFT JOIN monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        LEFT JOIN monitor_sensor_info si on si.id = sn.sersor_type
+        LEFT JOIN monitor_gateway_node gn ON gn.id = sn.gateway_id
+        WHERE transfer_date = #{today}
+        <!-- 	AND sn.gateway_id IN -->
+        <!-- 	<foreach collection="gatewayIds" item="item" index="index"  -->
+        <!-- 	open="(" separator="," close=")">#{item} -->
+        <!-- 	</foreach> -->
+        AND gn.business_id = #{baseId}
+        GROUP BY sn.id, si.`name`, SUBSTR(rd.transfer_time,1,2)
+        order by sn.id, SUBSTR(rd.transfer_time,1,2)
+    </select>
+
+    <select id="queryFarmerRealDataListWithWeek" resultMap="BaseVoResultMap">
+        SELECT sn.id sersor_node_id,
+        si.`name`,
+        SUBSTR(rd.transfer_date,7,2) transfer_date,
+        AVG(rd.real_value) real_value
+        FROM monitor_real_data rd
+        LEFT JOIN monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        LEFT JOIN monitor_sensor_info si on si.id = sn.sersor_type
+        LEFT JOIN monitor_gateway_node gn ON gn.id = sn.gateway_id
+        WHERE transfer_date BETWEEN (SELECT DATE_ADD(now(),INTERVAL -1 WEEK)) and now()
+        <!-- 	AND sn.gateway_id IN -->
+        <!-- 	<foreach collection="gatewayIds" item="item" index="index"  -->
+        <!-- 	open="(" separator="," close=")">#{item} -->
+        <!-- 	</foreach> -->
+        AND gn.business_id = #{baseId}
+        GROUP BY sn.id, si.`name`, rd.transfer_date
+        order by sn.id, transfer_date
+    </select>
+
+    <select id="queryFarmerRealDataListWithMonth" resultMap="BaseVoResultMap">
+        SELECT sn.id sersor_node_id,
+        si.`name`,
+        SUBSTR(rd.transfer_date,7,2) transfer_date,
+        AVG(rd.real_value) real_value
+        FROM monitor_real_data rd
+        LEFT JOIN monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        LEFT JOIN monitor_sensor_info si on si.id = sn.sersor_type
+        LEFT JOIN monitor_gateway_node gn ON gn.id = sn.gateway_id
+        WHERE rd.transfer_date BETWEEN (SELECT DATE_ADD(now(),INTERVAL -1 MONTH)) and now()
+        <!-- 	AND sn.gateway_id IN -->
+        <!-- 	<foreach collection="gatewayIds" item="item" index="index"  -->
+        <!-- 	open="(" separator="," close=")">#{item} -->
+        <!-- 	</foreach> -->
+        AND gn.business_id = #{baseId}
+        GROUP BY sn.id, si.`name`, SUBSTR(rd.transfer_date,7,2)
+        order by sn.id, SUBSTR(rd.transfer_date,7,2)
+    </select>
+
+
+    <select id="queryRealDataById" resultMap="BaseResultMap">
+        SELECT real_value
+        FROM monitor_real_data
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryRealDataShowList" resultMap="BaseVoResultMap">
+        SELECT rd.id,
+        rd.sersor_node_id,
+        rd.transfer_date,
+        rd.transfer_time,
+        rd.real_value,
+        si.`name`,
+        si.unit,
+        sn.max_threshold,
+        sn.min_threshold,
+        sn.id nodeId
+        FROM monitor_real_data rd
+        LEFT JOIN monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        LEFT JOIN monitor_sensor_info si on si.id = sn.sersor_type
+        WHERE sn.gateway_id IN
+        <foreach collection="ids" item="item" index="index"
+                 open="(" separator="," close=")">#{item}
+        </foreach>
+        ORDER BY transfer_date DESC,transfer_time DESC
+        LIMIT 7
+    </select>
+
+    <select id="queryMeteorologicalRealDataList" resultMap="BaseVoResultMap">
+        <!-- SELECT sn.id sersor_node_id,
+          si.`name`,
+          SUBSTR(rd.transfer_date,7,2) transfer_date,
+          ROUND(AVG(rd.real_value),2) real_value,
+        sn.max_threshold,
+        sn.min_threshold,
+        si.unit
+        FROM monitor_real_data rd
+        LEFT JOIN monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        LEFT JOIN monitor_sensor_info si on si.id = sn.sersor_type
+        WHERE transfer_date = #{today}
+        AND sn.gateway_id in
+        <foreach collection="gatewayIds" item="item" index="index"
+        open="(" separator="," close=")">#{item}
+        </foreach>
+        GROUP BY sn.id,  si.`name`, SUBSTR(rd.transfer_date,7,2)
+        order by sn.id, SUBSTR(rd.transfer_time,1,2) -->
+
+        SELECT co_no.id,
+        co_no.`name`,
+        co_no.unit,
+        co_no.real_value,
+        co_no.node_name,
+        co_no.transfer_date,
+        co_no.transfer_time,
+        co_no.product_code pCode
+        FROM monitor_sersor_node sn
+        RIGHT JOIN (SELECT
+        sn.id,gn.product_code,si.`name`,si.unit,rd.real_value,sn.node_name,rd.transfer_date,rd.transfer_time
+        FROM monitor_real_data rd,monitor_sensor_info si,monitor_gateway_node gn,monitor_sersor_node sn
+        WHERE gn.id = sn.gateway_id
+        AND rd.sersor_node_id = sn.id
+        AND sn.sersor_type = si.id
+        AND gn.product_code = #{productCode}
+        ORDER BY rd.transfer_date DESC,rd.transfer_time DESC limit 100000000) co_no ON sn.id = co_no.id
+        GROUP BY co_no.`name`
+    </select>
+
+    <select id="queryAvgMeteorologicalAndSoilList" resultMap="BaseVoResultMap">
+        SELECT ROUND(AVG(co_no.real_value),2) real_value,
+        co_no.`name`,
+        co_no.unit,
+        co_no.node_name,
+        co_no.code
+        FROM monitor_sersor_node sn
+        left join monitor_gateway_node gn on gn.id=sn.gateway_id
+        RIGHT JOIN (select * from (select
+        rd.real_value,si.`name`,si.`code`,si.unit,sn.node_name,rd.transfer_date,rd.transfer_time,sn.id
+        from monitor_sersor_node sn
+        left join monitor_gateway_node gn on gn.id=sn.gateway_id
+        left join monitor_real_data rd on rd.sersor_node_id = sn.id and rd.transfer_date = #{today}
+        LEFT JOIN monitor_sensor_info si ON si.id = sn.sersor_type
+        where gn.business_id = #{businessId}
+        order by rd.transfer_time desc limit 100000000) a
+        group by a.id) co_no ON sn.id = co_no.id
+        where gn.business_id = #{businessId}
+        GROUP BY co_no.`name`,co_no.unit
+    </select>
+
+    <select id="queryAvgDataByFarmTunelId" resultMap="BaseVoResultMap">
+        SELECT ROUND(AVG(co_no.real_value),2) real_value,
+        co_no.`name`,
+        co_no.unit,
+        co_no.node_name,
+        co_no.code
+        FROM farm_rentland_info f
+        left join farm_rentland_device fd on fd.rent_land_id=f.id and fd.device_type = 3
+        left join monitor_sersor_node sn on fd.device_id=sn.id
+        left join monitor_gateway_node gn on gn.id=sn.gateway_id
+        left join (select * from (select rd.real_value,si.`name`,si.`code`,si.unit,sn.node_name,
+        rd.transfer_date,rd.transfer_time,sn.id
+        from monitor_sersor_node sn
+        left join monitor_gateway_node gn on gn.id=sn.gateway_id
+        left join monitor_real_data rd on rd.sersor_node_id = sn.id
+        LEFT JOIN monitor_sensor_info si ON si.id = sn.sersor_type
+        where gn.business_id = #{businessId}
+        order by rd.transfer_time desc limit 100000000) a
+        group by a.id) co_no ON sn.id = co_no.id
+        where f.tunnel_id = #{tunelId}
+        GROUP BY co_no.`name`,co_no.unit
+    </select>
+
+    <select id="queryAvgDataByRentLandId" resultMap="BaseVoResultMap">
+        SELECT ROUND(AVG(co_no.real_value),2) real_value,
+        co_no.`name`,
+        co_no.unit,
+        co_no.node_name,
+        co_no.code
+        FROM farm_rentland_info f
+        left join farm_rentland_device fd on fd.rent_land_id=f.id and fd.device_type = 3
+        left join monitor_sersor_node sn on fd.device_id=sn.id
+        left join monitor_gateway_node gn on gn.id=sn.gateway_id
+        left join (select * from (select rd.real_value,si.`name`,si.`code`,si.unit,sn.node_name,
+        rd.transfer_date,rd.transfer_time,sn.id
+        from monitor_sersor_node sn
+        left join monitor_gateway_node gn on gn.id=sn.gateway_id
+        left join monitor_real_data rd on rd.sersor_node_id = sn.id
+        LEFT JOIN monitor_sensor_info si ON si.id = sn.sersor_type
+        where gn.business_id = #{businessId}
+        order by rd.transfer_time desc limit 100000000) a
+        group by a.id) co_no ON sn.id = co_no.id
+        where f.id = #{rentLandId}
+        GROUP BY co_no.`name`,co_no.unit
+    </select>
+
+    <select id="getAvgRealDataWithDayBySensorId"
+            resultMap="weChatTemperatureResultMap">
+        SELECT
+        si.`name` AS sensor_node_name,
+        SUBSTR(rd.transfer_time, 1, 2) AS `hour`,
+        ROUND(AVG(rd.real_value),2) AS real_value,
+        sn.max_threshold,
+        sn.min_threshold,
+        si.unit
+        FROM
+        monitor_real_data rd
+        LEFT JOIN monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        LEFT JOIN monitor_sensor_info si ON si.id = sn.sersor_type
+        WHERE
+        rd.transfer_date = #{day,jdbcType=VARCHAR}
+        AND rd.sersor_node_id = #{sensorId,jdbcType=BIGINT}
+        GROUP BY
+        sn.id,
+        si.`name`,
+        SUBSTR(rd.transfer_time, 1, 2)
+        ORDER BY
+        sn.id,
+        SUBSTR(rd.transfer_time, 1, 2)
+    </select>
+</mapper>

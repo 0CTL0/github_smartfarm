@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartfarm.base.farm.core.dao.FarmCropsInfoDao">
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.FarmCropsInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="area" jdbcType="INTEGER" property="area" />
+    <result column="cover" jdbcType="VARCHAR" property="cover" />
+    <result column="carousel" jdbcType="VARCHAR" property="carousel" />
+    <result column="harvest" jdbcType="INTEGER" property="harvest" />
+    <result column="effect" jdbcType="VARCHAR" property="effect" />
+    <result column="planting_time" jdbcType="VARCHAR" property="plantingTime" />
+    <result column="growth" jdbcType="INTEGER" property="growth" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="fresh_day" jdbcType="INTEGER" property="freshDay" />
+    <result column="farm_id" jdbcType="BIGINT" property="farmId" />
+
+  </resultMap>
+
+  <select id="getByDelegateOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select fci.* from farm_crops_info fci where fci.id=(select fmc.crops_id from farm_member_crops fmc where fmc.id=(select fdo.member_crops_id from farm_delegate_order fdo
+    where fdo.id=#{orderId,jdbcType=BIGINT}))
+  </select>
+
+  <sql id="Base_Column_List">
+    id, name, price, area, cover, carousel, harvest, effect, planting_time, growth, status,
+    order_num,fresh_day,farm_id
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from farm_crops_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select from farm_crops_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.smartfarm.base.farm.core.entity.FarmCropsInfo">
+    insert into farm_crops_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="cover != null">
+        cover,
+      </if>
+      <if test="carousel != null">
+        carousel,
+      </if>
+      <if test="harvest != null">
+        harvest,
+      </if>
+      <if test="effect != null">
+        effect,
+      </if>
+      <if test="plantingTime != null">
+        planting_time,
+      </if>
+      <if test="growth != null">
+        growth,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="orderNum != null">
+        order_num,
+      </if>
+      <if test="freshDay != null">
+        fresh_day,
+      </if>
+      <if test="farmId != null">
+        farm_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=INTEGER},
+      </if>
+      <if test="cover != null">
+        #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="carousel != null">
+        #{carousel,jdbcType=VARCHAR},
+      </if>
+      <if test="harvest != null">
+        #{harvest,jdbcType=INTEGER},
+      </if>
+      <if test="effect != null">
+        #{effect,jdbcType=VARCHAR},
+      </if>
+      <if test="plantingTime != null">
+        #{plantingTime,jdbcType=VARCHAR},
+      </if>
+      <if test="growth != null">
+        #{growth,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="orderNum != null">
+      #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="freshDay != null">
+        #{freshDay,jdbcType=INTEGER},
+      </if>
+      <if test="farmId != null">
+        #{farmId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartfarm.base.farm.core.entity.FarmCropsInfo">
+    update farm_crops_info
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=INTEGER},
+      </if>
+      <if test="cover != null">
+        cover = #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="carousel != null">
+        carousel = #{carousel,jdbcType=VARCHAR},
+      </if>
+      <if test="harvest != null">
+        harvest = #{harvest,jdbcType=INTEGER},
+      </if>
+      <if test="effect != null">
+        effect = #{effect,jdbcType=VARCHAR},
+      </if>
+      <if test="plantingTime != null">
+        planting_time = #{plantingTime,jdbcType=VARCHAR},
+      </if>
+      <if test="growth != null">
+        growth = #{growth,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="orderNum != null">
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="freshDay != null">
+        fresh_day = #{freshDay,jdbcType=INTEGER},
+      </if>
+      <if test="farmId != null">
+        farm_id = #{farmId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <select id="selectAllRecordByFarmId" resultMap="BaseResultMap">
+    SELECT fci.* FROM farm_crops_info fci
+    where fci.farm_id=#{farmId}
+    and status=1
+  </select>
+
+  <select id="getCropById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select * from farm_crops_info where id=#{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectPageList" resultMap="BaseResultMap">
+    select fci.* from farm_crops_info fci
+
+    <where>
+      <if test="farmId != null">
+         fci.farm_id = #{farmId}
+      </if>
+      <if test="name != null">
+         and fci.name LIKE CONCAT('%',#{name},'%')
+      </if>
+      <if test="status != null">
+        and fci.status = #{status}
+      </if>
+    </where>
+    order by fci.id desc
+    limit #{start}, #{limit}
+  </select>
+
+  <select id="selectPageTotal" resultType="Integer">
+    select COUNT(*)  from farm_crops_info fci
+    <where>
+      <if test="farmId != null">
+        fci.farm_id = #{farmId}
+      </if>
+      <if test="name != null">
+        and fci.name LIKE CONCAT('%',#{name},'%')
+      </if>
+      <if test="status != null">
+        and fci.status = #{status}
+      </if>
+    </where>
+  </select>
+
+
+</mapper>

@@ -1,0 +1,46 @@
+﻿
+    <div class="navbar" ng-controller="headerCtrl">
+        <div class="navbar-inner">
+            <div class="navbar-container">
+                <div class="navbar-header pull-left">
+                    <a href="#" class="navbar-brand">
+                        <small>
+                            <img src="/r/image/logo.png" />
+                        </small>
+                    </a>
+                </div>
+                <div class="sidebar-collapse" id="sidebar-collapse">
+                    <i class="collapse-icon fa fa-bars"></i>
+                </div>
+		        <div class="navbar-header pull-right">
+                	<div class="page-header position-relative" style="z-index:100;width:45px;height:45px;float:right;background-image:none">
+		           
+		            <!--Header Buttons-->
+		            <div class="header-buttons">
+		                <a class="fullscreen" id="fullscreen-toggler" href="#">
+		                    <i class="glyphicon glyphicon-fullscreen"></i>
+		                </a>
+		            </div>
+		            <!--Header Buttons End-->
+		        </div>
+                </div>
+                <div class="navbar-header pull-right">
+                	<div>
+                		<div ng-click="logout()" style="padding:8px 20px 10px 20px;height:45px;opacity:1;cursor:pointer;font-size:14px"> 
+                			<span style="color:#fff;line-height:25px;">退出</span>
+                		</div>
+                	</div>
+                </div>
+                <div class="navbar-header pull-right">
+                	<div>
+                		<div style="padding:8px 20px 10px 20px;height:45px;opacity:1;font-size:14px"> 
+                			<span style="color:#fff;line-height:25px;">{{adminInfo.account}}</span>
+                		</div>
+                	</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    

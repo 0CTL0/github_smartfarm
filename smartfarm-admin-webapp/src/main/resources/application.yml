@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: dev
+
+redis:
+  database: mall
+  key:
+    admin: 'ums:admin'
+    resourceList: 'ums:resourceList'
+  expire:
+    common: 86400 # 24小时

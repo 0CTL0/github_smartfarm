@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartfarm.base.shop.core.dao.MemberOrderCommissionDao">
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.MemberOrderCommission">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="order_member_id" jdbcType="BIGINT" property="orderMemberId" />
+    <result column="commission_sum" jdbcType="DECIMAL" property="commissionSum" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="BaseVoResultMap" type="com.smartfarm.base.shop.core.entity.vo.MemberOrderCommissionVo">
+    <result column="orderMemberName" jdbcType="VARCHAR" property="orderMemberName" />
+    <result column="commissionMemberName" jdbcType="VARCHAR" property="commissionMemberName" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, member_id, order_id, order_member_id, commission_sum, create_time
+  </sql>
+
+  <select id="selectMemberOrderCommissions" resultMap="BaseVoResultMap">
+    select * from member_order_commission moc
+    where moc.member_id=#{memberId}
+    order by moc.id desc
+  </select>
+
+  <select id="selectPageList" resultMap="BaseVoResultMap">
+    select moc.*,mi1.nick_name commissionMemberName,mi2.nick_name orderMemberName,oi.order_no,oi.total_price
+    from member_order_commission moc
+    left join member_info mi1 on moc.member_id=mi1.id
+    left join member_info mi2 on moc.order_member_id=mi2.id
+    left join order_info oi on moc.order_id=oi.id
+    where oi.business_id=#{farmId}
+    <if test="orderNo!=null and orderNo!=''">
+      and oi.order_no LIKE CONCAT('%',#{orderNo},'%')
+    </if>
+    <if test="commissionMemberName!=null and commissionMemberName!=''">
+      and mi1.nick_name=#{commissionMemberName}
+    </if>
+    <if test="orderMemberName!=null and orderMemberName!=''">
+      and mi2.nick_name=#{orderMemberName}
+    </if>
+
+    order by moc.id desc
+    limit #{start}, #{limit}
+  </select>
+<select id="selectPageTotal" resultType="Integer">
+    select COUNT(*)
+    from member_order_commission moc
+    left join member_info mi1 on moc.member_id=mi1.id
+    left join member_info mi2 on moc.order_member_id=mi2.id
+    left join order_info oi on moc.order_id=oi.id
+    where oi.business_id=#{farmId}
+  <if test="orderNo!=null and orderNo!=''">
+    and oi.order_no LIKE CONCAT('%',#{orderNo},'%')
+  </if>
+    <if test="commissionMemberName!=null and commissionMemberName!=''">
+      and mi1.nick_name=#{commissionMemberName}
+    </if>
+    <if test="orderMemberName!=null and orderMemberName!=''">
+      and mi2.nick_name=#{orderMemberName}
+    </if>
+</select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from member_order_commission
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from member_order_commission
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertSelective" parameterType="com.smartfarm.base.shop.core.entity.MemberOrderCommission">
+    insert into member_order_commission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="orderMemberId != null">
+        order_member_id,
+      </if>
+      <if test="commissionSum != null">
+        commission_sum,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="memberId != null">
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="orderMemberId != null">
+        #{orderMemberId,jdbcType=BIGINT},
+      </if>
+      <if test="commissionSum != null">
+        #{commissionSum,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartfarm.base.shop.core.entity.MemberOrderCommission">
+    update member_order_commission
+    <set>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="orderMemberId != null">
+        order_member_id = #{orderMemberId,jdbcType=BIGINT},
+      </if>
+      <if test="commissionSum != null">
+        commission_sum = #{commissionSum,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

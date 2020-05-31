@@ -1,0 +1,285 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="description" content="login page" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>农场摄像头管理</title>
+
+<link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+<link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+<link href="/r/css/demo.min.css" rel="stylesheet" />
+<link href="/r/css/animate.min.css" rel="stylesheet" />
+<link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+<link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+<link href="/r/css/fileinput.min.css" rel="stylesheet" />
+<link href="/r/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+<script src="/r/js/skins.min.js"></script>
+<script src="/r/js/jquery-2.1.1.js"></script>
+<script src="/r/js/bootstrap.min.js"></script>
+<script src="/r/js/angular.min.js"></script>
+<script src="/r/js/toastr.js"></script>
+<script src="/r/js/ui-bootstrap-tpls.js"></script>
+<script src="/r/js/fileinput.min.js"></script>
+<script src="/r/js/distpicker.data.js"></script>
+<script src="/r/js/distpicker.js"></script>
+<script src="/r/js/bootstrap-datetimepicker.js"></script>
+<script src="/r/js/core.js"></script>
+<script src="/r/js/beyond.min.js"></script>
+
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+	<!-- 头部 -->
+
+	<div class="main-container container-fluid">
+		<div class="page-container">
+
+			<!-- 菜单 -->
+			<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+			<!-- 菜单 -->
+
+			<!-- 右半页 -->
+			<div class="page-content">
+				<div class="page-breadcrumbs">
+					<ul class="breadcrumb">
+						<li><i class="fa fa-comments"></i> <a href="/admin/main.htm">首页</a>
+						</li>
+						<li class="active">摄像头列表</li>
+					</ul>
+				</div>
+
+				<div class="page-body">
+					<div class="row">
+						<div class="col-xs-12 col-md-12">
+							<div class="widget">
+								<div class="widget-header ">
+									<span class="widget-caption">摄像头列表</span>
+								</div>
+
+								<div class="widget-body">
+
+									<!-- 主列表 -->
+									<table class="table table-striped table-hover"
+										id="simpledatatable">
+										<thead>
+											<tr>
+												<th>序号</th>
+												<th>摄像头名称</th>
+												<th>创建时间</th>
+												<th>序列号</th>
+												<th>验证码</th>
+												<th>通道号</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="camera in cameraList">
+												<td>{{$index+1+(formData.pageNumber-1)*10}}</td>
+												<td>{{camera.cameraName}}</td>
+												<td>{{camera.createTime}}</td>
+												<td>{{camera.deviceSerial}}</td>
+												<td>{{camera.validateCode}}</td>
+												<td>{{camera.channelNo}}</td>
+												<td>
+													<button class="btn btn-success" ng-click="showEditWindow(camera.id)">修改</button>
+												</td>
+											</tr>
+										</tbody>
+
+									</table>
+									<div class="row DTTTFooter">
+										<pagination style="float:right" ng-change="pageChanged()"
+											total-items="formData.total"
+											items-per-page="formData.pageSize"
+											ng-model="formData.pageNumber" max-size="5"
+											class="pagination m-t m-b" boundary-links="true"></pagination>
+									</div>
+									<div style="clear: both"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 修改摄像头弹窗 -->
+	<div class="modal-backdrop fade in" ng-if="common.showEdit"></div>
+	<div class="bootbox modal fade modal-darkorange in"
+		 style="display: block" ng-show="common.showEdit">
+		<div class="modal-dialog" style="top: 80px;">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<button type="button" class="bootbox-close-button close"
+							ng-click="closeEditWindow()">×</button>
+					<h4 class="modal-title">修改摄像头信息</h4>
+				</div>
+
+				<div class="modal-body"
+					 style="height: 80px; overflow-y: auto; overflow-x: hidden">
+					<div class="bootbox-body">
+						<div class="form-horizontal">
+
+							<div class="form-group">
+								<label
+									   class="col-sm-2 control-label no-padding-right">摄像头名称</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control"
+										   ng-model='cameraEdit.cameraName'>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary"
+							ng-click="closeEditWindow()">取消</button>
+					<button type="button" class="btn btn-primary"
+							ng-click="submitEdit()">提交</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 修改摄像头弹窗 -->
+
+</body>
+
+<script type="text/javascript">
+	var app = angular.module("myApp", ["ui.bootstrap"]);
+	app.controller("myCtrl", function($scope,$http) {
+		var submitNow = false;
+		$scope.common = {
+			showEdit : false
+		};
+
+		$scope.formData = {
+			total : 0,
+			pageSize : 10,
+			pageNumber : 1
+		}
+
+		$scope.cameraAdd = {
+			cameraName:'',
+			channelNo:'',
+			deviceSerial:'',
+			validateCode:''
+		}
+
+		//刷新页面数据
+		$scope.pageChanged = function() {
+			$http(
+					{
+						method : "post",
+						url : "/farmCamera/getCameras.htm",
+						data : $.param($scope.formData),
+						headers : {
+							"Content-Type" : "application/x-www-form-urlencoded"
+						}
+					})
+					.then(
+							function(response) {
+								if (!response.data.success) {
+									Notify("操作失败！",
+											"top-right",
+											"4000", "danger",
+											"fa-bolt", true);
+									return;
+								}
+								$scope.cameraList = response.data.cameraList;
+								$scope.formData.total = response.data.total;
+							});
+		}
+		$scope.pageChanged();
+
+		//打开修改摄像头窗口
+		$scope.showEditWindow = function(id) {
+			$http(
+					{
+						method : 'post',
+						url : '/farmCamera/getSingleCamera.htm',
+						params : {
+							"id" : id
+						},
+						transformRequest : angular.identity,
+						headers : {
+							'Content-type' : 'application/x-www-form-urlencoded'
+						}
+						//angularjs设置文件上传的content-type修改方式
+					})
+					.then(
+							function(response) {
+								if (!response.data.success) {
+									Notify("操作失败！",
+											'top-right',
+											'4000', 'danger',
+											'fa-bolt', true);
+									return;
+								}
+								$scope.cameraEdit = response.data.cameraEdit;
+							});
+
+			$scope.common.showEdit = true;
+		}
+
+		//关闭修改摄像头窗口
+		$scope.closeEditWindow = function() {
+			$scope.common.showEdit = false;
+		}
+
+		//提交修改摄像头信息
+		$scope.submitEdit = function(){
+			if (submitNow) {
+				return;
+			}
+			var fd = new FormData();
+			fd.append("id",$scope.cameraEdit.id);
+			fd.append("cameraName",$scope.cameraEdit.cameraName);
+			console.log(fd);
+			submitNow = true;
+			$http({
+				method : 'post',
+				url : '/farmCamera/modifyCameraInfo.htm',
+				data : fd,
+				transformRequest : angular.identity,
+				headers : {
+					'Content-Type' : undefined
+				}
+				//angularjs设置文件上传的content-type修改方式
+			}).then(function(response) {
+				if (!response.data.success) {
+					Notify("操作失败！", 'top-right','4000', 'danger','fa-bolt', true);
+					submitNow = false;
+					return;
+				}
+				Notify('修改成功', 'top-right', '5000','success', 'fa-check', true);
+				$scope.common.showEdit = false;
+				$scope.pageChanged();
+				submitNow = false;
+			});
+		}
+
+	});
+</script>
+<script src="/r/core/controller/base/menu.js"></script>
+<style type="text/css">
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td,
+	.table>tbody>tr>td, .table>tfoot>tr>td {
+	vertical-align: middle;
+	text-align: center;
+}
+
+.modal-footer {
+	text-align: center;
+}
+</style>
+
+</html>

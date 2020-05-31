@@ -1,0 +1,24 @@
+﻿            <div  ng-controller="menuCtrl">
+                <ul class="nav sidebar-menu">
+                	<li ng-repeat="func in funcs" ng-class="checkMenuClass(func)">
+                		<!-- 无次级菜单 -->
+                        <a href="{{func.url}}" ng-if="func.sub.length == 0">
+                            <i class="menu-icon glyphicon glyphicon-tasks"></i>
+                            <span class="menu-text">{{func.name}}</span>
+                        </a>
+                        <!-- 次级菜单 -->
+                        <a class="menu-dropdown" ng-if="func.sub.length != 0">
+                            <i class="menu-icon glyphicon glyphicon-tasks"></i>
+                            <span class="menu-text">{{func.name}}</span>
+                            <i class="menu-expand"></i>
+                        </a>
+                        <ul class="submenu" ng-if="func.sub.length != 0">
+                            <li ng-repeat="subItem in func.sub" ng-class="{'active':subItem.url == nowPath}">
+                                <a href="{{subItem.url}}">
+                                    <span class="menu-text">{{subItem.name}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li> 
+                 </ul>
+            </div>

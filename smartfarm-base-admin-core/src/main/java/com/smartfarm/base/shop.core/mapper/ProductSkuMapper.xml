@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.ProductSkuDao" >
+
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.ProductSku" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="stock" property="stock" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="details" property="details" jdbcType="VARCHAR" />
+    <result column="norm" property="norm" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="type" property="type" jdbcType="SMALLINT" />
+    <result column="point" property="point" jdbcType="INTEGER" />
+      <result column="weight" property="weight" jdbcType="DECIMAL" />
+      <result column="free_postage" property="freePostage" jdbcType="SMALLINT" />
+      <result column="logistics_template_id" property="logisticsTemplateId" jdbcType="BIGINT" />
+  </resultMap>
+   <resultMap type="com.smartfarm.base.shop.core.entity.vo.ProductSkuVo" id="BaseVoResultMap" extends="BaseResultMap">
+  	<result column="productName" property="productName" jdbcType="VARCHAR" />
+  	<result column="param_value" property="paramValue" jdbcType="VARCHAR" />
+  	<result column="rule_type" property="ruleType" jdbcType="SMALLINT" />
+     <result column="templateName" property="templateName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.ProductSku" keyProperty="id" useGeneratedKeys="true">
+    insert into product_sku
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="stock != null" >
+        stock,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="details != null" >
+        details,
+      </if>
+      <if test="norm != null" >
+        norm,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="point != null" >
+        point,
+      </if>
+        <if test="weight != null" >
+            weight,
+        </if>
+        <if test="freePostage != null" >
+            free_postage,
+        </if>
+        <if test="logisticsTemplateId != null" >
+            logistics_template_id,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        #{productId,jdbcType=BIGINT},
+      </if>    
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if> 
+      <if test="stock != null" >
+        #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="details != null" >
+        #{details,jdbcType=VARCHAR},
+      </if>
+      <if test="norm != null" >
+        #{norm,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="point != null" >
+        #{point,jdbcType=INTEGER},
+      </if>
+        <if test="weight != null" >
+            #{weight,jdbcType=DECIMAL},
+        </if>
+        <if test="freePostage != null" >
+            #{freePostage,jdbcType=SMALLINT},
+        </if>
+        <if test="logisticsTemplateId != null" >
+            #{logisticsTemplateId,jdbcType=BIGINT},
+        </if>
+    </trim>
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.ProductSku" >
+    update product_sku
+    <set >
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="stock != null" >
+        stock = #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="details != null" >
+        details = #{details,jdbcType=VARCHAR},
+      </if>
+      <if test="norm != null" >
+        norm = #{norm,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="point != null" >
+        point = #{point,jdbcType=INTEGER},
+      </if>
+        <if test="weight != null" >
+          weight = #{weight,jdbcType=DECIMAL},
+        </if>
+        <if test="freePostage != null" >
+            free_postage = #{freePostage,jdbcType=SMALLINT},
+        </if>
+        <if test="logisticsTemplateId != null" >
+            logistics_template_id = #{logisticsTemplateId,jdbcType=DECIMAL},
+        </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+   <select id="selectById" resultMap="BaseResultMap">
+	select ps.* from product_sku ps
+	where ps.id=#{id}
+  </select>
+  	
+   <select id="countSkuList" resultType="java.lang.Integer">
+	select count(*) from product_sku ps
+	where ps.product_id =#{productInfoId}
+  </select>
+
+  <select id="selectSkuList" resultMap="BaseVoResultMap">
+	select ps.*,pi.name as productName,plt.name templateName  from product_sku ps
+	left join product_info pi on ps.product_id=pi.id
+    left join product_logistics_template plt on ps.logistics_template_id=plt.id
+	where ps.product_id =#{productInfoId}
+	limit #{start}, #{limit}
+  </select>
+  
+  <select id="querySkuByProductId" resultMap="BaseVoResultMap">
+  	select *
+  	from product_sku
+  	where status = 1 and product_id = #{productId}
+  </select>
+  
+  <select id="queryById" resultMap="BaseResultMap">
+  	select *
+  	from product_sku
+  	where id = #{id}
+  </select>
+  
+  <update id="subSkuStock">
+  	update product_sku
+  	set stock = stock - #{stock}
+  	where id = #{id} and stock <![CDATA[>=]]> #{stock}
+  </update>
+  
+  <update id="addSkuStock">
+  	update product_sku
+  	set stock = stock + #{stock}
+  	where id = #{id} 
+  </update>
+  
+  <select id="querySkuByProductIdAndType" resultMap="BaseVoResultMap">
+  	select *
+  	from product_sku
+  	where status = 1 and product_id = #{productId} and type=#{type}
+  </select>
+  
+  <select id="querySkuDetailsById" resultMap="BaseResultMap">
+  	SELECT ps.details,ps.id
+	FROM product_category pc,product_info pi,product_sku ps
+	WHERE pc.id = pi.category_id
+	AND ps.product_id = pi.id
+	AND ps.type = 1
+	AND pc.id = #{id}
+  </select>
+  
+  <select id="queryProductSkuById" resultMap="BaseVoResultMap">
+  	SELECT ps.details,br.rule_type,br.param_value
+	FROM product_sku ps,coupon_batch_rule br
+	WHERE (ps.id = br.param_value OR br.param_value = 'all')
+	AND br.coupon_batch_id = #{id}
+  </select>
+  
+  <select id="queryAllProductSku" resultMap="BaseResultMap">
+  	SELECT id,
+  	details
+	FROM product_sku
+  </select>
+
+    <select id="selectSkuCommissionList" resultMap="BaseVoResultMap">
+        select *,pi.name productName from product_sku ps
+        left join product_info pi on ps.product_id=pi.id
+        where pi.business_id=#{farmId}
+        <if test="name!=null">
+            and pi.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        order by ps.id desc
+        limit #{start}, #{limit}
+    </select>
+
+    <select id="selectSkuCommissionTotal" resultType="java.lang.Integer">
+        select count(*) from product_sku ps
+        left join product_info pi on ps.product_id=pi.id
+        where pi.business_id=#{farmId}
+        <if test="name!=null">
+            and pi.name LIKE CONCAT('%',#{name},'%')
+        </if>
+    </select>
+
+
+</mapper>

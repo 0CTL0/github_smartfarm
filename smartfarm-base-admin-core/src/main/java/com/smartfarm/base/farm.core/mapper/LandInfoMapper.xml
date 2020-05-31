@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.LandInfoDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.LandInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="cover" property="cover" jdbcType="VARCHAR" />
+    <result column="brief" property="brief" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="type_id" property="typeId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="period" property="period" jdbcType="INTEGER" />
+    <result column="ship_times" property="shipTimes" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.farm.core.entity.vo.LandInfoVo" id="BaseVoResultMap" extends="BaseResultMap">
+  	<result column="landTypeName" property="landTypeName" jdbcType="VARCHAR" />
+  	 	 
+ 	<result column="minRentPrice" property="minRentPrice" jdbcType="DECIMAL" />
+  	<collection property="areaList" ofType="com.smartfarm.base.farm.core.entity.AcreageInfo">
+  	<!-- <collection column="land_id" property="areaList" ofType="com.smartfarm.base.farm.core.entity.AcreageInfo"> -->
+  		<id column="ai_id" property="id" jdbcType="BIGINT" />
+	    <result column="land_id" property="landId" jdbcType="BIGINT" />
+	    <result column="code" property="code" jdbcType="VARCHAR" />
+	    <result column="ai_name" property="name" jdbcType="VARCHAR" />
+	    <result column="area" property="area" jdbcType="INTEGER" />
+	    <result column="cost" property="cost" jdbcType="DECIMAL" />
+	    <result column="ai_status" property="status" jdbcType="SMALLINT" />
+  	</collection> 
+  	<collection property="seedList" ofType="com.smartfarm.base.farm.core.entity.SeedInfo">
+	  	<id column="si_id" property="id" jdbcType="BIGINT" />
+	    <result column="si_name" property="name" jdbcType="VARCHAR" />
+	    <result column="price" property="price" jdbcType="DECIMAL" />
+	    <result column="area" property="area" jdbcType="INTEGER" />
+	    <result column="cover" property="cover" jdbcType="VARCHAR" />
+	    <result column="carousel" property="carousel" jdbcType="VARCHAR" />
+	    <result column="harvest" property="harvest" jdbcType="INTEGER" />
+	    <result column="unit" property="unit" jdbcType="VARCHAR" />
+	    <result column="effect" property="effect" jdbcType="VARCHAR" />
+	    <result column="planting_time" property="plantingTime" jdbcType="VARCHAR" />
+	    <result column="growth" property="growth" jdbcType="INTEGER" />
+	    <result column="si_status" property="status" jdbcType="SMALLINT" />
+	    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+  	</collection> 	
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.farm.core.entity.vo.LandInfoTypeVo" id="BaseTypeVoResultMap" extends="BaseResultMap">
+  	<result column="minCost" property="minCost" jdbcType="DOUBLE" />
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.farm.core.entity.vo.LandInfoOrderVo" id="BaseLandOrderVoResultMap" extends="BaseResultMap">
+  	<result column="areaName" property="areaName" jdbcType="VARCHAR" />
+  	<result column="code" property="code" jdbcType="VARCHAR" />
+  	<result column="area" property="area" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.LandInfo" useGeneratedKeys="true"  keyProperty="id">
+    insert into farm_land_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="cover != null" >
+        cover,
+      </if>
+      <if test="brief != null" >
+        brief,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="typeId != null" >
+        type_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="period != null" >
+        period,
+      </if>
+      <if test="shipTimes != null" >
+        ship_times,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cover != null" >
+        #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="seedIds != null" >
+        #{seedIds,jdbcType=VARCHAR},
+      </if>
+      <if test="period != null" >
+        #{period,jdbcType=INTEGER},
+      </if>
+      <if test="shipTimes != null" >
+        #{shipTimes,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.LandInfo" >
+    update farm_land_info
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cover != null" >
+        cover = #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null" >
+        brief = #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="typeId != null" >
+        type_id = #{typeId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="period != null" >
+        period = #{period,jdbcType=INTEGER},
+      </if>
+      <if test="shipTimes != null" >
+        ship_times = #{shipTimes,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+   <select id="selectPageList" resultMap="BaseVoResultMap"> 	
+  	select fli.*,flt.name landTypeName from farm_land_info fli
+  	left join farm_land_type flt on fli.type_id=flt.id
+	<where>
+		<if test="name != null">
+			fli.name LIKE CONCAT('%',#{name},'%')
+		</if>
+		<if test="status != null">
+			and fli.status = #{status}
+		</if>
+	</where>
+	 limit #{start}, #{limit}
+  </select>
+  
+  <select id="selectPageTotal" resultType="Integer">
+  	select COUNT(*) from farm_land_info fli 
+ 	<where>
+ 		<if test="name != null">
+ 			fli.name LIKE CONCAT('%',#{name},'%')
+ 		</if>
+ 		<if test="status != null">
+ 			and fli.status = #{status}
+ 		</if>
+ 	</where>
+  </select>
+   
+   <select id="selectLandInfoById" resultMap="BaseResultMap">
+	select fli.* from farm_land_info fli
+	where fli.id = #{id}
+  </select>
+   
+  <select id="selectAllByStatus" resultMap="BaseVoResultMap">
+	select fli.*,
+	fai.id ai_id,fai.land_id,fai.code,fai.name ai_name,fai.area,fai.cost,fai.status ai_status,
+	fsi.id si_id,fsi.name si_name,fsi.price,fsi.area,fsi.cover,fsi.carousel,fsi.harvest,fsi.effect,fsi.planting_time,fsi.growth,fsi.status si_status,fsi.order_num,
+	a.minRentPrice	
+	from farm_land_info fli
+	inner join farm_acreage_info fai on fli.id=fai.land_id
+	inner join farm_land_seed fls on fli.id=fls.land_id
+	inner join farm_seed_info fsi on fls.seed_id=fsi.id
+	inner join (select fai.land_id,min(fai.cost) minRentPrice from farm_acreage_info fai GROUP BY fai.land_id)a on fli.id=a.land_id
+	where fli.status=1
+  </select>
+  
+  <select id="queryMiNiLandInfoList" resultMap="BaseResultMap">
+  	SELECT li.id,
+  	li.`name`,
+  	li.`status`
+	FROM farm_land_info li 
+  </select>
+  
+  <select id="queryMiNiLandInfoDetailListByName" resultMap="BaseResultMap">
+  	SELECT *
+	FROM farm_land_info li 
+	WHERE li.`name` = #{name}
+  </select>
+  
+  <select id="queryLangInfoWithTypeList" resultMap="BaseTypeVoResultMap">
+  	SELECT li.id,li.`name`,li.brief,MIN(ai.cost) minCost,li.cover
+	FROM farm_land_info li
+	INNER JOIN farm_acreage_info ai ON ai.land_id = li.id
+	WHERE li.`status` = 2
+	AND li.type_id = #{typeId}
+	GROUP BY li.id,li.`name`,li.brief
+  </select>
+  
+  <select id="queryLangInfoMsgByLandId" resultMap="BaseVoResultMap">
+  	select fli.*,
+	fai.id ai_id,fai.land_id,fai.code,fai.name ai_name,fai.area,fai.cost,fai.status ai_status,
+	fsi.id si_id,fsi.name si_name,fsi.price,fsi.area,fsi.cover,fsi.carousel,fsi.harvest,fsi.effect,fsi.planting_time,fsi.growth,fsi.status si_status,fsi.order_num
+	from farm_land_info fli
+	inner join farm_acreage_info fai on fli.id=fai.land_id
+	inner join farm_land_seed fls on fli.id=fls.land_id
+	inner join farm_seed_info fsi on fls.seed_id=fsi.id
+	WHERE fli.id = #{landId}
+  </select>
+  
+  <select id="queryLandInfoWithOrder" resultMap="BaseLandOrderVoResultMap">
+  	SELECT li.`name`,
+  	li.id,
+  	ai.area,
+  	ai.`code`,
+  	ai.`name` areaName
+	FROM farm_land_info li 
+	INNER JOIN farm_acreage_info ai ON ai.land_id = li.id
+	WHERE li.id = #{landId}
+	AND ai.id = #{areaId}
+
+  </select>
+  
+</mapper>

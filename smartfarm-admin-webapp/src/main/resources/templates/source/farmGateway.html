@@ -1,0 +1,401 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type"  content="multipart/form-data; charset=utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="/r/css/fileinput.min.css" rel="stylesheet" />
+    <link href="/r/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="/r/css/showProgress.css" rel="stylesheet" />
+
+    <script src="/r/js/skins.min.js"></script>
+    <script src="/r/js/jquery-2.1.1.js"></script>
+    <script src="/r/js/bootstrap.min.js"></script>
+    <script src="/r/js/angular.min.js"></script>
+    <script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>
+	<script src="/r/js/fileinput.min.js"></script>
+	<script src="/r/js/distpicker.data.js"></script>
+	<script src="/r/js/distpicker.js"></script>	
+	<script src="/r/js/bootstrap-datetimepicker.js"></script>
+	<script src="/r/js/core.js"></script>
+	<script src="/r/js/beyond.min.js"></script>
+
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+	<!-- 头部 -->
+	   
+    <div class="main-container container-fluid">
+        <div class="page-container">
+        
+        	<!-- 菜单 -->
+        	<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+        	<!-- 菜单 -->
+            
+            <!-- 右半页 -->
+            <div class="page-content">
+            	<div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="fa fa-comments"></i>
+                            <a href="/admin/main.htm">首页</a>
+                        </li>
+                        <li class="active">农场管理</li>
+                    </ul>
+                </div>
+                
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                        
+                            <div class="widget">
+                                <div class="widget-header ">
+                                    <span class="widget-caption">网关列表</span>
+                                </div>
+                                <div class="widget-body">
+
+                                	<div class="table table-striped table-bordered table-hover" style="height:55px;margin-bottom:20px;padding:10px;">
+                                		<div class="DTTT btn-group" style="left:35px;top:60px;">
+                                			<a class="btn btn-primary" ng-click="showAddMsg()"><span style="color:white;"><i class="glyphicon glyphicon-plus"></i>新增网关</span></a>
+                                		</div>
+                                	</div>
+                                
+                                    <table class="table table-striped table-bordered table-hover" id="simpledatatable">
+                                        <thead>
+                                            <tr>
+                                            	<th>
+                                                   	 序号
+                                                </th>
+                                                <th>
+                                                   	产品编码
+                                                </th>
+                                                <th>
+                                                                                                                                                            网关节点名称
+                                                </th>
+                                                 <th>
+                                                   	 网关状态
+                                                </th>
+                                                <th>
+                                                   	操作
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        
+                                        <tbody>
+                                            <tr ng-repeat="gate in list">
+                                            	<td>
+                                                    {{$index+1}}
+                                                </td>
+                                            	<td>
+                                                    {{gate.productCode}}
+                                                </td>
+                                            	<td>
+                                                    {{gate.nodeName}}
+                                                </td>
+                                            	<td>
+                                                    {{{'1':'离线','2':'联机'}[gate.status]}}
+                                                </td>
+                                            	<td>
+                                                    <button class="btn btn-primary" ng-click="showEdit(gate.id)">编辑</button>
+                                                    <button class="btn btn-danger" ng-click="deleteById(gate.id)">删除</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        
+                                    </table>
+                                    <div class="row DTTTFooter">
+                                    	<pagination style="float:right" ng-change="pageChanged()" total-items="formData.total" items-per-page="formData.pageSize" ng-model="formData.pageNumber" max-size="5" class="pagination m-t m-b" boundary-links="true"></pagination>
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--添加传感器网关 -->
+    <div class="modal-backdrop fade in" ng-if="common.showAdd"></div>
+    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showAdd">
+    	<div class="modal-dialog">
+	    	<div class="modal-content">
+	    	
+	    		<div class="modal-header"> 
+	    			<button type="button" class="bootbox-close-button close"  ng-click="closeAddMsg()">×</button>
+	    			<h4 class="modal-title">新增网关</h4>
+	    		</div>
+	    		
+	    		<div class="modal-body" style="height:200px;overflow-y:scroll;overflow-x:hidden">
+		    		<div class="bootbox-body">
+		    			<div class="form-horizontal">
+		    			
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">产品编码</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='sensorGatewayAdd.productCode'>
+	                        	</div>
+			    			</div>
+		    				<div class="form-group">
+			    				<label  class="col-sm-2 control-label no-padding-right">网关节点名称</label>
+			    				<div class="col-sm-10">
+	                            	<input type="text" class="form-control" ng-model='sensorGatewayAdd.nodeName'>
+	                        	</div>
+			    			</div>
+
+			    			<!-- 活动档次DIV -->
+		    			</div>
+		    		</div>
+		    	</div>
+		    	
+		    	<div class="modal-footer">
+		    		<button type="button" class="btn btn-primary" ng-click="closeAddMsg()">取消</button>
+		    		<button type="button" class="btn btn-primary" ng-click="submitAdd()">保存</button>
+		    	</div>
+	    	</div>
+	    </div>
+</div>    
+
+	<!--编辑传感器网关  -->
+	 <div class="modal-backdrop fade in" ng-if="common.showEdit"></div>
+	    <div class="bootbox modal fade modal-darkorange in" style="display: block" ng-show="common.showEdit">
+	    	<div class="modal-dialog">
+		    	<div class="modal-content">
+		    	
+		    		<div class="modal-header"> 
+		    			<button type="button" class="bootbox-close-button close"  ng-click="closeshowEdit ()">×</button>
+		    			<h4 class="modal-title">编辑网关</h4>
+		    		</div>
+		    		
+		    		<div class="modal-body" style="height:200px;overflow-y:scroll;overflow-x:hidden">
+			    		<div class="bootbox-body">
+			    			<div class="form-horizontal">
+			    			
+			    				<div class="form-group">
+				    				<label  class="col-sm-2 control-label no-padding-right">产品编码</label>
+				    				<div class="col-sm-10">
+		                            	<input type="text" class="form-control" ng-model='sensorGatewayInfo.productCode'>
+		                        	</div>
+				    			</div>
+			    				<div class="form-group">
+				    				<label  class="col-sm-2 control-label no-padding-right">网关节点名称</label>
+				    				<div class="col-sm-10">
+		                            	<input type="text" class="form-control" ng-model='sensorGatewayInfo.nodeName'>
+		                        	</div>
+				    			</div>
+				    			<!-- 活动档次DIV -->
+			    			</div>
+			    		</div>
+			    	</div>
+			    	
+			    	<div class="modal-footer">
+			    		<button type="button" class="btn btn-primary" ng-click="closeshowEdit()">取消</button>
+			    		<button type="button" class="btn btn-primary" ng-click="submitEdit()">保存</button>
+			    	</div>
+		    	</div>
+		    </div>
+	</div>        
+    
+			
+</body>
+<script type="text/javascript">
+	var app = angular.module("myApp", ["ui.bootstrap"]);
+	app.controller("myCtrl", function($scope,$http,$timeout) {
+		var submitNow = false;
+		//图片路径前缀
+		$scope.picUrl= picurl;
+		//控制模态框
+		$scope.common = {
+			showAdd:false,
+			showEdit:false
+		}
+		//添加监控传感器参数
+		$scope.sensorGatewayAdd = {
+			productCode:'',
+			nodeName:'',
+			baseId:''
+		}
+		//查询列表参数
+		$scope.formData = {
+			total:0,
+			pageSize:10,
+			pageNumber:1
+		}
+		//展示新增框
+		$scope.showAddMsg = function(){
+
+			// $scope.queryBaseList();
+
+			$scope.common.showAdd = true
+		}
+		//展示编辑框
+		$scope.showEdit = function(infoId){
+			$scope.common.showEdit = true;
+
+			// $timeout(function(){
+			// 	$scope.queryBaseList();
+			// },100)
+
+			$scope.querySensorInfoById(infoId);
+		}
+		//关闭新增框
+		$scope.closeAddMsg = function(){
+			$scope.common.showAdd = false
+		}
+		//关闭编辑框
+		$scope.closeshowEdit = function(){
+			$scope.common.showEdit = false
+		}
+		//初始化列表
+		$scope.pageChanged = function() {
+			$http({
+				method  : 'POST',
+				url     : '/gatewayNode/queryFarmerMonitorGatewayList.htm',
+				data    : $.param($scope.formData),
+				headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+			}).then(function(response) {
+				$scope.list = response.data.sensorGatewayList;
+				$scope.formData.total = response.data.total;
+			});
+		}
+
+		$scope.pageChanged();
+
+		//根据id得到网关
+		$scope.querySensorInfoById = function(id){
+			$http({
+				method  : 'GET',
+				url     : '/monitor/querySensorGatewayById.htm',
+				params:{
+					'id':id
+				},
+				headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+			}).then(function(response) {
+				$scope.sensorGatewayInfo = response.data.sensorGatewayInfo;
+			});
+		}
+
+		//得到所有基地信息
+		$scope.queryBaseList = function(){
+			$http({
+				method  : 'GET',
+				url     : '/farmInfo/queryAll.htm',
+				headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+			}).then(function(response) {
+				$scope.baseList = response.data.list;
+			});
+		}
+
+		//新增
+		$scope.submitAdd = function(){
+			if($scope.sensorGatewayAdd.productCode == '') {
+				Notify("产品编码不能为空！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+				return;
+			}
+			if($scope.sensorGatewayAdd.nodeName == '') {
+				Notify("网关节点名称不能为空！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+				return;
+			}
+			var fd = new FormData();
+			fd.append("productCode", $scope.sensorGatewayAdd.productCode);
+			fd.append("nodeName", $scope.sensorGatewayAdd.nodeName);
+			// fd.append("baseId", $scope.sensorGatewayAdd.baseId);
+			$http({
+				method  : 'POST',
+				url     : '/gatewayNode/addSensorGateway.htm',
+				data : fd,
+				transformRequest: angular.identity,
+				headers : {'Content-Type' : undefined}
+			}).then(function(response){
+				if(!response.data.success) {
+					Notify("操作失败！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+					submitNow = false;
+					return;
+				}
+
+				Notify('添加成功', 'top-right', '5000', 'success', 'fa-check', true);
+				$scope.common.showAdd = false;
+				$scope.pageChanged();
+				$scope.sensorGatewayAdd = {
+					productCode:'',
+					nodeName:''
+				}
+			});
+		}
+
+		//编辑网关
+		$scope.submitEdit = function(){
+			if($scope.sensorGatewayInfo.productCode == '') {
+				Notify("产品编码不能为空！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+				return;
+			}
+			if($scope.sensorGatewayInfo.nodeName == '') {
+				Notify("网关节点名称不能为空！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+				return;
+			}
+			var fd = new FormData();
+			fd.append("id", $scope.sensorGatewayInfo.id);
+			fd.append("productCode", $scope.sensorGatewayInfo.productCode);
+			fd.append("nodeName", $scope.sensorGatewayInfo.nodeName);
+			// fd.append("baseId", $scope.sensorGatewayInfo.baseId);
+			$http({
+				method  : 'POST',
+				url     : '/monitor/editSensorGatewayById.htm',
+				data : fd,
+				transformRequest: angular.identity,
+				headers : {'Content-Type' : undefined}
+			}).then(function(response){
+				if(!response.data.success) {
+					Notify("操作失败！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+					return;
+				}
+
+				Notify('操作成功', 'top-right', '5000', 'success', 'fa-check', true);
+				$scope.common.showEdit = false;
+				$scope.pageChanged();
+			});
+		}
+
+		//删除传感器网关
+		$scope.deleteById = function(id){
+			if(confirm("你确定删除此网关吗?")){
+				$http({
+					method  : 'POST',
+					url     : '/monitor/deleteSensorGatewayById.htm',
+					params:{
+						'id':id
+					},
+					transformRequest: angular.identity,
+					headers : {'Content-Type' : undefined}
+				}).then(function(response){
+					if(!response.data.success) {
+						Notify("操作失败！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+						return;
+					}
+
+					Notify('操作成功', 'top-right', '5000', 'success', 'fa-check', true);
+					$scope.pageChanged();
+				});
+			}else{
+				//
+			}
+		}
+	});
+</script>
+<script src="/r/core/controller/base/menu.js"></script>
+</html>

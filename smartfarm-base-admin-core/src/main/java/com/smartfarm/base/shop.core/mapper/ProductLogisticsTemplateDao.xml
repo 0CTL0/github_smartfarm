@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartfarm.base.shop.core.dao.ProductLogisticsTemplateDao">
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.ProductLogisticsTemplate">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="SMALLINT" property="type" />
+    <result column="farm_id" jdbcType="BIGINT" property="farmId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, type, farm_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from product_logistics_template
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from product_logistics_template
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.smartfarm.base.shop.core.entity.ProductLogisticsTemplate">
+    insert into product_logistics_template
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="farmId != null">
+        farm_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="farmId != null">
+        #{farmId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartfarm.base.shop.core.entity.ProductLogisticsTemplate">
+    update product_logistics_template
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="farmId != null">
+        farm_id = #{farmId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="countPageList" resultType="java.lang.Integer">
+    select COUNT(*) from product_logistics_template plt
+    where plt.farm_id=#{farmId}
+    <if test="name != ''">
+      and plt.name like CONCAT('%',#{name},'%')
+    </if>
+  </select>
+
+
+  <select id="selectPageList" resultType="com.smartfarm.base.shop.core.entity.ProductLogisticsTemplate">
+    select plt.* from product_logistics_template plt
+    where plt.farm_id=#{farmId}
+    <if test="name != ''">
+      and plt.name like CONCAT('%',#{name},'%')
+    </if>
+    order by id desc
+    limit #{start}, #{limit}
+  </select>
+
+    <select id="selectAllTemplate" resultType="com.smartfarm.base.shop.core.entity.ProductLogisticsTemplate">
+      select plt.* from product_logistics_template plt
+        where plt.farm_id=#{farmId}
+    </select>
+
+
+</mapper>

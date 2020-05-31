@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运营管理系统</title>
+	
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css" />
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet" />
+
+    <script src="/r/js/skins.min.js"></script>
+    <script src="/r/js/jquery-2.1.1.js"></script>
+    <script src="/r/js/bootstrap.min.js"></script>
+    <script src="/r/js/angular.min.js"></script>
+    <script src="/r/js/toastr.js"></script>
+	<script src="/r/js/ui-bootstrap-tpls.js"></script>
+	<script src="/r/js/core.js"></script>
+	<script src="/r/js/beyond.min.js"></script>
+	<script src="/r/core/controller/base/adminManager.js"></script>
+	<script src="/r/core/controller/base/menu.js"></script>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+	<!-- 头部 -->
+	<div  ng-include="'/admin/include/header.htm'"></div>
+
+    
+    <div class="main-container container-fluid">
+        <div class="page-container">
+        
+            
+        	<!-- 菜单 -->
+        	<div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+        	<!-- 菜单 -->
+            
+            
+            <!-- 右半页 -->
+            <div class="page-content">
+                
+               	<div class="page-breadcrumbs">
+				    <ul class="breadcrumb">
+				        <li>
+				            <i class="fa fa-comments"></i>
+				            <a href="">系统管理</a>
+				        </li>
+				        <li class="active">系统用户管理</li>
+				    </ul>
+				</div>
+				
+				<div class="page-body">
+				    <div class="row">
+				        <div class="col-xs-12 col-md-12">
+				            <div class="widget">
+				                <div class="widget-header ">
+				                    <span class="widget-caption">系统用户管理</span>
+				                    <div class="widget-buttons">
+				                        <a href="javascript:void(0)" ng-click="openAddDialog()" title="添加"><i class="fa fa-plus"></i></a>
+				                    </div>
+				                </div>
+				                <div class="widget-body">
+				                    <div class="table-scrollable">
+				                        <table class="table table-bordered table-hover table-fixed table-min-width-1000">
+				                            <thead>
+				                            <tr>
+				                                <th style="width: 5%">ID</th>
+				                                <th style="width: 10%">账号</th>
+				                                <th style="width: 20%">状态</th>
+				                                <th style="width: 20%">所属商户</th>
+				                                <th style="width: 20%">备注</th>
+				                                <th>操作</th>
+				                            </tr>
+				                            </thead>
+				                            <tbody>
+				                            <tr class="bg-f5f5f5">
+				                                <td></td>
+				                                <td>
+				                                    <input class="form-control input-sm"
+				                                           onfocus="this.select()"
+				                                           ng-model="pageData.account"
+				                                           ng-model-options="common.defaultNgModelOptions"
+				                                           ng-change="formDataChange()">
+				                                </td>
+				                                <td></td>
+				                                <td></td>
+				                                <td>
+				                                    <input class="form-control input-sm"
+				                                           onfocus="this.select()"
+				                                           ng-model="pageData.remark"
+				                                           ng-model-options="common.defaultNgModelOptions"
+				                                           ng-change="formDataChange()"></td>
+				                                <td></td>
+				                            </tr>
+				                            <tr ng-if="formData.data.length == 0" class="bg-f5f5f5">
+				                                <td colspan="8" class="text-align-center">无数据</td>
+				                            </tr>
+				                            <tr ng-repeat="item in formData.data">
+				                                <td>{{item.id}}</td>
+				                                <td>{{item.account}}</td>
+				                                <td>{{{1:'启用',2:'禁用'}[item.status]}}</td>
+				                                <td>{{item.farmName}}</td>
+				                                <td>{{item.remark}}</td>
+				                                <td>
+				                                    <button class="btn icon-only btn-xs"
+				                                            ng-click="toggleAdminStatus(item)" title="{{{1:'禁用', 2:'启用'}[item.status]}}">
+				                                        <i class="fa" ng-class="{1:'fa-arrow-down', 2:'fa-arrow-up'}[item.status]"></i>
+				                                    </button>
+				                                    <button class="btn btn-xs icon-only" ng-click="openUpdateDialog(item)" title="修改">
+				                                        <i class="fa fa-edit"></i>
+				                                    </button>
+				                                    <button class="btn btn-xs icon-only" ng-click="openRoleUpdateDialog(item)" title="角色">
+				                                        <i class="fa fa-group"></i>
+				                                    </button>
+				                                </td>
+				                            </tr>
+				                            </tbody>
+				
+				                        </table>
+				
+				                    </div>
+				                    <div class="row DTTTFooter">
+				                        <span style="line-height: 34px; padding: 8px">记录数：{{formData.total}}</span>
+				
+				                        <pagination style="float:right" ng-change="formDataChange()" total-items="formData.total"
+				                                    items-per-page="pageData.pageSize" ng-model="pageData.pageNumber" max-size="5"
+				                                    class="pagination m-t m-b" boundary-links="true"></pagination>
+				                    </div>
+				                    <div style="clear: both"></div>
+				                </div>
+				            </div>
+				        </div>
+				    </div>
+				</div>
+				
+				
+				<div class="modal-backdrop fade in" ng-if="common.showAdd || common.showUpdate || common.showRoleUpdate"></div>
+				<div class="bootbox modal fade modal-darkorange in" style="display: block" ng-if="common.showAdd">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="bootbox-close-button close" ng-click="closeAddDialog()">×</button>
+				                <h4 class="modal-title">添加</h4>
+				            </div>
+				            <div class="modal-body">
+				                <div class="bootbox-body">
+				                    <div class="form-horizontal">
+				                        <div class="form-group">
+				                            <label class="col-sm-2 control-label no-padding-right">账号</label>
+				                            <div class="col-sm-10">
+				                                <input type="text" class="form-control" ng-model="common.adminAdd.account">
+				                            </div>
+				                        </div>
+				                        <div class="form-group">
+				                            <label class="col-sm-2 control-label no-padding-right">密码</label>
+				                            <div class="col-sm-10">
+				                                <input type="text" class="form-control" ng-model="common.adminAdd.password">
+				                            </div>
+				                        </div>
+				                        <div class="form-group">
+				                            <label class="col-sm-2 control-label no-padding-right">备注</label>
+				                            <div class="col-sm-10">
+				                                <input type="text" class="form-control" ng-model="common.adminAdd.remark">
+				                            </div>
+				                        </div>
+										<div class="form-group">
+				                            <label class="col-sm-2 control-label no-padding-right">所属</label>
+				                            <div class="col-sm-10">
+				                                <select class="form-control" ng-model="common.adminAdd.farmId">
+				                                    <option value="{{item.id}}" ng-repeat="item in farmList">{{item.name}}</option>
+				                                </select>
+				                            </div>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				            <div class="modal-footer">
+				                <button type="button" class="btn" ng-click="closeAddDialog()">取消</button>
+				                <button type="button" class="btn btn-primary" ng-click="submitAdd()">保存</button>
+				            </div>
+				        </div>
+				    </div>
+				</div>
+				<div class="bootbox modal fade modal-darkorange in" style="display: block" ng-if="common.showUpdate">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="bootbox-close-button close" ng-click="closeUpdateDialog()">×</button>
+				                <h4 class="modal-title">修改</h4>
+				            </div>
+				            <div class="modal-body">
+				                <div class="bootbox-body">
+				                    <div class="form-horizontal">
+				                        <div class="form-group">
+				                            <label class="col-sm-2 control-label no-padding-right">备注</label>
+				                            <div class="col-sm-10">
+				                                <input type="text" class="form-control" ng-model="common.updateSelected.remark">
+				                            </div>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				
+				            <div class="modal-footer">
+				                <button type="button" class="btn" ng-click="closeUpdateDialog()">取消</button>
+				                <button type="button" class="btn btn-primary" ng-click="submitUpdate()">保存</button>
+				            </div>
+				        </div>
+				    </div>
+				</div>
+				<div class="bootbox modal fade modal-darkorange in" style="display: block" ng-if="common.showRoleUpdate">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <button type="button" class="bootbox-close-button close" ng-click="closeRoleUpdateDialog()">×</button>
+				                <h4 class="modal-title">角色</h4>
+				            </div>
+				            <div class="modal-body">
+				                <div class="bootbox-body">
+				                    <div class="form-horizontal">
+				                        <div class="form-group">
+				                            <div class="checkbox col-sm-offset-1">
+				                                <label ng-repeat="item in common.allRoles track by $index" class="col-sm-3">
+				                                    <input type="checkbox" value="{{item.id}}" ng-model="item.contained">
+				                                    <span class="text">{{item.name}}</span>
+				                                </label>
+				                            </div>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				
+				            <div class="modal-footer">
+				                <button type="button" class="btn" ng-click="closeRoleUpdateDialog()">取消</button>
+				                <button type="button" class="btn btn-primary" ng-click="submitRoleUpdate()">保存</button>
+				            </div>
+				        </div>
+				    </div>
+				</div>
+			</div>
+        </div>
+    </div>
+</body>
+</html>

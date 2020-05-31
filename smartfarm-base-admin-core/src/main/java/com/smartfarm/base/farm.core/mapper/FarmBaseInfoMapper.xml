@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.FarmBaseInfoDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.FarmBaseInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="INTEGER" />
+    <result column="farm_id" property="farmId" jdbcType="BIGINT" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+  </resultMap>
+
+    <resultMap type="com.smartfarm.base.farm.core.entity.vo.FarmBaseInfoVo" id="BaseVoResultMap" extends="BaseResultMap">
+      <result column="farmName" property="farmName" jdbcType="VARCHAR" />
+      <collection property="farmTunnelVoList" ofType="com.smartfarm.base.farm.core.entity.vo.FarmTunnelInfoVo">
+        <id column="tunnelId" property="id" jdbcType="BIGINT" />
+        <result column="tunnelName" property="name" jdbcType="VARCHAR" />
+        <result column="tunnelArea" property="area" jdbcType="INTEGER" />
+        <result column="base_id" property="baseId" jdbcType="BIGINT" />
+        <result column="tunnelStatus" jdbcType="SMALLINT" property="status" />
+        <result column="brief" jdbcType="VARCHAR" property="brief" />
+        <result column="main_pic" jdbcType="VARCHAR" property="mainPic" />
+        <result column="detail_pic" jdbcType="VARCHAR" property="detailPic" />
+        <result column="lowestPrice" property="lowestPrice" jdbcType="DECIMAL"  />
+      </collection>
+   </resultMap>
+
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.FarmBaseInfo" >
+    insert into farm_base_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="pic != null" >
+        pic,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="farmId != null" >
+        farm_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null" >
+        #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=INTEGER},
+      </if>
+      <if test="farmId != null" >
+        #{farmId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.FarmBaseInfo" >
+    update farm_base_info
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null" >
+        pic = #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=INTEGER},
+      </if>
+      <if test="farmId != null" >
+        farm_id = #{farmId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectPageList" resultMap="BaseVoResultMap">
+    select fbi.*,fi.name farmName from farm_base_info fbi
+    left join farm_info fi on fbi.farm_id=fi.id
+    <where>
+      <if test="farmId !=null">
+        fbi.farm_id=#{farmId}
+      </if>
+    <if test="name != null">
+          and fbi.name LIKE CONCAT('%',#{name},'%')
+    </if>
+    <if test="status != null">
+          and fbi.status = #{status}
+    </if>
+    </where>
+    order by fbi.id desc
+    limit #{start}, #{limit}
+  </select>
+
+  <select id="selectPageTotal" resultType="java.lang.Integer">
+    select COUNT(*) from farm_base_info fbi
+    <where>
+      <if test="farmId !=null">
+        fbi.farm_id=#{farmId}
+      </if>
+      <if test="name != null">
+        and fbi.name LIKE CONCAT('%',#{name},'%')
+      </if>
+      <if test="status != null">
+        and fbi.status = #{status}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectById" resultMap="BaseResultMap">
+	select fbi.* from farm_base_info fbi
+	where fbi.id = #{id}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select fbi.* from farm_base_info fbi
+    left join farm_info fi on fi.id =fbi.farm_id
+    where fi.id=#{farmId}
+  </select>
+
+
+  <select id="selectBaseVoList" resultMap="BaseVoResultMap">
+    SELECT fbi.*,fti.id tunnelId,fti.name tunnelName,fti.area tunnelArea,fti.base_id,fti.status tunnelStatus,fti.brief,fti.main_pic,fti.detail_pic,a.lowestPrice
+    FROM farm_base_info fbi
+    LEFT JOIN farm_tunnel_info fti ON fti.base_id=fbi.id AND fti.`status`=1
+	LEFT JOIN (SELECT fri.tunnel_id,MIN(fri.price) lowestPrice FROM farm_rentland_info fri GROUP BY fri.tunnel_id)a
+	ON a.tunnel_id=fti.id
+    WHERE fbi.`status`=1 AND fbi.farm_id=#{farmId}
+  </select>
+
+  <select id="selectBaseVo" resultMap="BaseVoResultMap">
+    SELECT fbi.*,fti.* FROM farm_base_info fbi
+    LEFT JOIN farm_tunnel_info fti ON fti.base_id=fbi.id
+    WHERE fbi.id=#{id}
+  </select>
+
+
+</mapper>

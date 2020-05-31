@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>登录</title>
+	
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet" />
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet" />
+    <link href="/r/css/demo.min.css" rel="stylesheet" />
+    <link href="/r/css/animate.min.css" rel="stylesheet" />
+    <link href="/r/css/skins/azure.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="/r/js/skins.min.js"></script>
+    <script src="/r/js/jquery-2.1.1.js"></script>
+    <script src="/r/js/bootstrap.min.js"></script>
+    <script src="/r/js/beyond.min.js"></script>
+    <script src="/r/js/angular.min.js"></script>
+    <script src="/r/js/toastr.js"></script>
+    
+    <link rel="shortcut icon" href="/r/assets/img/favicon.png" type="image/x-icon">
+    <style type="text/css">
+		body:before{ background:url(/r/image/bg_login.jpg) no-repeat; background-size:cover}
+		.login-container {}
+		.login-container .loginbox {position: relative;!important;height: auto!important;padding: 0;border-radius:10px;}
+		.login-container .loginbox .loginbox-title{height:auto;padding:27px 0 20px 0;}
+		.btn-primary, .btn-primary:focus{line-height:66px;font-size:32px;border:none;border-radius:8px;background-color:#5DC42C;
+			background-image: -webkit-linear-gradient(#5DC42C,#45B035);
+			background-image: -moz-linear-gradient(#5DC42C,#45B035);
+			background-image: -o-linear-gradient(#5DC42C,#45B035);
+			background-image: -ms-linear-gradient(#5DC42C,#45B035);
+			background-image: linear-gradient(#5DC42C,#45B035);
+		}
+		
+		.loginbox-textbox{position:relative;}
+		.login-container .loginbox .loginbox-textbox{padding:10px 40px;}
+		.loginbox-textbox .icon{width:54px;height:40px;border:1px solid #CBD4BC; position:absolute;left:40px;top:10px;border-top-left-radius:8px;border-bottom-left-radius:8px;}
+		.loginbox-textbox .icon.user{background:#fff url(/r/image/icon_user.png) center center no-repeat;}
+		.loginbox-textbox .icon.password{background:#fff url(/r/image/icon_password.png) center center no-repeat;}
+		.login-container .loginbox .loginbox-submit{padding:10px 40px 30px 40px;}
+		.login-container .loginbox .loginbox-textbox .form-control{font-size:20px;color:#6D6D6D;padding: 6px 12px 6px 90px;height:40px;line-height:60px;border:1px solid #CBD4BC;background:#F3F6EE;border-radius:8px!important;}
+	</style>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+    <div class="login-container animated fadeInDown">
+        <div class="loginbox bg-white"  style="width:{{boxWidth}};">
+            <div class="loginbox-title"><img src="/r/image/login.png" style="height:80px;"></div>
+            <div class="loginbox-textbox">
+            	<div class="icon user"></div>
+                <input type="text" class="form-control" placeholder="账号" ng-model="formData.account" />
+            </div>
+            <div class="loginbox-textbox">
+            <div class="icon password"></div>
+                <input type="password" class="form-control" placeholder="密码" ng-model="formData.password"/>
+            </div>
+            <div class="loginbox-submit">
+                <input type="button" ng-click="submit()" class="btn btn-primary btn-block" value="登录" name="btn" style="height: 50px!important;line-height: 0px;font-size: 24px;">
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+var app = angular.module("myApp", []);
+var submitNow = false;
+app.controller("myCtrl", function($scope,$http,$timeout) {
+	$scope.width=window.screen.width;
+	$scope.boxWidth = window.screen.width/3;
+	$scope.formData = {
+		account:'',
+		password:''
+	};
+	
+// 	if(self.location!=top.location) {
+// 		top.location = self.location;
+// 	}
+		
+	$scope.submit = function() {
+		if(submitNow) {
+			return;
+		}
+		if($scope.formData.account == '') {
+			Notify('请输入账号', 'top-right', '4000', 'warning', 'fa-warning', true);
+			return;
+		}
+		if($scope.formData.password == '') {
+			Notify('请输入密码', 'top-right', '4000', 'warning', 'fa-warning', true);
+			return;
+		}
+		submitNow = true;
+		$http({
+		 	method  : 'POST',
+	        url     : '/adminInfo/login.htm',
+	        data : $.param($scope.formData),
+	        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+		}).then(function(response){
+			if(!response.data.success) {
+				Notify("操作失败！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+				submitNow = false;
+				return;
+			}
+			if(!response.data.logonFlag) {
+				Notify("账号或密码错误！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+				submitNow = false;
+				return;
+			}
+			Notify('登录成功', 'top-right', '5000', 'success', 'fa-check', true);
+			window.location.href = "/admin/main.htm";
+			submitNow = false;
+		});
+	}
+
+});
+</script>
+</html>

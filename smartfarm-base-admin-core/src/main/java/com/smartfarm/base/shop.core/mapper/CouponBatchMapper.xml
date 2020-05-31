@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.CouponBatchDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.CouponBatch" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="discretion" property="discretion" jdbcType="VARCHAR" />
+    <result column="strategy_type" property="strategyType" jdbcType="SMALLINT" />
+    <result column="deadline" property="deadline" jdbcType="VARCHAR" />
+    <result column="day_count" property="dayCount" jdbcType="INTEGER" />
+    <result column="display_name" property="displayName" jdbcType="VARCHAR" />
+    <result column="reduct_price" property="reductPrice" jdbcType="DECIMAL" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="type" property="type" jdbcType="SMALLINT" />
+    <result column="discount" property="discount" jdbcType="INTEGER" />
+    <result column="business_id" property="businessId" jdbcType="BIGINT" />
+      <result column="use_time" property="useTime" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap type="com.smartfarm.base.shop.core.entity.vo.CouponBatchVo" id="BaseVoResultMap" extends="BaseResultMap">
+   	<result column="use_count" property='useCount' jdbcType="INTEGER"/>
+   	<result column="coupon_count" property='couponCount' jdbcType="INTEGER"/>
+  </resultMap>
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.CouponBatch" >
+    insert into coupon_batch
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="discretion != null" >
+        discretion,
+      </if>
+      <if test="strategyType != null" >
+        strategy_type,
+      </if>
+      <if test="deadline != null" >
+        deadline,
+      </if>
+      <if test="dayCount != null" >
+        day_count,
+      </if>
+      <if test="displayName != null" >
+        display_name,
+      </if>
+      <if test="reductPrice != null" >
+        reduct_price,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="businessId != null" >
+        business_id,
+      </if>
+        <if test="useTime != null" >
+            use_time,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="discretion != null" >
+        #{discretion,jdbcType=VARCHAR},
+      </if>
+      <if test="strategyType != null" >
+        #{strategyType,jdbcType=SMALLINT},
+      </if>
+      <if test="deadline != null" >
+        #{deadline,jdbcType=VARCHAR},
+      </if>
+      <if test="dayCount != null" >
+        #{dayCount,jdbcType=INTEGER},
+      </if>
+      <if test="displayName != null" >
+        #{displayName,jdbcType=VARCHAR},
+      </if>
+      <if test="reductPrice != null" >
+        #{reductPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=INTEGER},
+      </if>
+      <if test="businessId != null" >
+        #{businessId,jdbcType=BIGINT},
+      </if>
+        <if test="useTime != null" >
+            #{useTime,jdbcType=INTEGER},
+        </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.CouponBatch" >
+    update coupon_batch
+    <set >
+      <if test="discretion != null" >
+        discretion = #{discretion,jdbcType=VARCHAR},
+      </if>
+      <if test="strategyType != null" >
+        strategy_type = #{strategyType,jdbcType=SMALLINT},
+      </if>
+      <if test="deadline != null" >
+        deadline = #{deadline,jdbcType=VARCHAR},
+      </if>
+      <if test="dayCount != null" >
+        day_count = #{dayCount,jdbcType=INTEGER},
+      </if>
+      <if test="displayName != null" >
+        display_name = #{displayName,jdbcType=VARCHAR},
+      </if>
+      <if test="reductPrice != null" >
+        reduct_price = #{reductPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=INTEGER},
+      </if>
+      <if test="businessId != null" >
+        business_id = #{businessId,jdbcType=BIGINT},
+      </if>
+        <if test="useTime != null" >
+            use_time = #{useTime,jdbcType=INTEGER},
+        </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryCouponBatchList" resultMap="BaseVoResultMap">
+  	SELECT cb.id,
+  	cb.discretion,
+  	cb.discount,
+  	cb.display_name,
+  	cb.strategy_type,
+  	cb.deadline,
+  	cb.day_count,
+  	cb.reduct_price,
+  	cb.amount,
+  	cb.type,
+      cb.use_time,
+  	co_no.use_count,
+  	count_tb.coupon_count
+	FROM coupon_batch cb
+	LEFT JOIN (SELECT COUNT(ci.coupon_name) use_count,
+	ci.coupon_batch_id 
+	FROM coupon_batch cb,coupon_info ci WHERE cb.id = ci.coupon_batch_id AND ci.`status` &gt; 0 GROUP BY cb.id) 
+	co_no ON cb.id = co_no.coupon_batch_id
+	LEFT OUTER JOIN (SELECT count(ci.coupon_no) coupon_count,
+	cb.id 
+	FROM coupon_batch cb,coupon_info ci WHERE cb.id = ci.coupon_batch_id GROUP BY cb.id) count_tb ON cb.id = count_tb.id
+	where cb.business_id = #{businessId}
+	<if test="type != null">
+		 and cb.type = #{type}
+	</if>
+	ORDER BY cb.id DESC
+	limit #{start}, #{limit}
+  </select>
+  
+  <select id="queryCountCouponBatchList" resultType="int">
+  	SELECT COUNT(*)
+	FROM coupon_batch cb
+	LEFT JOIN (SELECT COUNT(ci.coupon_name) use_count,
+	ci.coupon_batch_id 
+	FROM coupon_batch cb,coupon_info ci WHERE cb.id = ci.coupon_batch_id AND ci.`status` &gt; 0 GROUP BY cb.id) 
+	co_no ON cb.id = co_no.coupon_batch_id
+	LEFT OUTER JOIN (SELECT count(ci.coupon_no) coupon_count,
+	cb.id 
+	FROM coupon_batch cb,coupon_info ci WHERE cb.id = ci.coupon_batch_id GROUP BY cb.id) count_tb ON cb.id = count_tb.id
+	where cb.business_id = #{businessId}
+	<if test="type != null">
+		and cb.type = #{type}
+	</if>
+  </select>
+  
+  <select id="queryDetailBatchById" resultMap="BaseResultMap">
+  	SELECT id,discretion,discount,display_name,strategy_type,deadline,day_count,reduct_price,amount,type,use_time
+	FROM coupon_batch
+	WHERE id = #{id}
+  </select>
+  
+  <select id="getPrizes" resultMap="BaseResultMap">
+  	select id,display_name from coupon_batch where business_id = #{businessId} order by id desc
+  </select>
+</mapper>

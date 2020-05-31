@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.FarmDelegateOrderDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.FarmDelegateOrder" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="apply_no" property="applyNo" jdbcType="VARCHAR" />
+    <result column="apply_date" property="applyDate" jdbcType="VARCHAR" />
+    <result column="work_date" property="workDate" jdbcType="VARCHAR" />
+    <result column="work_type" property="workType" jdbcType="VARCHAR" />
+    <result column="member_land_id" property="memberLandId" jdbcType="BIGINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="integral" property="integral" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="member_crops_id" property="memberCropsId" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <resultMap id="BaseVoResultMap" type="com.smartfarm.base.farm.core.entity.vo.FarmDelegateOrderVo" extends="BaseResultMap" >
+    <result column="param_name" property="paramName" jdbcType="VARCHAR" />
+    <result column="rent_land_name" property="rentLandName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.FarmDelegateOrder" useGeneratedKeys="true" keyProperty="id">
+    insert into farm_delegate_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="applyNo != null" >
+        apply_no,
+      </if>
+      <if test="applyDate != null" >
+        apply_date,
+      </if>
+      <if test="workDate != null" >
+        work_date,
+      </if>
+      <if test="workType != null" >
+        work_type,
+      </if>
+      <if test="memberLandId != null" >
+        member_land_id,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="integral != null" >
+        integral,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="memberCropsId != null" >
+        member_crops_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="applyNo != null" >
+        #{applyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="applyDate != null" >
+        #{applyDate,jdbcType=VARCHAR},
+      </if>
+      <if test="workDate != null" >
+        #{workDate,jdbcType=VARCHAR},
+      </if>
+      <if test="workType != null" >
+        #{workType,jdbcType=VARCHAR},
+      </if>
+      <if test="memberLandId != null" >
+        #{memberLandId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="integral != null" >
+        #{integral,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="memberCropsId != null" >
+        #{memberCropsId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="getIdByApplyNo" resultType="long" >
+    select id from farm_delegate_order where apply_no=#{applyNo,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getDelegateOrderPageList" resultMap="BaseVoResultMap">
+    select fdo.*,csi.param_name,fri.name rent_land_name from farm_delegate_order fdo,farm_member_land fml,farm_rentland_info fri,farm_tunnel_info fti,farm_base_info fbi,farm_info fi,crfd_setting_info csi
+    <where>
+      fdo.member_land_id=fml.id and fml.rent_land_id=fri.id and fri.tunnel_id=fti.id and fti.base_id=fbi.id and fbi.farm_id=fi.id and fdo.work_type=csi.param_code
+      <if test="farmId != null" >
+        and fi.id=#{farmId}
+      </if>
+
+      <if test="status != null">
+			and fdo.status=#{status}
+		</if>
+		<if test="workType != null and workType != '' ">
+			and fdo.work_type=#{workType}
+		</if>
+		<if test="startDate != null and startDate != '' ">
+			and fdo.work_date&gt;=#{startDate}
+		</if>
+		<if test="endDate != null and endDate != '' ">
+			and fdo.work_date&lt;=#{endDate}
+		</if>
+	</where>
+    order by fdo.work_date asc
+    limit #{start}, #{limit}
+  </select>
+  
+  <select id="getDelegateOrderTotal" resultType="Integer" >
+    select count(*) from farm_delegate_order fdo,farm_member_land fml,farm_rentland_info fri,farm_tunnel_info fti,farm_base_info fbi,farm_info fi
+    <where>
+      fdo.member_land_id=fml.id and fml.rent_land_id=fri.id and fri.tunnel_id=fti.id and fti.base_id=fbi.id and fbi.farm_id=fi.id
+      <if test="farmId != null">
+        and fi.id=#{farmId}
+      </if>
+		<if test="status != null">
+			and status=#{status}
+		</if>
+		<if test="workType != null">
+			and work_type=#{workType}
+		</if>
+		<if test="startDate != null and startDate != '' ">
+			and work_date&gt;=#{startDate}
+		</if>
+		<if test="endDate != null and endDate != '' ">
+			and work_date&lt;=#{endDate}
+		</if>
+	</where>
+  </select>
+  
+  <update id="updateStatusById" parameterType="com.smartfarm.base.farm.core.entity.FarmDelegateOrder" >
+    update farm_delegate_order set status=#{status,jdbcType=SMALLINT} where id=#{id,jdbcType=BIGINT}
+  </update>
+
+
+	
+
+
+
+  
+  <sql id="Base_Column_List" >
+    id, apply_no, apply_date, work_date, work_type, member_land_id, remark, integral, 
+    status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from farm_delegate_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from farm_delegate_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert2" parameterType="com.smartfarm.base.farm.core.entity.FarmDelegateOrder" >
+    insert into farm_delegate_order (id, apply_no, apply_date, 
+      work_date, work_type, member_land_id, 
+      remark, integral, status
+      )
+    values (#{id,jdbcType=BIGINT}, #{applyNo,jdbcType=VARCHAR}, #{applyDate,jdbcType=VARCHAR}, 
+      #{workDate,jdbcType=VARCHAR}, #{workType,jdbcType=VARCHAR}, #{memberLandId,jdbcType=BIGINT},
+      #{remark,jdbcType=VARCHAR}, #{integral,jdbcType=BIGINT}, #{status,jdbcType=SMALLINT}
+      )
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.FarmDelegateOrder" >
+    update farm_delegate_order
+    <set >
+      <if test="applyNo != null" >
+        apply_no = #{applyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="applyDate != null" >
+        apply_date = #{applyDate,jdbcType=VARCHAR},
+      </if>
+      <if test="workDate != null" >
+        work_date = #{workDate,jdbcType=VARCHAR},
+      </if>
+      <if test="workType != null" >
+        work_type = #{workType,jdbcType=VARCHAR},
+      </if>
+      <if test="memberLandId != null" >
+        member_land_id = #{memberLandId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="integral != null" >
+        integral = #{integral,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartfarm.base.farm.core.entity.FarmDelegateOrder" >
+    update farm_delegate_order
+    set apply_no = #{applyNo,jdbcType=VARCHAR},
+      apply_date = #{applyDate,jdbcType=VARCHAR},
+      work_date = #{workDate,jdbcType=VARCHAR},
+      work_type = #{workType,jdbcType=VARCHAR},
+      member_land_id = #{memberLandId,jdbcType=BIGINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      integral = #{integral,jdbcType=BIGINT},
+      status = #{status,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

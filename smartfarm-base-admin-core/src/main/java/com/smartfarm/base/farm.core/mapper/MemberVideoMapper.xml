@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartfarm.base.farm.core.dao.MemberVideoDao">
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.MemberVideo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="cover" jdbcType="VARCHAR" property="cover" />
+    <result column="video_url" jdbcType="CHAR" property="videoUrl" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="play_times" jdbcType="INTEGER" property="playTimes" />
+    <result column="farm_id" jdbcType="BIGINT" property="farmId" />
+  </resultMap>
+
+  <resultMap id="BaseVoResultMap" type="com.smartfarm.base.farm.core.entity.vo.MemberVideoVo" extends="BaseResultMap">
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.MemberVideo">
+    insert into member_video
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="cover != null">
+        cover,
+      </if>
+      <if test="videoUrl != null">
+        video_url,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="playTimes != null">
+        play_times,
+      </if>
+      <if test="farmId != null">
+        farm_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="memberId != null">
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cover != null">
+        #{cover,jdbcType=VARCHAR},
+      </if>
+      <if test="videoUrl != null">
+        #{videoUrl,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="playTimes != null">
+        #{playTimes,jdbcType=INTEGER},
+      </if>
+      <if test="farmId != null">
+        #{farmId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getUserLatestVideo" resultMap="BaseResultMap">
+      select * from member_video
+      where name=#{name,jdbcType=VARCHAR} and member_id=#{memberId,jdbcType=BIGINT} and create_time like concat(#{createDate},'%')
+      order by id desc limit 1
+  </select>
+
+  <update id="updateVideoUrl" parameterType="com.smartfarm.base.farm.core.entity.MemberVideo">
+      update member_video set video_url=#{videoUrl,jdbcType=CHAR} where id=#{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="getVideosByMemberId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select * from member_video where member_id=#{memberId,jdbcType=BIGINT} and status!=0
+  </select>
+
+  <select id="getAllPassedVideo" resultMap="BaseResultMap">
+    select * from member_video where farm_id=#{farmId,jdbcType=BIGINT} and status=3
+  </select>
+
+  <select id="getVideoById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select * from member_video where id=#{id,jdbcType=BIGINT}
+  </select>
+
+  <update id="updatePlayTimes" parameterType="com.smartfarm.base.farm.core.entity.MemberVideo">
+    update member_video set play_times=#{playTimes,jdbcType=INTEGER} where id=#{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateStatusById" parameterType="com.smartfarm.base.farm.core.entity.MemberVideo">
+    update member_video set status=#{status,jdbcType=SMALLINT} where id=#{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteById" parameterType="com.smartfarm.base.farm.core.entity.MemberVideo">
+    update member_video set status=#{status,jdbcType=SMALLINT} where id=#{id,jdbcType=BIGINT}
+  </update>
+
+  <!-- 物理删除视频记录，暂不使用 -->
+  <!--<delete id="deleteById" parameterType="java.lang.Long">-->
+    <!--delete from member_video where id=#{id,jdbcType=BIGINT}-->
+  <!--</delete>-->
+
+
+  <!-- 后台管理员部分 -->
+  <select id="getVideosPageList" resultMap="BaseVoResultMap">
+    select mv.*, mi.nick_name from member_video mv left join member_info mi on mv.member_id=mi.id
+    <where>
+      <choose>
+        <when test="status != null ">
+          and mv.status=#{status,jdbcType=SMALLINT}
+        </when>
+        <otherwise>
+          and mv.status in (0,1,3,4)
+        </otherwise>
+      </choose>
+      <if test="startDate != null">
+        and mv.create_time like concat(#{startDate},'%')
+      </if>
+      <if test="farmId != null">
+        and mv.farm_id=#{farmId,jdbcType=BIGINT}
+      </if>
+    </where>
+    order by mv.id desc
+    limit #{start}, #{limit}
+  </select>
+
+  <select id="getVideosTotal" resultType="java.lang.Integer">
+    select count(*) from member_video
+    <where>
+      <choose>
+        <when test="status != null ">
+          and status=#{status,jdbcType=SMALLINT}
+        </when>
+        <otherwise>
+          and status in (0,1,3,4)
+        </otherwise>
+      </choose>
+      <if test="startDate != null">
+        and create_time like concat(#{startDate},'%')
+      </if>
+      <if test="farmId != null">
+        and farm_id=#{farmId,jdbcType=BIGINT}
+      </if>
+    </where>
+  </select>
+
+  <select id="getBeingAuditVideosPageList" resultMap="BaseVoResultMap">
+    select mv.*, mi.nick_name from member_video mv left join member_info mi on mv.member_id=mi.id
+    where mv.farm_id=#{farmId,jdbcType=BIGINT} and mv.status=2 order by mv.id desc limit #{start}, #{limit}
+  </select>
+
+  <select id="getBeingAuditVideosTotal" resultType="java.lang.Integer">
+    select count(*) from member_video where farm_id=#{farmId,jdbcType=BIGINT} and status=2
+  </select>
+
+  <update id="auditById" parameterType="com.smartfarm.base.farm.core.entity.MemberVideo">
+    update member_video set status=#{status,jdbcType=SMALLINT} where id=#{id,jdbcType=BIGINT}
+  </update>
+
+
+
+
+  <sql id="Base_Column_List">
+    id, member_id, `name`, cover, video_url, create_time, status, play_times
+  </sql>
+
+  <insert id="insert1" parameterType="com.smartfarm.base.farm.core.entity.MemberVideo">
+    insert into member_video (id, member_id, `name`,
+      cover, video_url, create_time, 
+      status, play_times)
+    values (#{id,jdbcType=BIGINT}, #{memberId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{cover,jdbcType=VARCHAR}, #{videoUrl,jdbcType=CHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{status,jdbcType=SMALLINT}, #{playTimes,jdbcType=INTEGER})
+  </insert>
+
+</mapper>

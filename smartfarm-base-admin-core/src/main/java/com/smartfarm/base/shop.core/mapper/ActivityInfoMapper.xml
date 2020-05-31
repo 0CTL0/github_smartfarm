@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.ActivityInfoDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.ActivityInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+    <result column="join_num" property="joinNum" jdbcType="INTEGER" />
+    <result column="join_time" property="joinTime" jdbcType="VARCHAR" />
+    <result column="activity_time" property="activityTime" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="business_id" property="businessId" jdbcType="BIGINT" />
+    <result column="need_name" property="needName" jdbcType="BIT" />
+    <result column="need_mobile" property="needMobile" jdbcType="BIT" />
+    <result column="need_idcard" property="needIdcard" jdbcType="BIT" />
+    <result column="detail" property="detail" jdbcType="VARCHAR" />
+    <result column="is_show" property="isShow" jdbcType="BIT" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="join_deadline" property="joinDeadline" jdbcType="VARCHAR" />
+    <result column="remain" property="remain" jdbcType="INTEGER" />
+    <result column="activity_deadline" property="activityDeadline" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap type="com.smartfarm.base.shop.core.entity.vo.ActivityInfoVo" id="BaseVoResultMap" extends="BaseResultMap">
+  	<result column="price" property="price" jdbcType="DECIMAL" />
+  </resultMap>
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.ActivityInfo" useGeneratedKeys="true"  keyProperty="id">
+    insert into activity_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="picUrl != null" >
+        pic_url,
+      </if>
+      <if test="joinNum != null" >
+        join_num,
+      </if>
+      <if test="joinTime != null" >
+        join_time,
+      </if>     
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="businessId != null" >
+        business_id,
+      </if>
+      <if test="needName != null" >
+        need_name,
+      </if>
+      <if test="needMobile != null" >
+        need_mobile,
+      </if>
+      <if test="needIdcard != null" >
+        need_idcard,
+      </if>
+      <if test="detail != null" >
+        detail,
+      </if>
+      <if test="isShow != null" >
+        is_show,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="orderNum != null" >
+        order_num,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+       <if test="activityTime != null" >
+        activity_time,
+      </if>
+      <if test="joinDeadline != null" >
+        join_deadline,
+      </if> 
+      <if test="remain != null" >
+        remain,
+      </if>
+      <if test="activityDeadline != null" >
+        activity_deadline,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null" >
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="joinNum != null" >
+        #{joinNum,jdbcType=INTEGER},
+      </if>
+      <if test="joinTime != null" >
+        #{joinTime,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null" >
+        #{businessId,jdbcType=BIGINT},
+      </if>
+      <if test="needName != null" >
+        #{needName,jdbcType=BIT},
+      </if>
+      <if test="needMobile != null" >
+        #{needMobile,jdbcType=BIT},
+      </if>
+      <if test="needIdcard != null" >
+        #{needIdcard,jdbcType=BIT},
+      </if>
+      <if test="detail != null" >
+        #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        #{isShow,jdbcType=BIT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="orderNum != null" >
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+       <if test="activityTime != null" >
+        #{activityTime,jdbcType=VARCHAR},
+      </if>
+      <if test="joinDeadline != null" >
+        #{joinDeadline,jdbcType=VARCHAR},
+      </if>
+      <if test="remain != null" >
+        #{remain,jdbcType=INTEGER},
+      </if>
+      <if test="activityDeadline != null" >
+        #{activityDeadline,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.ActivityInfo" >
+    update activity_info
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null" >
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="joinNum != null" >
+        join_num = #{joinNum,jdbcType=INTEGER},
+      </if>
+      <if test="joinTime != null" >
+        join_time = #{joinTime,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null" >
+        business_id = #{businessId,jdbcType=BIGINT},
+      </if>
+      <if test="needName != null" >
+        need_name = #{needName,jdbcType=BIT},
+      </if>
+      <if test="needMobile != null" >
+        need_mobile = #{needMobile,jdbcType=BIT},
+      </if>
+      <if test="needIdcard != null" >
+        need_idcard = #{needIdcard,jdbcType=BIT},
+      </if>
+      <if test="detail != null" >
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        is_show = #{isShow,jdbcType=BIT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="orderNum != null" >
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="joinDeadline != null" >
+        join_deadline = #{joinDeadline,jdbcType=VARCHAR},
+      </if>
+      <if test="remain != null" >
+        remain = #{remain,jdbcType=INTEGER},
+      </if>
+      <if test="activityDeadline != null" >
+        activity_deadline = #{activityDeadline,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+ 
+   <select id="selectActivityInfoList" resultMap="BaseResultMap">
+	select ai.* from activity_info ai
+	where ai.business_id = #{businessId}
+	<if test="name != null">
+		and ai.name like CONCAT('%',#{name},'%')
+	</if>
+	order by id desc
+	limit #{start}, #{limit}
+  </select>
+
+   <select id="selectActivityTotal" resultType="Integer">
+	select count(*) from activity_info ai
+	where ai.business_id = #{businessId}
+	<if test="name != null">
+		and ai.name like CONCAT('%',#{name},'%')
+	</if>
+  </select>
+   
+   <select id="selectActivityById" resultMap="BaseResultMap">
+	select ai.* from activity_info ai
+	where ai.id=#{id}
+  </select>
+  
+  <select id="queryUseableList" resultMap="BaseVoResultMap">
+  	select a.*,p.price
+  	from activity_info a 
+  	left join activity_price p on p.activity_id=a.id 
+  	where a.status=1 and a.is_show=1
+  	and  a.business_id = #{businessId}
+  	group by a.id
+  	order by a.order_num
+  </select>
+  
+  <select id="queryVoById" resultMap="BaseVoResultMap">
+  	select a.*,p.price
+  	from activity_info a 
+  	left join activity_price p on p.activity_id=a.id
+  	where a.id=#{id}
+  	group by a.id
+  </select>
+  
+  <update id="updateRemain">
+  	update activity_info
+  	set remain = remain - #{num}
+  	where id = #{id} and remain <![CDATA[ >= ]]> #{num}
+  </update>
+  
+  <update id="addRemain">
+  	update activity_info
+  	set remain = remain + #{num}
+  	where id = #{id} 
+  </update>
+  
+  <select id="queryActivityForAdvance" resultMap="BaseVoResultMap">
+  	select a.*,p.price
+  	from index_advance i
+  	left join activity_info a on a.id=i.ref_id
+  	left join activity_price p on p.activity_id=a.id
+  	where i.farm_id = #{farmId}
+  	and i.status = 1
+  	and i.type = 3
+  	and a.status=1 
+  	and a.is_show=1
+  	group by a.id
+  	order by a.order_num
+  </select>
+  
+  <select id="queryActivityForAdvanceId" resultMap="BaseVoResultMap">
+  	select a.*,p.price
+  	from index_advance i
+  	left join activity_info a on a.id=i.ref_id
+  	left join activity_price p on p.activity_id=a.id
+  	where i.id = #{id}
+  	group by a.id
+  </select>
+  
+  <select id="queryActivityForAdvanceAdd" resultMap="BaseVoResultMap">
+  	select a.*,p.price
+  	from activity_info a 
+  	left join activity_price p on p.activity_id=a.id
+  	where a.business_id = #{farmId}
+  	and a.status=1 
+  	and a.is_show=1
+  	group by a.id
+  </select>
+</mapper>

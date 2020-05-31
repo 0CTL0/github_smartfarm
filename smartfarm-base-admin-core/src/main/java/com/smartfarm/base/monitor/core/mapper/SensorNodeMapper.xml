@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.monitor.core.dao.SensorNodeDao">
+    <resultMap id="BaseResultMap" type="com.smartfarm.base.monitor.core.entity.SensorNode">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="product_code" property="productCode" jdbcType="VARCHAR"/>
+        <result column="node_name" property="nodeName" jdbcType="VARCHAR"/>
+        <result column="sersor_type" property="sersorType" jdbcType="BIGINT"/>
+        <result column="max_threshold" property="maxThreshold" jdbcType="DOUBLE"/>
+        <result column="min_threshold" property="minThreshold" jdbcType="DOUBLE"/>
+        <result column="status" property="status" jdbcType="SMALLINT"/>
+        <result column="gateway_id" property="gatewayId" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <resultMap type="com.smartfarm.base.monitor.core.entity.vo.SensorNodeVo" id="BaseVoResultMap"
+               extends="BaseResultMap">
+        <result column="gateNodeName" property="gateNodeName" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="codeList" property="codeList" jdbcType="VARCHAR"/>
+        <result column="pCode" property="pCode" jdbcType="VARCHAR"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="real_value" property="realValue" jdbcType="DOUBLE"/>
+        <result column="avg_value" property="avgValue" jdbcType="DOUBLE"/>
+        <result column="sersor_node_id" property="sersorNodeId" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <resultMap type="com.smartfarm.base.monitor.core.entity.vo.WeChatMonitorSensorVo" id="WeChatResultMap">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="node_name" property="nodeName" jdbcType="VARCHAR"/>
+        <result column="sersor_type" property="sersorType" jdbcType="BIGINT"/>
+        <result column="transfer_time" property="transferTime" jdbcType="VARCHAR"/>
+        <result column="transfer_date" property="transferDate" jdbcType="VARCHAR"/>
+        <result column="real_value" property="realValue" jdbcType="DOUBLE"/>
+        <result column="max_threshold" property="maxThreshold" jdbcType="DOUBLE"/>
+        <result column="min_threshold" property="minThreshold" jdbcType="DOUBLE"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select * from monitor_sersor_node
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from monitor_sersor_node
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="com.smartfarm.base.monitor.core.entity.SensorNode">
+        insert into monitor_sersor_node
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="productCode != null">
+                product_code,
+            </if>
+            <if test="nodeName != null">
+                node_name,
+            </if>
+            <if test="sersorType != null">
+                sersor_type,
+            </if>
+            <if test="maxThreshold != null">
+                max_threshold,
+            </if>
+            <if test="minThreshold != null">
+                min_threshold,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="gatewayId != null">
+                gateway_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="productCode != null">
+                #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="nodeName != null">
+                #{nodeName,jdbcType=VARCHAR},
+            </if>
+            <if test="sersorType != null">
+                #{sersorType,jdbcType=BIGINT},
+            </if>
+            <if test="maxThreshold != null">
+                #{maxThreshold,jdbcType=INTEGER},
+            </if>
+            <if test="minThreshold != null">
+                #{minThreshold,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=SMALLINT},
+            </if>
+            <if test="gatewayId != null">
+                #{gatewayId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.smartfarm.base.monitor.core.entity.SensorNode">
+        update monitor_sersor_node
+        <set>
+            <if test="productCode != null">
+                product_code = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="nodeName != null">
+                node_name = #{nodeName,jdbcType=VARCHAR},
+            </if>
+            <if test="sersorType != null">
+                sersor_type = #{sersorType,jdbcType=BIGINT},
+            </if>
+            <if test="maxThreshold != null">
+                max_threshold = #{maxThreshold,jdbcType=INTEGER},
+            </if>
+            <if test="minThreshold != null">
+                min_threshold = #{minThreshold,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=SMALLINT},
+            </if>
+            <if test="gatewayId != null">
+                gateway_id = #{gatewayId,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryMonitorsensorNodeList" resultMap="BaseVoResultMap">
+        SELECT sn.id,
+        sn.gateway_id,
+        sn.max_threshold,
+        sn.min_threshold,
+        sn.node_name,
+        sn.product_code,
+        sn.sersor_type,
+        sn.`status`,
+        gn.node_name gateNodeName,
+        si.`name`
+        FROM monitor_sersor_node sn
+        LEFT JOIN monitor_gateway_node gn ON sn.gateway_id = gn.id
+        LEFT OUTER JOIN monitor_sensor_info si ON sn.sersor_type = si.id
+        limit #{start}, #{limit}
+    </select>
+
+    <select id="queryCountMonitorsensorNodeList" resultType="int">
+  	SELECT COUNT(*)
+	FROM monitor_sersor_node sn
+	LEFT JOIN monitor_gateway_node gn ON sn.gateway_id = gn.id
+	LEFT OUTER JOIN monitor_sensor_info si ON sn.sersor_type = si.id
+  </select>
+
+    <select id="queryFarmerSensorNodeList" resultMap="BaseVoResultMap">
+        SELECT sn.id,
+        sn.gateway_id,
+        sn.max_threshold,
+        sn.min_threshold,
+        sn.node_name,
+        sn.product_code,
+        sn.sersor_type,
+        sn.`status`,
+        gn.node_name gateNodeName,
+        si.`name`
+        FROM monitor_sersor_node sn
+        LEFT JOIN monitor_gateway_node gn ON sn.gateway_id = gn.id
+        LEFT OUTER JOIN monitor_sensor_info si ON sn.sersor_type = si.id
+        WHERE gn.business_id = #{baseId}
+        limit #{start}, #{limit}
+    </select>
+
+    <select id="queryCountFarmerSensorList" resultType="int">
+        SELECT COUNT(sn.node_name)
+        FROM monitor_sersor_node sn
+        LEFT JOIN monitor_gateway_node gn ON sn.gateway_id = gn.id
+        LEFT OUTER JOIN monitor_sensor_info si ON sn.sersor_type = si.id
+        WHERE business_id = #{baseId}
+    </select>
+
+    <select id="querySensorNodeById" resultMap="BaseVoResultMap">
+        SELECT sn.id,
+        sn.gateway_id,
+        sn.max_threshold,
+        sn.min_threshold,
+        sn.node_name,
+        sn.product_code,
+        sn.sersor_type,
+        sn.`status`,
+        gn.node_name gateNodeName,
+        si.`name`
+        FROM monitor_sersor_node sn
+        LEFT JOIN monitor_gateway_node gn ON sn.gateway_id = gn.id
+        LEFT OUTER JOIN monitor_sensor_info si ON sn.sersor_type = si.id
+        WHERE sn.id = #{id}
+    </select>
+
+    <select id="querySersorCodeList" resultMap="BaseVoResultMap">
+        SELECT gn.node_name gateNodeName,
+        sn.`status`,
+        sn.gateway_id
+        FROM monitor_sersor_node sn
+        LEFT JOIN monitor_gateway_node gn ON sn.gateway_id = gn.id
+        WHERE gn.id IN
+        <foreach collection="ids" item="item" index="index"
+                 open="(" separator="," close=")">#{item}
+        </foreach>
+        GROUP BY sn.gateway_id
+    </select>
+
+    <select id="querySersorNodeByCode" resultMap="BaseVoResultMap">
+        <!-- SELECT co_no.id,
+          co_no.`name`,
+          co_no.unit,
+          co_no.real_value,
+          co_no.node_name,
+        co_no.transfer_date,
+        co_no.transfer_time,
+        co_no.product_code pCode
+        FROM monitor_sersor_node sn
+        RIGHT JOIN (SELECT sn.id,gn.product_code,si.`name`,si.unit,rd.real_value,sn.node_name,rd.transfer_date,rd.transfer_time
+        FROM monitor_real_data rd,monitor_sensor_info si,monitor_gateway_node gn,monitor_sersor_node sn
+        WHERE gn.id = sn.gateway_id
+        AND rd.sersor_node_id = sn.id
+        AND sn.sersor_type = si.id
+        AND gn.product_code = #{productCode}
+        ORDER BY rd.transfer_date DESC,rd.transfer_time DESC) co_no ON sn.id = co_no.id
+        GROUP BY co_no.`name` -->
+
+        SELECT sn.id,
+        si.`name`,
+        STIME.tHour,
+        ROUND(avg(rd.real_value),2) real_value,
+        gn.product_code pCode
+        FROM monitor_real_data rd
+        INNER JOIN monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        INNER JOIN monitor_sensor_info si ON si.id = sn.sersor_type
+        INNER JOIN monitor_gateway_node gn ON gn.id = sn.gateway_id
+        INNER JOIN (SELECT MAX(transfer_time) tHour FROM monitor_real_data WHERE transfer_date = #{today} )
+        STIME ON STIME.tHour = rd.transfer_time
+        WHERE gn.product_code = #{productCode}
+        group by sn.id , si.`name`, STIME.tHour,si.`name`,gn.product_code
+    </select>
+
+
+    <select id="querySersorNodeByCodeWithsSersorCode" resultMap="BaseVoResultMap">
+        <!-- SELECT co_no.id,
+        co_no.`name`,
+        co_no.unit,
+        co_no.real_value,
+        co_no.node_name,
+      co_no.transfer_date,
+      co_no.transfer_time,
+      co_no.product_code
+      FROM monitor_sersor_node sn
+      RIGHT JOIN (SELECT sn.id,gn.product_code,si.`name`,si.unit,rd.real_value,sn.node_name,rd.transfer_date,rd.transfer_time
+      FROM monitor_real_data rd,monitor_sensor_info si,monitor_gateway_node gn,monitor_sersor_node sn
+      WHERE gn.id = sn.gateway_id AND rd.sersor_node_id = sn.id AND sn.sersor_type = si.id AND gn.product_code = #{productCode}
+      AND sn.product_code IN
+      <foreach collection="codes" item="item" index="index"
+      open="(" separator="," close=")">#{item}
+      </foreach>
+      ORDER BY rd.transfer_date DESC,rd.transfer_time DESC) co_no ON sn.id = co_no.id
+      GROUP BY co_no.`name` -->
+        <!-- SELECT sn.id,
+        si.`name`,
+        STIME.tHour,
+        ROUND(avg(rd.real_value),2) real_value,
+        gn.product_code pCode
+        FROM monitor_real_data rd
+        INNER JOIN monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        INNER JOIN monitor_sensor_info si ON si.id = sn.sersor_type
+        INNER JOIN monitor_gateway_node gn ON gn.id = sn.gateway_id
+        INNER JOIN (SELECT MAX(transfer_time) tHour FROM monitor_real_data WHERE transfer_date = #{today} )
+        STIME ON STIME.tHour = rd.transfer_time
+        WHERE  gn.product_code = #{productCode}
+        AND sn.product_code IN
+        <foreach collection="codes" item="item" index="index"
+        open="(" separator="," close=")">#{item}
+        </foreach>
+        group by sn.id , si.`name`, STIME.tHour,si.`name`,gn.product_code -->
+
+        select sn.id,
+        si.`name`,
+        rd.transfer_time,
+        rd.real_value as real_value,
+        gn.product_code pCode,
+        si.unit
+        from (select * from (select * from monitor_real_data order by transfer_date desc,transfer_time desc limit
+        100000000) a group by sersor_node_id) rd
+        left join monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        left join monitor_sensor_info si ON si.id = sn.sersor_type
+        left join monitor_gateway_node gn ON gn.id = sn.gateway_id
+        WHERE gn.product_code = #{productCode}
+        and rd.transfer_date = #{today}
+        AND sn.product_code IN
+        <foreach collection="codes" item="item" index="index"
+                 open="(" separator="," close=")">#{item}
+        </foreach>
+        <!-- 	group by sn.id , si.`name`,si.`name`,gn.product_code -->
+
+    </select>
+
+    <select id="queryAvgSersorNode" resultMap="BaseVoResultMap">
+        SELECT co_no.`name`,
+        ROUND(co_no.avg_value,2) avg_value,
+        co_no.unit
+        FROM monitor_sersor_node sn
+        LEFT JOIN monitor_real_data rd on rd.sersor_node_id = sn.id
+        LEFT JOIN monitor_sensor_info si on sn.sersor_type = si.id
+        RIGHT JOIN (SELECT AVG(rd.real_value) avg_value,
+        si.unit,
+        sn.product_code,
+        sn.gateway_id,
+        si.`name`,
+        rd.transfer_date
+        from monitor_sersor_node sn,
+        monitor_real_data rd,
+        monitor_sensor_info si
+        WHERE rd.sersor_node_id = sn.id
+        AND rd.transfer_date = #{today}
+        AND si.id = sn.sersor_type
+        GROUP BY si.`name`) co_no
+        ON sn.product_code = co_no.product_code
+        WHERE co_no.gateway_id in
+        <foreach collection="ids" item="item" index="index"
+                 open="(" separator="," close=")">#{item}
+        </foreach>
+        GROUP BY co_no.`name`,co_no.gateway_id
+        ORDER BY rd.transfer_date DESC,rd.transfer_time DESC
+    </select>
+
+    <select id="queryWarnningSersorByCode" resultMap="BaseVoResultMap">
+        SELECT sn.node_name,
+        sn.max_threshold,
+        sn.min_threshold,
+        sn.product_code,
+        rd.real_value,
+        rd.id,
+        rd.sersor_node_id,
+        sn.gateway_id
+        FROM monitor_sersor_node sn
+        LEFT JOIN monitor_real_data rd ON sn.id = rd.sersor_node_id
+        WHERE sn.gateway_id = #{gatewayId}
+        ORDER BY rd.transfer_date DESC,rd.transfer_time DESC
+        LIMIT 5
+    </select>
+
+    <select id="getIdByProductCodeAndGateWayId" parameterType="map" resultMap="BaseResultMap">
+        select msn.id as id,msn.max_threshold max_threshold,msn.min_threshold min_threshold
+        from monitor_sersor_node msn
+        where msn.product_code=#{productCode}
+        and msn.sersor_type=(select msi.id sersor_type
+        from monitor_sensor_info msi where msi.code=#{sensorInfoCode})
+        and msn.gateway_id=
+        (select mgn.id gateway_id from monitor_gateway_node mgn
+        where mgn.product_code=#{gatewayCode})
+    </select>
+
+    <select id="queryListByGatewayId" resultMap="BaseResultMap">
+        select *
+        from monitor_sersor_node
+        where gateway_id = #{gatewayId}
+    </select>
+
+    <select id="getFarmSensorNodes" resultMap="BaseResultMap">
+        select msn.* from monitor_sersor_node msn,monitor_gateway_node mgn where msn.gateway_id=mgn.id
+        and mgn.business_id=#{farmId,jdbcType=BIGINT}
+    </select>
+
+    <select id="listSensorNodeAndTodayNewestRealDataByGatewayId" resultMap="WeChatResultMap">
+        SELECT
+        sn.id,
+        sn.node_name,
+        sn.sersor_type,
+        CONCAT(SUBSTRING(MAX(rd.transfer_time),1,2),":",SUBSTRING(MAX(rd.transfer_time),3,2),":",SUBSTRING(MAX(rd.transfer_time),5,2)) AS transfer_time,
+        MAX(rd.transfer_date) AS transfer_date,
+        rd.real_value,
+        sn.max_threshold,
+        sn.min_threshold,
+        si.unit,
+        sn.gateway_id
+        FROM
+        monitor_real_data rd
+        LEFT JOIN monitor_sersor_node sn ON sn.id = rd.sersor_node_id
+        LEFT JOIN monitor_sensor_info si ON si.id = sn.sersor_type
+        WHERE
+        sn.gateway_id = #{gatewayId}
+        AND sn.`status` = 2
+        AND rd.transfer_date = #{today}
+        GROUP BY
+        sersor_type
+    </select>
+</mapper>

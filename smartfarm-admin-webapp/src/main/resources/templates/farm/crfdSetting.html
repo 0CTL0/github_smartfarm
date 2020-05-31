@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="description" content="login page"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>农场数据管理</title>
+
+    <link href="/r/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/r/css/font-awesome.min.css" rel="stylesheet"/>
+    <link id="beyond-link" href="/r/css/beyond.min.css" rel="stylesheet"/>
+    <link href="/r/css/demo.min.css" rel="stylesheet"/>
+    <link href="/r/css/animate.min.css" rel="stylesheet"/>
+    <link href="/r/css/skins/darkblue.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/r/css/dataTables.bootstrap.css" rel="stylesheet"/>
+    <link href="/r/css/fileinput.min.css" rel="stylesheet"/>
+    <link href="/r/css/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
+
+    <script src="/r/js/skins.min.js"></script>
+    <script src="/r/js/jquery-2.1.1.js"></script>
+    <script src="/r/js/bootstrap.min.js"></script>
+    <script src="/r/js/angular.min.js"></script>
+    <script src="/r/js/toastr.js"></script>
+    <script src="/r/js/ui-bootstrap-tpls.js"></script>
+    <script src="/r/js/fileinput.min.js"></script>
+    <script src="/r/js/distpicker.data.js"></script>
+    <script src="/r/js/distpicker.js"></script>
+    <script src="/r/js/bootstrap-datetimepicker.js"></script>
+    <script src="/r/js/core.js"></script>
+    <script src="/r/js/beyond.min.js"></script>
+
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+<!-- 头部 -->
+<div id="header_id" ng-include="'/admin/include/header.htm'"></div>
+<!-- 头部 -->
+
+<div class="main-container container-fluid">
+    <div class="page-container">
+
+        <!-- 菜单 -->
+        <div class="page-sidebar" id="sidebar" ng-include="'/admin/include/menu.htm'"></div>
+        <!-- 菜单 -->
+
+        <!-- 右半页 -->
+        <div class="page-content">
+            <div class="page-breadcrumbs">
+                <ul class="breadcrumb">
+                    <li><i class="fa fa-comments"></i> <a href="/admin/main.htm">首页</a>
+                    </li>
+                    <li class="active">数据列表</li>
+                </ul>
+            </div>
+
+
+            <div class="page-body">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="widget">
+                            <div class="widget-header ">
+                                <span class="widget-caption">数据信息列表</span>
+                            </div>
+
+
+                            <div class="form-horizontal" ng-repeat="settingList in settingLists">
+
+                                <div class="alert"
+                                     style="background: #f8f8f8;color: #4285f4;padding:10px 10px;margin-top: 20px;">
+                                    <span class="glyphicon glyphicon-cog">{{{1:'商城设置',2:'分销设置',3:'租地设置',4:'众筹设置'}[settingList[0].settingType]}}</span>
+                                </div>
+
+                                <div ng-repeat="settingInfo in settingList">
+                                    <div class="form-group" ng-if="settingInfo.controlType==1">
+                                        <div class="col-sm-1"></div>
+                                        <label class="col-sm-2">{{settingInfo.paramName}}</label>
+                                        <div class="col-sm-1">
+                                            <label>
+                                                <input type="radio" value="0" name="isShow"  ng-model="settingInfo.paramValue" ng-checked="settingInfo.paramValue==0">
+                                                <span class="text">关闭</span>
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <label>
+                                                <input type="radio" value="1" name="isShow" ng-model="settingInfo.paramValue" ng-checked="settingInfo.paramValue==1">
+                                                <span class="text">开启</span>
+                                            </label>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-3"></div>
+                                            <span class="text" style="margin-left:20px;color:gray">{{settingInfo.remark}}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" ng-if="settingInfo.controlType==2">
+                                        <div class="row">
+                                            <div class="col-sm-1"></div>
+                                            <label class="col-sm-2">{{settingInfo.paramName}}</label>
+                                            <input class="col-sm-2" ng-model="settingInfo.paramValue">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3"></div>
+                                            <span class="text" style="margin-left: 20px;color: gray">{{settingInfo.remark}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-3"></div>
+                                    <button type="button" class="btn btn-info" ng-click="submitSetting($index)">完成</button>
+                                </div>
+
+                            </div>
+
+
+<!--                            <div class="widget-body">-->
+
+<!--                                &lt;!&ndash; 主列表 &ndash;&gt;-->
+<!--                                <table class="table table-striped table-hover"-->
+<!--                                       id="simpledatatable">-->
+<!--                                    <thead>-->
+<!--                                    <tr>-->
+<!--                                        <th>序号</th>-->
+<!--                                        <th>设置名称</th>-->
+<!--                                        <th>设置值</th>-->
+<!--                                    </tr>-->
+<!--                                    </thead>-->
+<!--                                    <tbody>-->
+<!--                                    <tr ng-repeat="settingInfo in settingInfoList">-->
+<!--                                        <td>{{$index+1}}</td>-->
+<!--                                        <td>{{settingInfo.paramName}}</td>-->
+<!--                                        <td>-->
+<!--                                            <input type="text" class="form-control" ng-model='settingInfo.paramValue'-->
+<!--                                                   placeholder="{{settingInfo.remark}}">-->
+<!--                                        </td>-->
+<!--                                    </tr>-->
+<!--                                    </tbody>-->
+<!--                                </table>-->
+<!--                                <div class="row DTTTFooter">-->
+<!--                                    <a class="btn btn-block btn-success" href="javascript:void(0);"-->
+<!--                                       ng-click="saveSettings()">保存 <i class="fa fa-check right"></i></a>-->
+<!--                                </div>-->
+<!--                                <div style="clear: both"></div>-->
+<!--                            </div>-->
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+    var app = angular.module("myApp", ["ui.bootstrap"]);
+    app.controller("myCtrl", function ($scope, $http) {
+        var submitNow = false;
+
+        //刷新页面数据
+        $scope.pageChanged = function () {
+            $http({
+                method: "post",
+                //url : "/setting/getSettingInfo.htm",
+                url: "/setting/getFarmSettingLists.htm",
+                params: {},
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            }).then(function (response) {
+                if (!response.data.success) {
+                    Notify("操作失败！", "top-right", "4000", "danger", "fa-bolt", true);
+                    return;
+                }
+                $scope.settingLists = response.data.settingLists;
+            });
+        }
+        $scope.pageChanged();
+
+
+        $scope.submitSetting=function(index){
+            let settingList=$scope.settingLists[index];
+            for (let i = 0; i < settingList.length; i++) {
+                let setting = settingList[i];
+                if (setting.paramValue == '') {
+                    let content = "请输入" + setting.paramName + "的值!";
+                    Notify(content, 'top-right', '4000', 'danger', 'fa-bolt', true);
+                    return;
+                }
+            }
+            $http({
+                method: 'post',
+                url: '/setting/saveSettingInfo.htm',
+                params: {'settingInfos': JSON.stringify($scope.settingLists[index])},
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                }
+            }).then(function (response) {
+                if (!response.data.success) {
+                    Notify("操作失败！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+                    submitNow = false;
+                    return;
+                }
+                Notify('操作成功', 'top-right', '5000', 'success', 'fa-check', true);
+                submitNow = false;
+                $scope.pageChanged();
+            });
+        }
+
+
+        //保存内容
+        $scope.saveSettings = function () {
+            if (submitNow) {
+                return;
+            }
+            for (var i = 0; i < $scope.settingInfoList.length; i++) {
+                var setting = $scope.settingInfoList[i];
+                if (setting.paramValue == '') {
+                    var content = "请输入" + setting.paramName + "的值!";
+                    Notify(content, 'top-right', '4000', 'danger', 'fa-bolt', true);
+                    return;
+                }
+            }
+            submitNow = true;
+            $http({
+                method: 'post',
+                url: '/setting/saveSettingInfo.htm',
+                params: {'settingInfos': JSON.stringify($scope.settingInfoList)},
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                }//angularjs设置文件上传的content-type修改方式
+            }).then(function (response) {
+                if (!response.data.success) {
+                    Notify("操作失败！", 'top-right', '4000', 'danger', 'fa-bolt', true);
+                    submitNow = false;
+                    return;
+                }
+                Notify('添加成功', 'top-right', '5000', 'success', 'fa-check', true);
+                submitNow = false;
+                $scope.pageChanged();
+            });
+        }
+
+    });
+</script>
+<script src="/r/core/controller/base/menu.js"></script>
+<style type="text/css">
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td,
+    .table > tbody > tr > td, .table > tfoot > tr > td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .modal-footer {
+        text-align: center;
+    }
+</style>
+
+</html>

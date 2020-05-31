@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+	<mapper namespace="com.smartfarm.base.monitor.core.dao.ControlNodeDao">
+	<resultMap id="BaseResultMap" type="com.smartfarm.base.monitor.core.entity.ControlNode">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="node_name" property="name" jdbcType="VARCHAR" />
+		<result column="product_code" property="productCode" jdbcType="VARCHAR" />
+		<result column="node_status" property="nodeStatus" jdbcType="SMALLINT" />
+		<result column="operate_status" property="operateStatus" jdbcType="SMALLINT" />
+		<result column="control_type" property="sersorType" jdbcType="SMALLINT" />
+		<result column="gateway_id" property="gatewayId" jdbcType="BIGINT" />
+	</resultMap>
+
+    <resultMap id="WeChatResultMap" type="com.smartfarm.base.monitor.core.entity.vo.WeChatControlNodeVo">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="node_name" property="name" jdbcType="VARCHAR"/>
+        <result column="product_code" property="productCode" jdbcType="VARCHAR"/>
+        <result column="operate_status" property="operateStatus" jdbcType="SMALLINT"/>
+        <result column="control_type" property="type" jdbcType="SMALLINT"/>
+        <result column="timing_count" property="timingCount" jdbcType="SMALLINT"/>
+        <result column="strategy_count" property="strategyCount" jdbcType="SMALLINT"/>
+    </resultMap>
+
+
+    <select id="getControlNodes" resultMap="BaseResultMap">
+		select * from monitor_control_node
+	</select>
+
+	<select id="getControlNodesDetails" resultType="com.smartfarm.base.monitor.core.entity.ControlNodeDetails">
+		SELECT t1.id as id,t1.node_name as name,t1.product_code as productCode,t1.node_status as nodeStatus,t1.operate_status as operateStatus,
+		t1.control_type as sersorType,t1.gateway_id as gatewayId,t2.node_name as sersorTypeName FROM
+		monitor_control_node t1 LEFT JOIN monitor_sersor_node t2 ON t1.control_type=t2.id ORDER BY t1.id DESC
+	</select>
+
+	<select id="getFarmerControlNodes" parameterType="list" resultMap="BaseResultMap">
+		select * from monitor_control_node where gateway_id in
+		<foreach item="gatewayNode" index="index" collection="gatewayNodes" open="(" separator="," close=")">  
+             #{gatewayNode.id}  
+        </foreach>
+	</select>
+	
+	<select id="getById" resultMap="BaseResultMap">
+		select mcn.* from monitor_control_node mcn where mcn.id = #{id}
+	</select>
+	
+	<update id="updateById" parameterType="com.smartfarm.base.monitor.core.entity.ControlNode">
+		update monitor_control_node
+		<set>
+			<if test="name != null">
+				node_name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="productCode != null">
+				product_code = #{productCode,jdbcType=VARCHAR},
+			</if>
+			<if test="nodeStatus != null">
+				node_status = #{nodeStatus,jdbcType=SMALLINT},
+			</if>
+			<if test="operateStatus != null">
+				operate_status = #{operateStatus,jdbcType=SMALLINT},
+			</if>
+			<if test="sersorType != null">
+				control_type = #{sersorType,jdbcType=SMALLINT},
+			</if>
+			<if test="gatewayId != null">
+				gateway_id = #{gatewayId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<select id="queryControllerNodeList" resultMap="BaseResultMap">
+		SELECT cn.id,
+		cn.node_name,
+		cn.node_status
+		FROM monitor_control_node cn
+		LIMIT 3
+	</select>
+	
+	<insert id="add" parameterType="com.smartfarm.base.monitor.core.entity.ControlNode">
+		insert into monitor_control_node
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				node_name,
+			</if>
+			<if test="productCode != null">
+				product_code,
+			</if>
+			<if test="nodeStatus != null">
+				node_status,
+			</if>
+			<if test="operateStatus != null">
+				operate_status,
+			</if>
+			<if test="sersorType != null">
+				control_type,
+			</if>
+			<if test="gatewayId != null">
+				gateway_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="productCode != null">
+				#{productCode,jdbcType=VARCHAR},
+			</if>
+			<if test="nodeStatus != null">
+				#{nodeStatus,jdbcType=SMALLINT},
+			</if>
+			<if test="operateStatus != null">
+				#{operateStatus,jdbcType=SMALLINT},
+			</if>
+			<if test="sersorType != null">
+				#{sersorType,jdbcType=SMALLINT},
+			</if>
+			<if test="gatewayId != null">
+				#{gatewayId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	
+	<delete id="deleteById" parameterType="long">
+		delete from monitor_control_node where id=#{id}
+	</delete>
+	
+	<select id="queryByGatewayId" resultMap="BaseResultMap">
+		select *
+		from monitor_control_node
+		where gateway_id = #{gatewayId}
+	</select>
+	
+	<select id="queryNodeBySetId" resultMap="BaseResultMap">
+		select n.*
+		from monitor_control_set_node s
+		left join monitor_control_node n on n.id = s.control_node_id
+		where control_set_id = #{controlSetId}
+	</select>
+	
+	<select id="getNodeByLandId" resultMap="BaseResultMap">
+		select mcn.* from monitor_control_node mcn where mcn.id=(select frd.device_id from farm_rentland_device frd where frd.device_type=2 and frd.rent_land_id=(select fml.rent_land_id from farm_member_land fml
+		where fml.id=#{landId,jdbcType=BIGINT}))
+	</select>
+
+    <select id="getFarmControlNodes" resultMap="BaseResultMap">
+        select mcn.* from monitor_control_node mcn,monitor_gateway_node mgn where mcn.gateway_id=mgn.id
+        and mgn.business_id=#{farmId,jdbcType=BIGINT}
+    </select>
+
+    <select id="listControllerNodeAndSetCountWithOnline" resultMap="WeChatResultMap">
+        SELECT
+        cn.id,cn.node_name,cn.product_code,cn.operate_status,cn.control_type,
+        (
+        SELECT COUNT(cs.id)
+        FROM monitor_control_set cs
+        LEFT JOIN monitor_control_set_node csn ON cs.id = csn.control_set_id
+        LEFT JOIN monitor_control_node cn2 ON cn2.id = csn.control_node_id
+        WHERE cs.type = 1 AND cn2.id = cn.id
+        ) AS timing_count,
+        (
+        SELECT COUNT(cs.id)
+        FROM monitor_control_set cs
+        LEFT JOIN monitor_control_set_node csn ON cs.id = csn.control_set_id
+        LEFT JOIN monitor_control_node cn2 ON cn2.id = csn.control_node_id
+        WHERE cs.type = 2 AND cn2.id = cn.id
+        ) AS strategy_count
+        FROM monitor_control_node cn
+        WHERE cn.gateway_id = #{gatewayId,jdbcType=BIGINT} AND cn.node_status = 2;
+    </select>
+</mapper>

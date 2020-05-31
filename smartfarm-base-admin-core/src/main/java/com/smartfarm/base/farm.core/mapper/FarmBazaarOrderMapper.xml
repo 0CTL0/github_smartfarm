@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartfarm.base.farm.core.dao.FarmBazaarOrderDao">
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.FarmBazaarOrder">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="member_seller_id" jdbcType="BIGINT" property="memberSellerId" />
+    <result column="member_buyer_id" jdbcType="BIGINT" property="memberBuyerId" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="bazaar_product_id" jdbcType="BIGINT" property="bazaarProductId" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="order_status" jdbcType="SMALLINT" property="orderStatus" />
+    <result column="receive_name" jdbcType="VARCHAR" property="receiveName" />
+    <result column="receive_phone" jdbcType="VARCHAR" property="receivePhone" />
+    <result column="receive_address" jdbcType="VARCHAR" property="receiveAddress" />
+    <result column="pay_no" jdbcType="VARCHAR" property="payNo" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="pay_time" jdbcType="VARCHAR" property="payTime" />
+    <result column="pay_status" jdbcType="SMALLINT" property="payStatus" />
+    <result column="delegate_express_id" jdbcType="BIGINT" property="delegateExpressId" />
+  </resultMap>
+
+  <resultMap id="BaseVoResultMap" type="com.smartfarm.base.farm.core.entity.vo.FarmBazaarOrderVo" extends="BaseResultMap">
+
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, member_seller_id, member_buyer_id, order_code, bazaar_product_id, number, amount, 
+    order_status, receive_name, receive_phone, receive_address, pay_no, create_time, 
+    pay_time, pay_status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from farm_bazaar_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from farm_bazaar_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.smartfarm.base.farm.core.entity.FarmBazaarOrder" useGeneratedKeys="true" keyProperty="id">
+    insert into farm_bazaar_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="memberSellerId != null">
+        member_seller_id,
+      </if>
+      <if test="memberBuyerId != null">
+        member_buyer_id,
+      </if>
+      <if test="orderCode != null">
+        order_code,
+      </if>
+      <if test="bazaarProductId != null">
+        bazaar_product_id,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="orderStatus != null">
+        order_status,
+      </if>
+      <if test="receiveName != null">
+        receive_name,
+      </if>
+      <if test="receivePhone != null">
+        receive_phone,
+      </if>
+      <if test="receiveAddress != null">
+        receive_address,
+      </if>
+      <if test="payNo != null">
+        pay_no,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="payStatus != null">
+        pay_status,
+      </if>
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="memberSellerId != null">
+        #{memberSellerId,jdbcType=BIGINT},
+      </if>
+      <if test="memberBuyerId != null">
+        #{memberBuyerId,jdbcType=BIGINT},
+      </if>
+      <if test="orderCode != null">
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bazaarProductId != null">
+        #{bazaarProductId,jdbcType=BIGINT},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="orderStatus != null">
+        #{orderStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="receiveName != null">
+        #{receiveName,jdbcType=VARCHAR},
+      </if>
+      <if test="receivePhone != null">
+        #{receivePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveAddress != null">
+        #{receiveAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="payNo != null">
+        #{payNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        #{payStatus,jdbcType=SMALLINT},
+      </if>
+
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartfarm.base.farm.core.entity.FarmBazaarOrder">
+    update farm_bazaar_order
+    <set>
+      <if test="memberSellerId != null">
+        member_seller_id = #{memberSellerId,jdbcType=BIGINT},
+      </if>
+      <if test="memberBuyerId != null">
+        member_buyer_id = #{memberBuyerId,jdbcType=BIGINT},
+      </if>
+      <if test="orderCode != null">
+        order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bazaarProductId != null">
+        bazaar_product_id = #{bazaarProductId,jdbcType=BIGINT},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="orderStatus != null">
+        order_status = #{orderStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="receiveName != null">
+        receive_name = #{receiveName,jdbcType=VARCHAR},
+      </if>
+      <if test="receivePhone != null">
+        receive_phone = #{receivePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveAddress != null">
+        receive_address = #{receiveAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="payNo != null">
+        pay_no = #{payNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        pay_status = #{payStatus,jdbcType=SMALLINT},
+      </if>
+
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByOrderCode" resultMap="BaseResultMap">
+    SELECT * FROM farm_bazaar_order fbo
+    WHERE fbo.order_code=#{OrderCode}
+  </select>
+
+  <select id="selectAllOrder" resultMap="BaseVoResultMap">
+    SELECT fbo.*,fbp.cover,fbp.`name`,fbp.price FROM farm_bazaar_order fbo
+    LEFT JOIN farm_bazaar_product fbp ON 	fbo.bazaar_product_id=fbp.id
+    WHERE fbo.member_buyer_id=#{memberId} AND fbo.order_status!=0
+    ORDER BY fbo.id DESC
+  </select>
+
+  <select id="selectMemberLandOrderList" resultMap="BaseVoResultMap">
+    SELECT fbo.* FROM farm_bazaar_order fbo
+LEFT JOIN farm_bazaar_product fbp ON fbo.bazaar_product_id=fbp.id
+WHERE fbp.member_land_id=#{memberLandId}
+  </select>
+
+
+
+
+
+
+
+
+</mapper>

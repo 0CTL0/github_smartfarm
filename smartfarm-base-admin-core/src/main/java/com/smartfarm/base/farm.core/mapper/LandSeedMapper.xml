@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.farm.core.dao.LandSeedDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.farm.core.entity.LandSeed" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="land_id" property="landId" jdbcType="BIGINT" />
+    <result column="seed_id" property="seedId" jdbcType="BIGINT" />
+  </resultMap>
+  <insert id="insert" parameterType="com.smartfarm.base.farm.core.entity.LandSeed" >
+    insert into farm_land_seed
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="landId != null" >
+        land_id,
+      </if>
+      <if test="seedId != null" >
+        seed_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="landId != null" >
+        #{landId,jdbcType=BIGINT},
+      </if>
+      <if test="seedId != null" >
+        #{seedId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.farm.core.entity.LandSeed" >
+    update farm_land_seed
+    <set >
+      <if test="landId != null" >
+        land_id = #{landId,jdbcType=BIGINT},
+      </if>
+      <if test="seedId != null" >
+        seed_id = #{seedId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+   <delete id="deleteById" parameterType="com.smartfarm.base.farm.core.entity.LandSeed">
+  delete fls.* from farm_land_seed fls
+  where fls.land_id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <select id="selectByLandId" resultMap="BaseResultMap">
+  select fls.* from farm_land_seed fls
+  where fls.land_id = #{id,jdbcType=BIGINT}
+  </select>
+   
+ 
+  
+</mapper>

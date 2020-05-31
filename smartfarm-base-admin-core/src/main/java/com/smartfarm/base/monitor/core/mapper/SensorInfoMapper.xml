@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.monitor.core.dao.SensorInfoDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.monitor.core.entity.SensorInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="resolution_ratio" property="resolutionRatio" jdbcType="REAL" />
+    <result column="upper_limit" property="upperLimit" jdbcType="INTEGER" />
+    <result column="lower_limit" property="lowerLimit" jdbcType="INTEGER" />
+    <result column="precision" property="precision" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select * from monitor_sensor_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    delete from monitor_sensor_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.smartfarm.base.monitor.core.entity.SensorInfo" >
+    insert into monitor_sensor_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="resolutionRatio != null" >
+        resolution_ratio,
+      </if>
+      <if test="upperLimit != null" >
+        upper_limit,
+      </if>
+      <if test="lowerLimit != null" >
+        lower_limit,
+      </if>
+      <if test="precision != null" >
+        `precision`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="resolutionRatio != null" >
+        #{resolutionRatio,jdbcType=REAL},
+      </if>
+      <if test="upperLimit != null" >
+        #{upperLimit,jdbcType=INTEGER},
+      </if>
+      <if test="lowerLimit != null" >
+        #{lowerLimit,jdbcType=INTEGER},
+      </if>
+      <if test="precision != null" >
+        #{precision,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateById" parameterType="com.smartfarm.base.monitor.core.entity.SensorInfo" >
+    update monitor_sensor_info
+    <set >
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="resolutionRatio != null" >
+        resolution_ratio = #{resolutionRatio,jdbcType=REAL},
+      </if>
+      <if test="upperLimit != null" >
+        upper_limit = #{upperLimit,jdbcType=INTEGER},
+      </if>
+      <if test="lowerLimit != null" >
+        lower_limit = #{lowerLimit,jdbcType=INTEGER},
+      </if>
+      <if test="precision != null" >
+        `precision` = #{precision,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryMonitorsensorInfoList" resultMap="BaseResultMap">
+  	SELECT id,
+  	`name`,
+  	`code`,
+  	unit,
+  	resolution_ratio,
+  	lower_limit,
+  	upper_limit,
+  	`precision`
+	FROM monitor_sensor_info order by id desc
+	limit #{start}, #{limit}
+  </select>
+  
+  <select id="queryCountMonitorsensorInfo" resultType="int">
+  	SELECT COUNT(*)
+	FROM monitor_sensor_info
+  </select>
+  
+  <select id="queryAllSensorInfo" resultMap="BaseResultMap">
+  	SELECT id,
+  	`name`
+	FROM monitor_sensor_info
+  </select>
+  
+  <select id="queryRatioByCode" resultType="float">
+  	select resolution_ratio from monitor_sensor_info where code=#{code}
+  </select>
+</mapper>

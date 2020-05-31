@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smartfarm.base.shop.core.dao.IndexAdvanceDao" >
+  <resultMap id="BaseResultMap" type="com.smartfarm.base.shop.core.entity.IndexAdvance" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="ref_id" property="refId" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="SMALLINT" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="farm_id" property="farmId" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap type="com.smartfarm.base.shop.core.entity.vo.IndexAdvanceVo" id="BaseVoResultMap" extends="BaseResultMap">
+  </resultMap>
+  <insert id="insert" parameterType="com.smartfarm.base.shop.core.entity.IndexAdvance" >
+    insert into index_advance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="refId != null" >
+        ref_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="farmId != null" >
+        farm_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="refId != null" >
+        #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="farmId != null" >
+        #{farmId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="com.smartfarm.base.shop.core.entity.IndexAdvance" >
+    update index_advance
+    <set >
+      <if test="refId != null" >
+        ref_id = #{refId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+      <if test="farmId != null" >
+        farm_id = #{farmId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryAllList" resultMap="BaseVoResultMap">
+  	select *
+  	from index_advance
+  	where farm_id =#{farmId}
+  </select>
+</mapper>
