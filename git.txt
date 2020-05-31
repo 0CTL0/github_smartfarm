@@ -14,6 +14,7 @@ git commit -a -m "注释"  自动把所有跟踪的文件暂存起来并一起提交
 git commit -a
 	弹出注释文件，a和ESC切换状态，：qa!保存退出；
 git push -u origin master 推送到远程库
+git push -u origin master -f	强行push
 git fetch	将数据拉取到本地仓库 - 它并不会自动合并或修改当前的工作回，本地的库中master的commitID不变。
 git pull	从唯一远程获取最新版本并merge到本地，会自动合并或修改当前的工作,commitID发生改变。
 	完整格式	$ git pull <远程主机名> <远程分支名>:<本地分支名>	拉取某远程库的某分支与本地某分支合并
