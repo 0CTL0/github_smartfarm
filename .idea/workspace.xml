@@ -2,41 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="295896f0-141d-42b9-b289-036c1a7d4d61" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_lettuce_lettuce_core_5_2_2_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_buffer_4_1_48_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_4_1_48_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_common_4_1_48_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_handler_4_1_48_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_resolver_4_1_48_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_4_1_48_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_projectreactor_reactor_core_3_3_4_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_aspectj_aspectjweaver_1_9_5.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_reactivestreams_reactive_streams_1_0_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_aop_2_2_6_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_data_redis_2_2_6_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_commons_2_2_6_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_keyvalue_2_2_6_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_redis_2_2_6_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_oxm_5_2_5_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/java/com/smartfarm/base/cache/RedisService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/java/com/smartfarm/base/cache/annotation/CacheException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/java/com/smartfarm/base/cache/aspect/RedisCacheAspect.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/java/com/smartfarm/base/cache/impl/RedisServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/java/com/smartfarm/base/config/redis/RedisConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/~$redis.docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/根据macro的mall项目来改版完善.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/redis.docx" beforeDir="false" afterPath="$PROJECT_DIR$/redis.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartfarm-admin-webapp/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/smartfarm-admin-webapp/src/main/resources/application-dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smartfarm-admin-webapp/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/smartfarm-admin-webapp/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smartfarm-base-admin-core/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/smartfarm-base-admin-core/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/java/com/smartfarm/base/config/redis/RedisConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/java/com/smartfarm/base/config/redis/RedisConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/java/com/smartfarm/base/config/redis/RedisConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/java/com/smartfarm/base/config/redis/RedisConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/resources/mapper/AdminMapper.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/resources/mapper/AdminRoleMapper.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/resources/mapper/FarmInfoMapper.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/resources/mapper/FunctionMapper.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/resources/mapper/RoleFunctionMapper.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/smartfarm-base-admin-core/src/main/resources/mapper/RoleMapper.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,6 +168,7 @@
       <workItem from="1590304736546" duration="4383000" />
       <workItem from="1590505634616" duration="268000" />
       <workItem from="1590831320991" duration="5606000" />
+      <workItem from="1591714955210" duration="1208000" />
     </task>
     <servers />
   </component>
@@ -320,9 +291,9 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="278" y="142" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1587308025528" />
-    <state x="430" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1590854460524">
+    <state x="430" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1591715232679">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="430" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1590854460524" />
+    <state x="430" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1591715232679" />
   </component>
 </project>

@@ -20,6 +20,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import java.time.Duration;
 
 /**
+ * mall项目
  * Redis配置类
  * Created by macro on 2020/3/2.
  */

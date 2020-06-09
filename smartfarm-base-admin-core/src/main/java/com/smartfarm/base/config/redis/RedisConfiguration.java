@@ -10,6 +10,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import javax.annotation.Resource;
 
 /**
+ * O2O项目
  * spring-redis.xml里的配置
  * 
  * @author xiangze
